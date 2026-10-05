@@ -5,7 +5,18 @@ All notable changes to Vero are documented here. The format follows
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.0.0] - 2026-10-05
+
+First complete release: all eight build phases of the engineering plan.
+
 ### Added
+
+- Phase 8: release — static landing page (`landing/`) replaying a
+  precomputed coding + audit run with evidence highlighting, no backend;
+  `export_demo_fixture` command; full README; optional GitHub Pages
+  deploy workflow.
 
 - Phase 7: dataset and evaluation — 12 hand-written synthetic notes with a
   manifest carrying draft gold labels, do-not-code conditions, audit cases,

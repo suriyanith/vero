@@ -1,0 +1,271 @@
+{
+  "note": {
+    "title": "Diabetes + CKD 3a follow-up (synthetic)",
+    "text": "CC: Follow-up diabetes and kidney function.\nHPI: 72-year-old with type 2 diabetes and CKD stage 3a. Home glucose readings 110-160.\nReports mild ankle swelling in the evenings. History of colon cancer, s/p resection 2015,\nno recurrence on last colonoscopy.\nMeds: metformin 500 mg BID, lisinopril 10 mg daily.\nExam: BP 128/76. Trace bilateral ankle edema.\nLabs: A1c 7.4%. eGFR 52.\nAssessment/Plan:\n1. Type 2 diabetes with CKD stage 3a - A1c 7.4%, continue metformin, eGFR stable at 52,\n   recheck BMP in 3 months.\n2. Ankle edema - likely dependent edema; rule out heart failure. Order echocardiogram.\n3. History of colon cancer - no evidence of recurrence, continue surveillance per GI.\n"
+  },
+  "mode": "audit",
+  "model_name": "gemini (replayed)",
+  "conditions": [
+    {
+      "id": 1,
+      "label": "type 2 diabetes with diabetic chronic kidney disease",
+      "status": "active",
+      "quotes": [
+        {
+          "text": "Type 2 diabetes with CKD stage 3a - A1c 7.4%, continue metformin",
+          "start": 399,
+          "end": 463,
+          "meat": [
+            "evaluate",
+            "treat"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "chronic kidney disease stage 3a",
+      "status": "active",
+      "quotes": [
+        {
+          "text": "eGFR stable at 52,\n   recheck BMP in 3 months",
+          "start": 465,
+          "end": 510,
+          "meat": [
+            "evaluate",
+            "assess",
+            "monitor"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "ankle edema",
+      "status": "active",
+      "quotes": [
+        {
+          "text": "Trace bilateral ankle edema",
+          "start": 325,
+          "end": 352,
+          "meat": [
+            "evaluate"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "heart failure",
+      "status": "uncertain",
+      "quotes": [
+        {
+          "text": "rule out heart failure",
+          "start": 553,
+          "end": 575,
+          "meat": [],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "colon cancer",
+      "status": "historical",
+      "quotes": [
+        {
+          "text": "History of colon cancer, s/p resection 2015",
+          "start": 176,
+          "end": 219,
+          "meat": [],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ]
+    }
+  ],
+  "suggestions": [
+    {
+      "display_code": "E11.22",
+      "description": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+      "hcc_number": 37,
+      "hcc_label": "Diabetes with Chronic Complications",
+      "evidence": [
+        {
+          "text": "Type 2 diabetes with CKD stage 3a - A1c 7.4%, continue metformin",
+          "start": 399,
+          "end": 463,
+          "meat": [
+            "evaluate",
+            "treat"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "meat": [
+        "evaluate",
+        "treat"
+      ],
+      "confidence": "high",
+      "confidence_reasons": [
+        "all evidence matched exactly and unambiguously",
+        "at least one MEAT element",
+        "code in the top 3 search results",
+        "model certainty was high",
+        "no flags"
+      ],
+      "rationale": "Note links type 2 diabetes with CKD stage 3a; the combination code applies.",
+      "flags": [],
+      "condition_id": 1
+    },
+    {
+      "display_code": "N18.31",
+      "description": "Chronic kidney disease, stage 3a",
+      "hcc_number": 329,
+      "hcc_label": "Chronic Kidney Disease, Moderate (Stage 3, Except 3B)",
+      "evidence": [
+        {
+          "text": "eGFR stable at 52,\n   recheck BMP in 3 months",
+          "start": 465,
+          "end": 510,
+          "meat": [
+            "evaluate",
+            "assess",
+            "monitor"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "meat": [
+        "assess",
+        "evaluate",
+        "monitor"
+      ],
+      "confidence": "high",
+      "confidence_reasons": [
+        "all evidence matched exactly and unambiguously",
+        "at least one MEAT element",
+        "code in the top 3 search results",
+        "model certainty was high",
+        "no flags"
+      ],
+      "rationale": "CKD stage 3a is explicitly documented with a stable eGFR of 52.",
+      "flags": [],
+      "condition_id": 2
+    },
+    {
+      "display_code": "R60.0",
+      "description": "Localized edema",
+      "hcc_number": null,
+      "hcc_label": null,
+      "evidence": [
+        {
+          "text": "Trace bilateral ankle edema",
+          "start": 325,
+          "end": 352,
+          "meat": [
+            "evaluate"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "meat": [
+        "evaluate"
+      ],
+      "confidence": "high",
+      "confidence_reasons": [
+        "all evidence matched exactly and unambiguously",
+        "at least one MEAT element",
+        "code in the top 3 search results",
+        "model certainty was high",
+        "no flags"
+      ],
+      "rationale": "Trace bilateral ankle edema is localized edema.",
+      "flags": [],
+      "condition_id": 3
+    }
+  ],
+  "findings": [
+    {
+      "submitted_code": "E11.9",
+      "verdict": "SPECIFICITY_MISMATCH",
+      "reason": "The note supports E11.22 (Type 2 diabetes mellitus with diabetic chronic kidney disease) instead.",
+      "evidence": [
+        {
+          "text": "Type 2 diabetes with CKD stage 3a - A1c 7.4%, continue metformin",
+          "start": 399,
+          "end": 463,
+          "meat": [
+            "evaluate",
+            "treat"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "suggested_code": "E11.22"
+    },
+    {
+      "submitted_code": "N18.31",
+      "verdict": "SUPPORTED",
+      "reason": "The note supports this code with MEAT evidence.",
+      "evidence": [
+        {
+          "text": "eGFR stable at 52,\n   recheck BMP in 3 months",
+          "start": 465,
+          "end": 510,
+          "meat": [
+            "evaluate",
+            "assess",
+            "monitor"
+          ],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "suggested_code": null
+    },
+    {
+      "submitted_code": "I50.9",
+      "verdict": "NOT_SUPPORTED",
+      "reason": "heart failure is documented as uncertain, which is not codeable for this visit.",
+      "evidence": [
+        {
+          "text": "rule out heart failure",
+          "start": 553,
+          "end": 575,
+          "meat": [],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "suggested_code": null
+    },
+    {
+      "submitted_code": "C18.9",
+      "verdict": "NOT_SUPPORTED",
+      "reason": "colon cancer is documented as historical, which is not codeable for this visit.",
+      "evidence": [
+        {
+          "text": "History of colon cancer, s/p resection 2015",
+          "start": 176,
+          "end": 219,
+          "meat": [],
+          "match_type": "exact",
+          "ambiguous": false
+        }
+      ],
+      "suggested_code": null
+    }
+  ]
+}

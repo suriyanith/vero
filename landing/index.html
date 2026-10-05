@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vero — evidence-first medical coding</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Vero</h1>
+      <p class="tagline">
+        An evidence-first medical coding assistant. Every suggested ICD-10 code comes with the
+        exact sentence that supports it — verified in code, reviewed by a human, and recorded in
+        an append-only audit trail.
+      </p>
+      <p class="hero-links">
+        <a href="https://github.com/" class="button">View the code on GitHub</a>
+      </p>
+      <p class="note">This page is a static replay of precomputed results. No backend, no AI calls, no text input.</p>
+    </header>
+
+    <section>
+      <h2>The problem</h2>
+      <p>
+        Doctors document visits in free text; insurers pay on standardized codes; medical coders
+        translate between them. Errors cost money in both directions: <strong>under-coding</strong>
+        leaves documented conditions unpaid, while <strong>over-coding</strong> creates compliance
+        risk — CMS RADV audits claw back payments for diagnoses the chart doesn't support, and
+        regulators have specifically flagged AI tools that push coders to add diagnoses. Every
+        code needs to be traceable to evidence, verified quickly, and defensible later.
+      </p>
+    </section>
+
+    <section>
+      <h2>How Vero works</h2>
+      <ol class="steps">
+        <li><strong>Extract.</strong> An LLM reads the note and lists every condition with verbatim quotes, a status (active, historical, rule-out, negated…), and MEAT evidence tags.</li>
+        <li><strong>Verify.</strong> Python checks every quote against the note character-by-character. A quote that isn't really there is dropped — the AI cannot invent evidence.</li>
+        <li><strong>Retrieve.</strong> Candidate codes come from the real FY2027 ICD-10-CM code set via Postgres full-text + trigram search, with category expansion.</li>
+        <li><strong>Select.</strong> The LLM chooses only from those retrieved real codes; anything outside the list is discarded. Tabular conventions (Excludes1, "use additional code") ride along.</li>
+        <li><strong>Finalize.</strong> Deterministic rules validate billability, reconcile conflicts, map each code to its CMS-HCC V28 category, and assign a readable confidence level. A human accepts, rejects, or modifies every code.</li>
+      </ol>
+    </section>
+
+    <section id="replay">
+      <h2>Replay: one synthetic note, coded and audited</h2>
+      <p class="note">Hover a code card to highlight its evidence in the note.</p>
+      <div class="replay-grid">
+        <div class="panel">
+          <h3>The note</h3>
+          <pre id="note-text"></pre>
+        </div>
+        <div class="panel">
+          <h3>Suggested codes</h3>
+          <div id="suggestions"></div>
+          <h3>Not coded — and why</h3>
+          <ul id="not-coded"></ul>
+        </div>
+      </div>
+      <h3>Audit mode: were the submitted codes supported?</h3>
+      <p class="note">Submitted for this note: E11.9, N18.31, I50.9, C18.9.</p>
+      <table id="findings">
+        <thead>
+          <tr><th>Submitted</th><th>Verdict</th><th>Reason</th><th>Suggested</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>What makes it defensible</h2>
+      <ul class="pillars">
+        <li><strong>Mechanically verified evidence.</strong> 0 unverified quotes shown to users — enforced by code and tests, not policy.</li>
+        <li><strong>Codes only from the official code set.</strong> 98,403 FY2027 codes loaded from CMS files; only billable codes can surface.</li>
+        <li><strong>Two-way review.</strong> Audit mode flags unsupported codes to remove and documented HCCs that were never submitted.</li>
+        <li><strong>An append-only audit trail.</strong> Every decision stores who, when, what changed, and a snapshot of the evidence the reviewer saw. Edits and deletes are impossible.</li>
+        <li><strong>Readable confidence.</strong> Rule-based High/Medium/Low with every reason recorded, checked against live acceptance rates and the evaluation set.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Tech</h2>
+      <p>
+        Django 6 + Django Ninja + PostgreSQL 16 · a framework-free Python pipeline (Pydantic) with
+        exactly two Gemini calls per note · React + TypeScript + Vite + Tailwind · database-backed
+        task queue (no Redis) · TypeScript API types generated from the OpenAPI schema ·
+        220+ automated tests, CI with lint/typecheck/secret-scanning.
+      </p>
+    </section>
+
+    <section>
+      <h2>Why it runs locally</h2>
+      <p>
+        A public site that calls an AI API on every request exposes quota and cost to anyone, and
+        an open text box invites someone to paste a real patient's note — which would mean handling
+        PHI and HIPAA obligations. Vero therefore runs locally on synthetic notes only, with a PHI
+        tripwire that rejects anything resembling real identifiers. This demo page is static.
+      </p>
+    </section>
+
+    <footer>
+      <p>Vero · a portfolio project · synthetic data only · MIT licensed</p>
+    </footer>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
