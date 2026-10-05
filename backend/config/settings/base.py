@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "apps.runs",
     "apps.review",
     "apps.dashboard",
+    "apps.evaluation",
 ]
 
 MIDDLEWARE = [

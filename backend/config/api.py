@@ -11,6 +11,7 @@ from ninja.security import django_auth
 
 from apps.accounts.api import router as accounts_router
 from apps.dashboard.api import router as dashboard_router
+from apps.evaluation.api import router as evaluation_router
 from apps.reference.api import router as reference_router
 from apps.review.api import router as review_router
 from apps.runs.api import router as runs_router
@@ -23,6 +24,7 @@ api.add_router("", reference_router)
 api.add_router("", runs_router)
 api.add_router("", review_router)
 api.add_router("", dashboard_router)
+api.add_router("", evaluation_router)
 
 
 class HealthOut(Schema):

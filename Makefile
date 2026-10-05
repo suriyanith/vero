@@ -29,6 +29,7 @@ init:
 	$(BACKEND) python manage.py load_hcc_map --model V28 --payment-year 2027 --file "$(HCC_CSV)" --labels-file "$(HCC_LABELS)"
 	$(BACKEND) python manage.py seed_users
 	$(BACKEND) python manage.py load_samples --path ../data/samples
+	$(BACKEND) python manage.py load_gold_drafts --path ../data/samples
 
 test:
 	$(BACKEND) pytest
@@ -54,7 +55,7 @@ gen-api:
 	$(FRONTEND) run gen:api
 
 eval:
-	@echo "TODO Phase 7: manage.py run_eval --split test"
+	$(BACKEND) python manage.py run_eval --split test --mode both
 
 live-smoke:
 	$(BACKEND) python manage.py code_note_file \

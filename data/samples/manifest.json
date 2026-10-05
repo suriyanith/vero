@@ -1,0 +1,413 @@
+[
+  {
+    "file": "note_01_diabetes_ckd.txt",
+    "title": "Diabetes + CKD 3a follow-up",
+    "split": "dev",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "PRESUMED_LINK",
+      "RULE_OUT",
+      "HISTORY_ONLY"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "E11.22",
+        "rationale": "T2DM linked with CKD stage 3a in A/P; treated and evaluated."
+      },
+      {
+        "display_code": "N18.31",
+        "rationale": "CKD stage 3a documented with stable eGFR 52."
+      },
+      {
+        "display_code": "R60.0",
+        "rationale": "Localized bilateral ankle edema on exam, evaluated."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "heart failure",
+        "reason": "uncertain",
+        "rationale": "Documented only as rule out."
+      },
+      {
+        "condition_label": "colon cancer",
+        "reason": "historical",
+        "rationale": "s/p resection 2015, no recurrence."
+      }
+    ],
+    "audit_case": {
+      "submitted_codes": [
+        "E11.9",
+        "N18.31",
+        "I50.9",
+        "C18.9"
+      ],
+      "expected_verdicts": {
+        "E11.9": "SPECIFICITY_MISMATCH",
+        "N18.31": "SUPPORTED",
+        "I50.9": "NOT_SUPPORTED",
+        "C18.9": "NOT_SUPPORTED"
+      }
+    }
+  },
+  {
+    "file": "note_02_chf_copd.txt",
+    "title": "CHF + COPD routine follow-up",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "NEGATED",
+      "FAMILY_HISTORY"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "I50.22",
+        "rationale": "Chronic systolic CHF assessed stable and treated."
+      },
+      {
+        "display_code": "J44.9",
+        "rationale": "COPD with mild symptoms, treated with tiotropium."
+      },
+      {
+        "display_code": "F17.210",
+        "rationale": "Tobacco use disorder assessed and counseled."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "chest pain",
+        "reason": "negated",
+        "rationale": "Denies chest pain."
+      },
+      {
+        "condition_label": "atrial fibrillation",
+        "reason": "family_history",
+        "rationale": "Father's condition."
+      }
+    ],
+    "audit_case": null
+  },
+  {
+    "file": "note_03_depression_obesity.txt",
+    "title": "MDD + morbid obesity med check",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "RESOLVED",
+      "RULE_OUT",
+      "PROBLEM_LIST_ONLY"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "F33.41",
+        "rationale": "MDD recurrent in partial remission, treated and monitored."
+      },
+      {
+        "display_code": "E66.01",
+        "rationale": "Morbid obesity BMI 41, assessed and in treatment program."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "obstructive sleep apnea",
+        "reason": "uncertain",
+        "rationale": "Possible OSA, study ordered."
+      },
+      {
+        "condition_label": "shoulder strain",
+        "reason": "resolved",
+        "rationale": "Explicitly resolved."
+      },
+      {
+        "condition_label": "GERD",
+        "reason": "no_meat",
+        "rationale": "Problem-list only, never addressed."
+      }
+    ],
+    "audit_case": null
+  },
+  {
+    "file": "note_04_afib.txt",
+    "title": "Atrial fibrillation rate check",
+    "split": "dev",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "PROBLEM_LIST_ONLY"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "I48.91",
+        "rationale": "Afib evaluated on ECG, rate controlled, anticoagulated."
+      },
+      {
+        "display_code": "E78.5",
+        "rationale": "Hyperlipidemia evaluated (LDL 92) and treated."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "GERD",
+        "reason": "no_meat",
+        "rationale": "Problem-list only, never addressed."
+      }
+    ],
+    "audit_case": null
+  },
+  {
+    "file": "note_05_copd_tobacco.txt",
+    "title": "COPD exacerbation",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "NEGATED",
+      "FAMILY_HISTORY"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "J44.1",
+        "rationale": "COPD with acute exacerbation, treated with prednisone."
+      },
+      {
+        "display_code": "F17.210",
+        "rationale": "Nicotine dependence assessed, cessation counseled."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "hemoptysis",
+        "reason": "negated",
+        "rationale": "Denies hemoptysis."
+      },
+      {
+        "condition_label": "lung cancer",
+        "reason": "family_history",
+        "rationale": "Father's condition."
+      }
+    ],
+    "audit_case": {
+      "submitted_codes": [
+        "J44.9",
+        "F17.210",
+        "C34.90",
+        "R04.2"
+      ],
+      "expected_verdicts": {
+        "J44.9": "SPECIFICITY_MISMATCH",
+        "F17.210": "SUPPORTED",
+        "C34.90": "NOT_SUPPORTED",
+        "R04.2": "NOT_SUPPORTED"
+      }
+    }
+  },
+  {
+    "file": "note_06_ckd4_diabetes.txt",
+    "title": "T2DM + CKD stage 4",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "PRESUMED_LINK"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "E11.22",
+        "rationale": "Diabetes with CKD linked in A/P, insulin adjusted."
+      },
+      {
+        "display_code": "N18.4",
+        "rationale": "CKD stage 4 with eGFR 26, nephrology following."
+      },
+      {
+        "display_code": "I10",
+        "rationale": "Hypertension above goal, lisinopril added."
+      }
+    ],
+    "gold_non_codes": [],
+    "audit_case": {
+      "submitted_codes": [
+        "E11.9",
+        "N18.4",
+        "I10"
+      ],
+      "expected_verdicts": {
+        "E11.9": "SPECIFICITY_MISMATCH",
+        "N18.4": "SUPPORTED",
+        "I10": "SUPPORTED"
+      }
+    }
+  },
+  {
+    "file": "note_07_depression_obesity.txt",
+    "title": "MDD partial remission + obesity",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "RESOLVED",
+      "VAGUE"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "F33.41",
+        "rationale": "MDD recurrent, partial remission, treated with bupropion."
+      },
+      {
+        "display_code": "E66.9",
+        "rationale": "Obesity BMI 38 (not morbid), assessed with plan."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "insomnia",
+        "reason": "resolved",
+        "rationale": "Explicitly resolved."
+      }
+    ],
+    "audit_case": null
+  },
+  {
+    "file": "note_08_pvd.txt",
+    "title": "PVD claudication + rule-out DVT",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "RULE_OUT"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "I73.9",
+        "rationale": "PVD with claudication, treated with cilostazol."
+      },
+      {
+        "display_code": "E78.5",
+        "rationale": "Hyperlipidemia on statin, continued."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "deep vein thrombosis",
+        "reason": "uncertain",
+        "rationale": "Possible DVT, rule out pending."
+      }
+    ],
+    "audit_case": null
+  },
+  {
+    "file": "note_09_history_mi.txt",
+    "title": "HTN follow-up, history of MI",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED",
+      "HISTORY_ONLY",
+      "NEGATED"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "I10",
+        "rationale": "Hypertension above goal, medication increased."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "myocardial infarction",
+        "reason": "historical",
+        "rationale": "MI in 2019, s/p stent, asymptomatic."
+      },
+      {
+        "condition_label": "chest pain",
+        "reason": "negated",
+        "rationale": "Denies chest pain."
+      }
+    ],
+    "audit_case": {
+      "submitted_codes": [
+        "I21.9",
+        "I10",
+        "R07.9"
+      ],
+      "expected_verdicts": {
+        "I21.9": "NOT_SUPPORTED",
+        "I10": "SUPPORTED",
+        "R07.9": "NOT_SUPPORTED"
+      }
+    }
+  },
+  {
+    "file": "note_10_osa_obesity.txt",
+    "title": "OSA on CPAP + morbid obesity",
+    "split": "test",
+    "scenario_tags": [
+      "WELL_DOCUMENTED"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "G47.33",
+        "rationale": "OSA on CPAP with adherence data reviewed."
+      },
+      {
+        "display_code": "E66.01",
+        "rationale": "Morbid obesity BMI 42 in active weight program."
+      },
+      {
+        "display_code": "K21.9",
+        "rationale": "GERD symptoms controlled on omeprazole, addressed."
+      }
+    ],
+    "gold_non_codes": [],
+    "audit_case": null
+  },
+  {
+    "file": "note_11_messy_chf.txt",
+    "title": "Messy CHF + DM follow-up",
+    "split": "dev",
+    "scenario_tags": [
+      "MESSY",
+      "WELL_DOCUMENTED",
+      "RESOLVED"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "I50.22",
+        "rationale": "Chronic systolic CHF stable, treated with lasix/carvedilol."
+      },
+      {
+        "display_code": "E11.9",
+        "rationale": "T2DM without documented complications, treated with metformin."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "atrial fibrillation",
+        "reason": "resolved",
+        "rationale": "Patient denies; cards cleared years ago."
+      }
+    ],
+    "audit_case": null
+  },
+  {
+    "file": "note_12_vague_diabetes.txt",
+    "title": "Vague diabetes + unstaged CKD",
+    "split": "dev",
+    "scenario_tags": [
+      "VAGUE",
+      "PROBLEM_LIST_ONLY",
+      "PRESUMED_LINK"
+    ],
+    "gold_labels": [
+      {
+        "display_code": "E11.9",
+        "rationale": "Diabetes without documented type defaults to E11 per guidelines; no complications stated."
+      },
+      {
+        "display_code": "N18.9",
+        "rationale": "CKD stage not restated; unspecified stage."
+      }
+    ],
+    "gold_non_codes": [
+      {
+        "condition_label": "hypertension",
+        "reason": "no_meat",
+        "rationale": "Problem-list only, never addressed."
+      }
+    ],
+    "audit_case": null
+  }
+]

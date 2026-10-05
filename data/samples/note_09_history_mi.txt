@@ -1,0 +1,11 @@
+CC: Blood pressure check.
+HPI: 66-year-old here for hypertension follow-up. History of myocardial infarction in
+2019, s/p stent, cardiology discharged him to primary care last year. Denies chest
+pain, denies dyspnea on exertion. Home BP log averages 138/85.
+Meds: lisinopril 20 mg daily, metoprolol 25 mg BID, aspirin 81 mg daily,
+atorvastatin 80 mg daily.
+Exam: BP 142/88. Heart regular, no murmur.
+Assessment/Plan:
+1. Hypertension - above goal, increase lisinopril to 30 mg daily, recheck in 4 weeks,
+   continue home BP log.
+2. History of MI - asymptomatic, continue aspirin, statin, and beta blocker.

@@ -2,6 +2,7 @@ import { Link, Navigate, NavLink, Outlet, Route, Routes } from 'react-router-dom
 import { useLogout, useMe } from './features/auth/hooks'
 import { AuditTrailPage } from './pages/AuditTrailPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { EvaluationPage } from './pages/EvaluationPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewRunPage } from './pages/NewRunPage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -65,6 +66,18 @@ function Layout() {
           >
             Audit trail
           </NavLink>
+          {me.role === 'admin' && (
+            <NavLink
+              to="/evaluation"
+              className={({ isActive }) =>
+                `text-sm ${
+                  isActive ? 'font-semibold text-blue-700' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Evaluation
+            </NavLink>
+          )}
           <span className="ml-auto text-sm text-gray-500">
             {me.display_name || me.username} ({me.role})
           </span>
@@ -93,6 +106,7 @@ export default function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/trail" element={<AuditTrailPage />} />
+        <Route path="/evaluation" element={<EvaluationPage />} />
         <Route path="/new" element={<NewRunPage />} />
         <Route path="/queue" element={<WorkQueuePage />} />
         <Route path="/runs/:runId" element={<RunDetailPage />} />

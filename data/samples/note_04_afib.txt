@@ -1,0 +1,11 @@
+CC: Atrial fibrillation follow-up.
+HPI: 75-year-old returns for rate check. Atrial fibrillation, rate well controlled on
+metoprolol, no palpitations or dizziness this month. Hyperlipidemia on atorvastatin,
+last LDL 92.
+Problem list: GERD.
+Meds: metoprolol 50 mg BID, apixaban 5 mg BID, atorvastatin 40 mg daily, omeprazole 20 mg daily.
+Exam: Pulse 72, irregularly irregular. No edema.
+Assessment/Plan:
+1. Atrial fibrillation - rate controlled on metoprolol, continue apixaban for stroke
+   prevention, ECG today shows afib at 72.
+2. Hyperlipidemia - LDL 92 at goal, continue atorvastatin.

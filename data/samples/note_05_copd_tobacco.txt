@@ -1,0 +1,11 @@
+CC: COPD follow-up; cough.
+HPI: 63-year-old with COPD, increased morning cough and sputum for 1 week, no fever.
+Denies hemoptysis. Still smoking about half a pack per day despite counseling.
+Father died of lung cancer at 70.
+Meds: tiotropium daily, albuterol PRN.
+Exam: Scattered expiratory wheezes, prolonged expiration. Afebrile.
+Assessment/Plan:
+1. COPD with acute exacerbation - increased cough and sputum, start prednisone 40 mg
+   x5 days and azithromycin, continue tiotropium, follow up in 2 weeks.
+2. Nicotine dependence, cigarettes - counseled again on cessation, offered varenicline,
+   patient declined for now.

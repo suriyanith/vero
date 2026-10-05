@@ -7,6 +7,17 @@ All notable changes to Vero are documented here. The format follows
 
 ### Added
 
+- Phase 7: dataset and evaluation — 12 hand-written synthetic notes with a
+  manifest carrying draft gold labels, do-not-code conditions, audit cases,
+  scenario tags, and dev/test splits (all `reviewed=false` until a human
+  reviews them in the admin); `generate_samples` drafts more notes with
+  Gemini; labeling inlines + "Mark reviewed" action on the Note admin;
+  `run_eval` with code/HCC/category precision-recall-F1, hard-case accuracy
+  per pattern, accuracy by confidence, evidence-integrity counters (0
+  unverified quotes / 0 invalid codes), audit verdict accuracy + confusion
+  matrix, and operational metrics; admin-only `/eval` endpoints and
+  evaluation page; `docs/DATASET_CARD.md` and `docs/EVALUATION.md`.
+
 - Phase 6: audit trail and dashboard — `/decisions` with filters (reviewer,
   action, code, dates, run), decisions CSV export, per-run CSV export with
   decision history; audit trail page; decision history panel on run detail;

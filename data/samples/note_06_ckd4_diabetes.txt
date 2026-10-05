@@ -1,0 +1,11 @@
+CC: Diabetes and kidney follow-up.
+HPI: 69-year-old with type 2 diabetes and chronic kidney disease stage 4. Home glucose
+140-180. No hypoglycemia. Mild fatigue. Blood pressure has been running 140s at home.
+Meds: insulin glargine 24 units nightly, amlodipine 10 mg daily.
+Exam: BP 146/84. Trace pedal edema.
+Labs: A1c 7.9%. eGFR 26, stable from 28.
+Assessment/Plan:
+1. Type 2 diabetes with CKD stage 4 - A1c 7.9%, increase glargine to 26 units,
+   eGFR 26 stable, nephrology following.
+2. Hypertension - above goal for CKD, add lisinopril 5 mg daily, recheck BMP and BP
+   in 2 weeks.

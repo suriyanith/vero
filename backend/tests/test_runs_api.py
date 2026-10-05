@@ -38,7 +38,7 @@ class TestRunLifecycle:
 
         call_command("load_samples", path="../data/samples")
         samples = client.get("/api/samples").json()
-        assert len(samples) == 3
+        assert len(samples) == 12
         response = post_run(
             client, django_capture_on_commit_callbacks, {"sample_id": samples[0]["id"]}
         )

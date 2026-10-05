@@ -1,0 +1,12 @@
+CC: Medication refills.
+HPI: 58-year-old requests refills. Diabetes, on metformin, no recent labs; reports
+sugars "fine" without a log. Also chronic kidney disease per last year's records,
+stage not restated today. No new complaints.
+Problem list: hypertension.
+Meds: metformin 500 mg BID, losartan 50 mg daily.
+Exam: BP 132/80. Well appearing.
+Assessment/Plan:
+1. Diabetes - refill metformin, order A1c and BMP today, discussed bringing glucose
+   log next visit.
+2. Chronic kidney disease - stage unclear from today's visit, BMP ordered, will
+   restage when labs return.

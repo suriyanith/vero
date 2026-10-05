@@ -328,6 +328,40 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/eval/runs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Eval Runs */
+    get: operations['apps_evaluation_api_list_eval_runs']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/eval/runs/{run_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get Eval Run */
+    get: operations['apps_evaluation_api_get_eval_run']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -740,6 +774,64 @@ export interface components {
       items: components['schemas']['DecisionListItemOut'][]
       /** Count */
       count: number
+    }
+    /** EvalRunListOut */
+    EvalRunListOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /** Split */
+      split: string
+      /** Mode */
+      mode: string
+      /** Model Name */
+      model_name: string
+      /** Provisional */
+      provisional: boolean
+    }
+    /** EvalRunDetailOut */
+    EvalRunDetailOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /** Split */
+      split: string
+      /** Mode */
+      mode: string
+      /** Model Name */
+      model_name: string
+      /** Provisional */
+      provisional: boolean
+      /** Pipeline Version */
+      pipeline_version: string
+      /** Prompt Versions */
+      prompt_versions: {
+        [key: string]: string
+      }
+      /** Git Sha */
+      git_sha: string
+      /** Metrics */
+      metrics: {
+        [key: string]: unknown
+      }
+      /** Per Note Results */
+      per_note_results: {
+        [key: string]: unknown
+      }[]
     }
   }
   responses: never
@@ -1346,6 +1438,75 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  apps_evaluation_api_list_eval_runs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EvalRunListOut'][]
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorOut']
+        }
+      }
+    }
+  }
+  apps_evaluation_api_get_eval_run: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        run_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EvalRunDetailOut']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorOut']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorOut']
+        }
       }
     }
   }
