@@ -33,7 +33,24 @@ body {
 header.hero, section, footer {
   max-width: 960px;
   margin: 0 auto;
-  padding: 2.25rem 1.5rem;
+  padding: 2.25rem 1.25rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-wrap #findings {
+  min-width: 38rem;
+}
+
+@media (max-width: 640px) {
+  header.hero, section, footer {
+    padding: 1.75rem 1rem;
+  }
+  .hero { padding-top: 3.5rem; }
+  .panel { padding: 1rem; }
+  .steps li { padding: 0.8rem 0.9rem 0.8rem 3.1rem; }
 }
 
 .hero {
@@ -44,7 +61,7 @@ header.hero, section, footer {
 }
 .hero h1 {
   font-family: var(--display);
-  font-size: 4.25rem;
+  font-size: clamp(2.75rem, 9vw, 4.25rem);
   margin: 0;
   letter-spacing: -0.03em;
   font-weight: 700;
@@ -71,7 +88,7 @@ header.hero, section, footer {
 
 h2 {
   font-family: var(--display);
-  font-size: 1.75rem;
+  font-size: clamp(1.4rem, 4.5vw, 1.75rem);
   letter-spacing: -0.015em;
   margin-top: 0;
 }

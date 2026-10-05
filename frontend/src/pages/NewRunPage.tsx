@@ -144,7 +144,7 @@ export function NewRunPage() {
         <Segmented<Tab> options={TABS} value={tab} onChange={setTab} />
       </div>
 
-      <Card className="mt-4 p-6">
+      <Card className="mt-4 p-4 sm:p-6">
         {tab === 'paste' && (
           <div>
             {auditControls}

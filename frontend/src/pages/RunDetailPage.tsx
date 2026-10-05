@@ -196,7 +196,7 @@ function ReviewView({ run }: { run: RunDetail }) {
         <h1 className="font-display text-2xl font-semibold tracking-tight">{run.note.title}</h1>
         <StatusBadge status={run.status} />
         <button
-          className="ml-auto text-xs text-ink-faint hover:text-ink"
+          className="ml-auto hidden text-xs text-ink-faint hover:text-ink sm:block"
           onClick={() => setShowShortcuts(true)}
         >
           Keyboard shortcuts <kbd className="rounded border border-line-strong px-1">?</kbd>

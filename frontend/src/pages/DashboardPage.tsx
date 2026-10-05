@@ -58,7 +58,7 @@ function HeroStat({ label, value, hint }: { label: string; value: string; hint?:
   return (
     <div>
       <MicroLabel className="text-ink-soft/70">{label}</MicroLabel>
-      <p className="mt-1 font-display text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+      <p className="mt-1 font-display text-3xl font-semibold tracking-tight tabular-nums sm:text-4xl xl:text-5xl">
         {value}
       </p>
       {hint && <p className="mt-1 text-xs text-ink-soft">{hint}</p>}
@@ -79,9 +79,11 @@ function MetricCard({
 }) {
   return (
     <div className="anim-in" style={{ animationDelay: `${delay}ms` }}>
-      <Card interactive className="h-full p-4">
+      <Card interactive className="h-full min-w-0 p-4">
         <MicroLabel>{label}</MicroLabel>
-        <p className="mt-1.5 text-2xl font-semibold tracking-tight tabular-nums">{value}</p>
+        <p className="mt-1.5 truncate text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
+          {value}
+        </p>
         {hint && (
           <p className="mt-0.5 truncate text-xs text-ink-faint" title={hint}>
             {hint}

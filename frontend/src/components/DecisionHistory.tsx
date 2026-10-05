@@ -38,8 +38,8 @@ export function DecisionHistory({ runId }: { runId: string }) {
       )}
       <ul className="mt-2.5 space-y-1.5">
         {data?.items.map((item) => (
-          <li key={item.id} className="flex items-baseline gap-2.5 text-sm">
-            <span className="w-36 shrink-0 text-xs tabular-nums text-ink-faint">
+          <li key={item.id} className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-sm">
+            <span className="w-full text-xs tabular-nums text-ink-faint sm:w-36 sm:shrink-0">
               {new Date(item.created_at).toLocaleString(undefined, {
                 month: 'short',
                 day: 'numeric',
