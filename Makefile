@@ -27,7 +27,8 @@ init:
 	$(BACKEND) python manage.py migrate
 	$(BACKEND) python manage.py load_icd10cm --fy 2027 --order-file "$(ICD10_ORDER)" --tabular-xml "$(ICD10_XML)"
 	$(BACKEND) python manage.py load_hcc_map --model V28 --payment-year 2027 --file "$(HCC_CSV)" --labels-file "$(HCC_LABELS)"
-	@echo "TODO Phase 3: seed_users, load_samples"
+	$(BACKEND) python manage.py seed_users
+	$(BACKEND) python manage.py load_samples --path ../data/samples
 
 test:
 	$(BACKEND) pytest

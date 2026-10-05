@@ -7,11 +7,18 @@ from django.db import connection
 from django.http import HttpRequest
 from ninja import NinjaAPI, Schema
 from ninja.responses import Status
+from ninja.security import django_auth
 
+from apps.accounts.api import router as accounts_router
 from apps.reference.api import router as reference_router
+from apps.runs.api import router as runs_router
 
-api = NinjaAPI(title="Vero API", version="0.1.0")
+# Session auth (with CSRF) on everything; the few public endpoints opt out
+# with auth=None: /health, /auth/csrf, /auth/login.
+api = NinjaAPI(title="Vero API", version="0.1.0", auth=django_auth)
+api.add_router("", accounts_router)
 api.add_router("", reference_router)
+api.add_router("", runs_router)
 
 
 class HealthOut(Schema):

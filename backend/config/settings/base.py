@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.reference",
     "apps.llm",
+    "apps.notes",
+    "apps.runs",
 ]
 
 MIDDLEWARE = [

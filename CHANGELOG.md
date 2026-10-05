@@ -7,6 +7,13 @@ All notable changes to Vero are documented here. The format follows
 
 ### Added
 
+- Phase 3: notes and runs — Note/Batch/Run/Condition/Suggestion models, the
+  PHI tripwire (rejects SSN/phone/email/MRN/DOB patterns, passes clinical
+  numbers), `process_run` background task on the database queue (idempotent,
+  enqueued on commit), `fail_stuck_runs`, session auth with CSRF on every
+  endpoint (health/csrf/login excepted), rate-limited login, `seed_users`,
+  `load_samples`, and the `/samples`, `/runs`, `/batches`,
+  `/runs/{id}`, `/runs/{id}/retry` endpoints with pagination and filters.
 - Phase 2: framework-free `vero_core` pipeline — text normalization with
   offset mapping (property-tested), quote verification that drops anything
   not verbatim in the note, candidate retrieval with category expansion,
