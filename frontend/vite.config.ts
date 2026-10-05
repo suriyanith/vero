@@ -10,10 +10,13 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     // One origin in the browser: session cookies and CSRF work, no CORS.
+    // The string shorthand would set changeOrigin (rewriting Host to the
+    // backend), which breaks Django's CSRF origin check against the
+    // browser's real Origin header — so keep Host as the browser sent it.
     proxy: {
-      '/api': backendOrigin,
-      '/admin': backendOrigin,
-      '/static': backendOrigin,
+      '/api': { target: backendOrigin, changeOrigin: false },
+      '/admin': { target: backendOrigin, changeOrigin: false },
+      '/static': { target: backendOrigin, changeOrigin: false },
     },
   },
   test: {
