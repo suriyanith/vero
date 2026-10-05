@@ -7,6 +7,14 @@ All notable changes to Vero are documented here. The format follows
 
 ### Added
 
+- Phase 6: audit trail and dashboard — `/decisions` with filters (reviewer,
+  action, code, dates, run), decisions CSV export, per-run CSV export with
+  decision history; audit trail page; decision history panel on run detail;
+  `apps/dashboard` metrics (every metric unit-tested against hand-computed
+  values), `/dashboard/summary`, and the dashboard page with metric cards,
+  a runs-per-day line chart, an acceptance-by-confidence bar chart, and the
+  review backlog list.
+
 - Phase 5: audit mode — `audit_note` reuses the coding result (no extra AI
   calls) and classifies each submitted code through the ordered verdict
   ladder (INVALID_CODE → SUPPORTED → WEAK_SUPPORT → SPECIFICITY_MISMATCH →

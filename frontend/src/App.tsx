@@ -1,5 +1,7 @@
 import { Link, Navigate, NavLink, Outlet, Route, Routes } from 'react-router-dom'
 import { useLogout, useMe } from './features/auth/hooks'
+import { AuditTrailPage } from './pages/AuditTrailPage'
+import { DashboardPage } from './pages/DashboardPage'
 import { LoginPage } from './pages/LoginPage'
 import { NewRunPage } from './pages/NewRunPage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -24,6 +26,16 @@ function Layout() {
             Vero
           </Link>
           <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `text-sm ${
+                isActive ? 'font-semibold text-blue-700' : 'text-gray-600 hover:text-gray-900'
+              }`
+            }
+          >
+            Dashboard
+          </NavLink>
+          <NavLink
             to="/new"
             className={({ isActive }) =>
               `text-sm ${
@@ -42,6 +54,16 @@ function Layout() {
             }
           >
             Work queue
+          </NavLink>
+          <NavLink
+            to="/trail"
+            className={({ isActive }) =>
+              `text-sm ${
+                isActive ? 'font-semibold text-blue-700' : 'text-gray-600 hover:text-gray-900'
+              }`
+            }
+          >
+            Audit trail
           </NavLink>
           <span className="ml-auto text-sm text-gray-500">
             {me.display_name || me.username} ({me.role})
@@ -68,7 +90,9 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route element={<Layout />}>
-        <Route path="/" element={<Navigate to="/queue" replace />} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/trail" element={<AuditTrailPage />} />
         <Route path="/new" element={<NewRunPage />} />
         <Route path="/queue" element={<WorkQueuePage />} />
         <Route path="/runs/:runId" element={<RunDetailPage />} />

@@ -7,6 +7,7 @@ import { paletteFor, type EvidenceSpan } from '../components/highlight'
 import { StatusBadge } from '../components/badges'
 import { SuggestionCard } from '../components/SuggestionCard'
 import { AuditFindingsTable } from '../components/AuditFindingsTable'
+import { DecisionHistory } from '../components/DecisionHistory'
 import { useAcceptAllHigh, useDecide, useDecideFinding } from '../features/review/hooks'
 import { useRun } from '../features/runs/hooks'
 
@@ -118,6 +119,8 @@ function AuditView({ run }: { run: RunDetail }) {
           )}
         </section>
       </div>
+
+      <DecisionHistory runId={run.id} />
 
       <footer className="mt-6 border-t border-gray-200 pt-3 text-xs text-gray-500">
         model {run.model_name || '—'} · {run.duration_ms ?? '—'} ms · tokens {run.input_tokens}/
@@ -293,6 +296,8 @@ function ReviewView({ run }: { run: RunDetail }) {
           )}
         </section>
       </div>
+
+      <DecisionHistory runId={run.id} />
 
       <footer className="mt-6 border-t border-gray-200 pt-3 text-xs text-gray-500">
         model {run.model_name || '—'} · prompts{' '}

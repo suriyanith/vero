@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "apps.notes",
     "apps.runs",
     "apps.review",
+    "apps.dashboard",
 ]
 
 MIDDLEWARE = [

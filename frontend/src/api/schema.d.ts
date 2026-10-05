@@ -260,6 +260,74 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/decisions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Decisions */
+    get: operations['apps_review_api_list_decisions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/decisions/export.csv': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Export Decisions Csv */
+    get: operations['apps_review_api_export_decisions_csv']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/runs/{run_id}/export.csv': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Export Run Csv */
+    get: operations['apps_review_api_export_run_csv']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/dashboard/summary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Dashboard Summary */
+    get: operations['apps_dashboard_api_dashboard_summary']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -631,6 +699,47 @@ export interface components {
       accepted: number
       /** Decisions */
       decisions: components['schemas']['DecisionOut'][]
+    }
+    /** DecisionListItemOut */
+    DecisionListItemOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string
+      /** Reviewer Name */
+      reviewer_name: string
+      /** Action */
+      action: string
+      /** Original Code */
+      original_code: string
+      /** Final Code */
+      final_code: string
+      /** Reason */
+      reason: string
+      /**
+       * Run Id
+       * Format: uuid
+       */
+      run_id: string
+      /** Run Mode */
+      run_mode: string
+      /** Note Title */
+      note_title: string
+      /** Kind */
+      kind: string
+    }
+    /** PagedDecisionListItemOut */
+    PagedDecisionListItemOut: {
+      /** Items */
+      items: components['schemas']['DecisionListItemOut'][]
+      /** Count */
+      count: number
     }
   }
   responses: never
@@ -1143,6 +1252,100 @@ export interface operations {
         content: {
           'application/json': components['schemas']['ErrorOut']
         }
+      }
+    }
+  }
+  apps_review_api_list_decisions: {
+    parameters: {
+      query?: {
+        reviewer?: string | null
+        action?: string | null
+        code?: string | null
+        date_from?: string | null
+        date_to?: string | null
+        run?: string | null
+        limit?: number
+        offset?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PagedDecisionListItemOut']
+        }
+      }
+    }
+  }
+  apps_review_api_export_decisions_csv: {
+    parameters: {
+      query?: {
+        reviewer?: string | null
+        action?: string | null
+        code?: string | null
+        date_from?: string | null
+        date_to?: string | null
+        run?: string | null
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  apps_review_api_export_run_csv: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        run_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  apps_dashboard_api_dashboard_summary: {
+    parameters: {
+      query?: {
+        days?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
