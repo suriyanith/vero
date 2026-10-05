@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
-import { Button, Card, inputClass } from '../components/ui'
+import { Button, Card, GlowBackdrop, inputClass } from '../components/ui'
 import { useLogin } from '../features/auth/hooks'
 
 export function LoginPage() {
@@ -11,21 +11,17 @@ export function LoginPage() {
   const navigate = useNavigate()
 
   return (
-    <main
-      className="flex min-h-screen items-center justify-center p-6"
-      style={{
-        background:
-          'radial-gradient(80rem 40rem at 50% -10%, #ece7f8 0%, rgba(236,231,248,0) 55%), var(--color-paper)',
-      }}
-    >
-      <div className="w-full max-w-sm">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-6">
+      <GlowBackdrop />
+      <div className="anim-in relative w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="font-display text-5xl font-bold tracking-tight">Vero</h1>
-          <p className="mt-2 text-sm text-ink-soft">
-            Every code, backed by the exact sentence that supports it.
+          <h1 className="font-display text-6xl font-bold tracking-tight">Vero</h1>
+          <p className="mx-auto mt-3 max-w-xs text-[15px] leading-6 text-ink-soft">
+            Every code, backed by <em className="font-display">the exact sentence</em> that supports
+            it.
           </p>
         </div>
-        <Card className="p-6">
+        <Card className="p-6 sm:p-7">
           <form
             className="space-y-4"
             onSubmit={(e) => {

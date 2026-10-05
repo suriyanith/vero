@@ -48,74 +48,93 @@ export function WorkQueuePage() {
       {runs.isPending && <p className="mt-8 text-ink-faint">Loading…</p>}
       {runs.isError && <p className="mt-8 text-[#9a2c21]">Could not load the queue.</p>}
       {runs.data && runs.data.items.length === 0 && (
-        <Card className="mt-8 p-10 text-center">
-          <p className="font-display text-lg">Nothing in the queue</p>
-          <p className="mt-1 text-sm text-ink-soft">
-            <Link to="/new" className="font-medium text-accent hover:underline">
+        <div className="relative mt-8 overflow-hidden rounded-3xl border border-line bg-surface p-12 text-center sm:p-16">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(30rem 16rem at 50% -8rem, #e2ddf8 0%, rgba(226,221,248,0) 65%)',
+            }}
+          />
+          <div className="relative">
+            <p className="font-display text-2xl font-semibold tracking-tight">
+              Nothing in the queue
+            </p>
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-ink-soft">
+              Submit a synthetic note and Vero will suggest codes with the evidence to back them.
+            </p>
+            <Link
+              to="/new"
+              className="mt-5 inline-block rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper shadow-sm transition-colors hover:bg-stone-700"
+            >
               Submit a note
-            </Link>{' '}
-            to get started.
-          </p>
-        </Card>
+            </Link>
+          </div>
+        </div>
       )}
 
       {runs.data && runs.data.items.length > 0 && (
         <>
           <Card className="mt-6 overflow-hidden">
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr className="text-left">
-                  {['Note', 'Status', 'Mode', 'Codes', 'Submitted by', 'Created', ''].map(
-                    (header) => (
-                      <th key={header} className="px-4 py-3">
-                        <MicroLabel>{header}</MicroLabel>
-                      </th>
-                    ),
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {runs.data.items.map((run) => (
-                  <tr
-                    key={run.id}
-                    className="border-t border-line transition-colors hover:bg-stone-50"
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        to={`/runs/${run.id}`}
-                        className="font-medium text-ink hover:text-accent"
-                      >
-                        {run.note_title}
-                      </Link>
-                      {run.error_code && (
-                        <span className="ml-2 text-xs text-[#9a2c21]">{run.error_code}</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={run.status} />
-                    </td>
-                    <td className="px-4 py-3 text-ink-soft">{run.mode}</td>
-                    <td className="px-4 py-3 tabular-nums text-ink-soft">{run.suggestion_count}</td>
-                    <td className="px-4 py-3 text-ink-soft">{run.created_by_name}</td>
-                    <td className="px-4 py-3 text-ink-faint">
-                      {new Date(run.created_at).toLocaleString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                      })}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      {run.status === 'failed' && (
-                        <Button size="sm" onClick={() => retry.mutate(run.id)}>
-                          Retry
-                        </Button>
-                      )}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[40rem] border-collapse text-sm">
+                <thead>
+                  <tr className="text-left">
+                    {['Note', 'Status', 'Mode', 'Codes', 'Submitted by', 'Created', ''].map(
+                      (header) => (
+                        <th key={header} className="px-4 py-3">
+                          <MicroLabel>{header}</MicroLabel>
+                        </th>
+                      ),
+                    )}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {runs.data.items.map((run) => (
+                    <tr
+                      key={run.id}
+                      className="border-t border-line transition-colors hover:bg-stone-50"
+                    >
+                      <td className="px-4 py-3">
+                        <Link
+                          to={`/runs/${run.id}`}
+                          className="font-medium text-ink hover:text-accent"
+                        >
+                          {run.note_title}
+                        </Link>
+                        {run.error_code && (
+                          <span className="ml-2 text-xs text-[#9a2c21]">{run.error_code}</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <StatusBadge status={run.status} />
+                      </td>
+                      <td className="px-4 py-3 text-ink-soft">{run.mode}</td>
+                      <td className="px-4 py-3 tabular-nums text-ink-soft">
+                        {run.suggestion_count}
+                      </td>
+                      <td className="px-4 py-3 text-ink-soft">{run.created_by_name}</td>
+                      <td className="px-4 py-3 text-ink-faint">
+                        {new Date(run.created_at).toLocaleString(undefined, {
+                          month: 'short',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        {run.status === 'failed' && (
+                          <Button size="sm" onClick={() => retry.mutate(run.id)}>
+                            Retry
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </Card>
           <div className="mt-4 flex items-center gap-3 text-sm">
             <Button

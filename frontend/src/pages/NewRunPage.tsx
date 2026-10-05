@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
-import { Button, Card, MicroLabel, PageTitle, inputClass } from '../components/ui'
+import { Button, Card, MicroLabel, PageTitle, Segmented, inputClass } from '../components/ui'
 import { useCreateBatch, useCreateRun, useSamples } from '../features/runs/hooks'
 
 type Tab = 'paste' | 'sample' | 'batch'
@@ -14,37 +14,6 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'sample', label: 'Pick a sample' },
   { id: 'batch', label: 'Upload a batch' },
 ]
-
-function Segmented<T extends string>({
-  options,
-  value,
-  onChange,
-}: {
-  options: { id: T; label: string }[]
-  value: T
-  onChange: (next: T) => void
-}) {
-  return (
-    <div
-      role="tablist"
-      className="inline-flex gap-0.5 rounded-full border border-line bg-stone-100 p-1"
-    >
-      {options.map((option) => (
-        <button
-          key={option.id}
-          role="tab"
-          aria-selected={value === option.id}
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-            value === option.id ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
-          }`}
-          onClick={() => onChange(option.id)}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
-  )
-}
 
 export function NewRunPage() {
   const [tab, setTab] = useState<Tab>('paste')

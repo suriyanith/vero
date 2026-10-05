@@ -74,7 +74,7 @@ function NotePanel({
   return (
     <section aria-label="Note with highlighted evidence" className="lg:sticky lg:top-24">
       <MicroLabel>The note</MicroLabel>
-      <Card className="mt-2.5 max-h-[72vh] overflow-y-auto p-6">
+      <Card className="mt-2.5 max-h-[48vh] overflow-y-auto p-5 sm:p-6 lg:max-h-[72vh]">
         <EvidenceHighlighter
           text={run.note.text}
           spans={spans}
