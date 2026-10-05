@@ -1,0 +1,11 @@
+CC: Routine follow-up of heart failure and COPD.
+HPI: 68-year-old returns for scheduled follow-up. Chronic systolic CHF, stable on current
+regimen, no orthopnea. COPD with occasional morning cough, using tiotropium daily, no
+exacerbations since last visit. Denies chest pain. Father had atrial fibrillation.
+Meds: furosemide 40 mg daily, carvedilol 12.5 mg BID, tiotropium inhaler daily.
+Exam: Lungs with mild expiratory wheeze. No peripheral edema. Heart regular rate and rhythm.
+Assessment/Plan:
+1. Chronic systolic heart failure - stable, no edema today, continue furosemide and
+   carvedilol, low-salt diet reviewed.
+2. COPD - mild symptoms, continue tiotropium, flu shot given today.
+3. Tobacco use disorder - counseled on cessation, patient contemplating quitting.

@@ -12,7 +12,8 @@ ESLint, …) are standard and not listed.
 | `pydantic` | Schemas for the `vero_core` pipeline and API payloads |
 | `psycopg[binary]` | PostgreSQL driver |
 | `django-environ` | Parse settings from environment variables, fail fast |
-| `django-tasks` | Database-backed backend + worker for Django's tasks API |
+| `django-tasks-db` | Database-backed backend + worker for Django 6's `django.tasks` API |
+| `google-genai` | Official Gemini SDK: structured output from Pydantic response schemas |
 
 ## Frontend (npm)
 

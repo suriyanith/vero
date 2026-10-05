@@ -1,35 +1,21 @@
 """Code lookup and search against the active reference data.
 
-PostgresCodeRepository will implement the `CodeRepository` protocol that
-`vero_core` defines in Phase 2; the same search powers the pipeline's
-candidate retrieval and the UI's code-search box.
+PostgresCodeRepository implements the `CodeRepository` protocol from
+`vero_core.interfaces`; the same search powers the pipeline's candidate
+retrieval and the UI's code-search box.
 """
-
-from dataclasses import dataclass, field
 
 from django.contrib.postgres.search import SearchQuery, SearchRank, TrigramSimilarity
 from django.db.models import F, Q, QuerySet
 
 from apps.reference.models import CodeSetVersion, HccModel, Icd10Code, Icd10HccMap
+from vero_core.schemas import Candidate
 
 # Combined score: mostly full-text relevance, trigram similarity as a
 # secondary signal and a fallback for typos/abbreviations. Tune on the dev set.
 TEXT_RANK_WEIGHT = 0.7
 TRIGRAM_WEIGHT = 0.3
 TRIGRAM_FLOOR = 0.1  # below this, a trigram-only match is noise
-
-
-@dataclass(frozen=True)
-class CodeHit:
-    code: str
-    display_code: str
-    description: str
-    is_billable: bool
-    rank: int  # 1-based position in the search results
-    category: str
-    notes: dict[str, list[str]] = field(default_factory=dict)
-    hcc_number: int | None = None
-    hcc_label: str | None = None
 
 
 def active_code_set() -> CodeSetVersion | None:
@@ -66,27 +52,27 @@ class PostgresCodeRepository:
         )
         return {m.code: (m.hcc.number, m.hcc.label) for m in mappings}
 
-    def _to_hits(self, codes: list[Icd10Code]) -> list[CodeHit]:
+    def _to_candidates(self, codes: list[Icd10Code], ranked: bool) -> list[Candidate]:
         hccs = self.hcc_lookup([c.code for c in codes])
-        hits = []
+        candidates = []
         for position, code in enumerate(codes, start=1):
             hcc = hccs.get(code.code)
-            hits.append(
-                CodeHit(
+            candidates.append(
+                Candidate(
                     code=code.code,
                     display_code=code.display_code,
                     description=code.long_desc,
                     is_billable=code.is_billable,
-                    rank=position,
+                    rank=position if ranked else 0,
                     category=code.category,
                     notes=code.notes,
                     hcc_number=hcc[0] if hcc else None,
                     hcc_label=hcc[1] if hcc else None,
                 )
             )
-        return hits
+        return candidates
 
-    def search(self, query: str, limit: int = 10, billable_only: bool = True) -> list[CodeHit]:
+    def search(self, query: str, limit: int = 10, billable_only: bool = True) -> list[Candidate]:
         query = query.strip()
         if not query:
             return []
@@ -105,13 +91,14 @@ class PostgresCodeRepository:
             .filter(Q(search_vector=search_query) | Q(similarity__gt=TRIGRAM_FLOOR))
             .order_by("-score", "code")
         )
-        return self._to_hits(list(qs[:limit]))
+        return self._to_candidates(list(qs[:limit]), ranked=True)
 
-    def get(self, display_code: str) -> CodeHit | None:
+    def get(self, display_code: str) -> Candidate | None:
         code = self._codes().filter(code=display_code.replace(".", "").upper()).first()
         if code is None:
             return None
-        return self._to_hits([code])[0]
+        return self._to_candidates([code], ranked=False)[0]
 
-    def billable_in_category(self, category: str) -> list[Icd10Code]:
-        return list(self._codes().filter(category=category, is_billable=True))
+    def billable_in_category(self, category: str) -> list[Candidate]:
+        codes = list(self._codes().filter(category=category, is_billable=True).order_by("code"))
+        return self._to_candidates(codes, ranked=False)

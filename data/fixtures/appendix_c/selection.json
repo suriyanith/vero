@@ -1,0 +1,40 @@
+{
+  "selections": [
+    {
+      "condition_index": 1,
+      "codes": [
+        {
+          "code": "E11.22",
+          "rationale": "Note links type 2 diabetes with CKD stage 3a; the combination code applies."
+        }
+      ],
+      "no_fit": false,
+      "specificity_flags": [],
+      "certainty": "high"
+    },
+    {
+      "condition_index": 2,
+      "codes": [
+        {
+          "code": "N18.31",
+          "rationale": "CKD stage 3a is explicitly documented with a stable eGFR of 52."
+        }
+      ],
+      "no_fit": false,
+      "specificity_flags": [],
+      "certainty": "high"
+    },
+    {
+      "condition_index": 3,
+      "codes": [
+        {
+          "code": "R60.0",
+          "rationale": "Trace bilateral ankle edema is localized edema."
+        }
+      ],
+      "no_fit": false,
+      "specificity_flags": [],
+      "certainty": "high"
+    }
+  ]
+}

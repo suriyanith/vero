@@ -1,0 +1,137 @@
+[
+  {
+    "code": "E1122",
+    "display_code": "E11.22",
+    "description": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+    "is_billable": true,
+    "rank": 1,
+    "category": "E11",
+    "notes": {
+      "excludes1": [
+        "type 1 diabetes mellitus (E10.-)"
+      ],
+      "excludes1_codes": [
+        "E08",
+        "E09",
+        "E10",
+        "E13"
+      ],
+      "use_additional": [
+        "code to identify control using insulin (Z79.4)",
+        "code to identify stage of chronic kidney disease (N18.1-N18.6)"
+      ],
+      "use_additional_codes": [
+        "Z79.4",
+        "N18.1",
+        "N18.6"
+      ]
+    },
+    "hcc_number": 37,
+    "hcc_label": "Diabetes with Chronic Complications"
+  },
+  {
+    "code": "E1121",
+    "display_code": "E11.21",
+    "description": "Type 2 diabetes mellitus with diabetic nephropathy",
+    "is_billable": true,
+    "rank": 1,
+    "category": "E11",
+    "notes": {},
+    "hcc_number": 37,
+    "hcc_label": "Diabetes with Chronic Complications"
+  },
+  {
+    "code": "E119",
+    "display_code": "E11.9",
+    "description": "Type 2 diabetes mellitus without complications",
+    "is_billable": true,
+    "rank": 1,
+    "category": "E11",
+    "notes": {},
+    "hcc_number": 38,
+    "hcc_label": "Diabetes with Glycemic, Unspecified, or No Complications"
+  },
+  {
+    "code": "N1831",
+    "display_code": "N18.31",
+    "description": "Chronic kidney disease, stage 3a",
+    "is_billable": true,
+    "rank": 1,
+    "category": "N18",
+    "notes": {
+      "code_first": [
+        "any associated diabetic chronic kidney disease (E08.22, E09.22, E10.22, E11.22, E13.22)"
+      ],
+      "code_first_codes": [
+        "E08.22",
+        "E09.22",
+        "E10.22",
+        "E11.22",
+        "E13.22"
+      ],
+      "use_additional": [
+        "code to identify kidney transplant status, if applicable, (Z94.0)"
+      ],
+      "use_additional_codes": [
+        "Z94.0"
+      ]
+    },
+    "hcc_number": 329,
+    "hcc_label": "Chronic Kidney Disease, Moderate (Stage 3, Except 3B)"
+  },
+  {
+    "code": "N1832",
+    "display_code": "N18.32",
+    "description": "Chronic kidney disease, stage 3b",
+    "is_billable": true,
+    "rank": 1,
+    "category": "N18",
+    "notes": {},
+    "hcc_number": 329,
+    "hcc_label": "Chronic Kidney Disease, Moderate (Stage 3, Except 3B)"
+  },
+  {
+    "code": "R600",
+    "display_code": "R60.0",
+    "description": "Localized edema",
+    "is_billable": true,
+    "rank": 1,
+    "category": "R60",
+    "notes": {},
+    "hcc_number": null,
+    "hcc_label": null
+  },
+  {
+    "code": "R609",
+    "display_code": "R60.9",
+    "description": "Edema, unspecified",
+    "is_billable": true,
+    "rank": 1,
+    "category": "R60",
+    "notes": {},
+    "hcc_number": null,
+    "hcc_label": null
+  },
+  {
+    "code": "I509",
+    "display_code": "I50.9",
+    "description": "Heart failure, unspecified",
+    "is_billable": true,
+    "rank": 1,
+    "category": "I50",
+    "notes": {},
+    "hcc_number": 226,
+    "hcc_label": "Congestive Heart Failure"
+  },
+  {
+    "code": "C189",
+    "display_code": "C18.9",
+    "description": "Malignant neoplasm of colon, unspecified",
+    "is_billable": true,
+    "rank": 1,
+    "category": "C18",
+    "notes": {},
+    "hcc_number": 22,
+    "hcc_label": "Bladder, Colorectal, and Other Cancers"
+  }
+]

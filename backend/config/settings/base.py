@@ -19,6 +19,7 @@ env = environ.Env(
     VERO_LLM_MODE=(str, "fake"),
     VERO_LLM_MAX_RPM=(int, 10),
     VERO_LLM_TIMEOUT_SECONDS=(int, 60),
+    VERO_LLM_MAX_OUTPUT_TOKENS=(int, 8192),
     VERO_RETRIEVAL_TOP_K=(int, 10),
     VERO_MAX_NOTE_CHARS=(int, 20000),
     VERO_MAX_BATCH_FILES=(int, 25),
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "django_tasks_db",
     "apps.accounts",
     "apps.reference",
+    "apps.llm",
 ]
 
 MIDDLEWARE = [
@@ -128,6 +130,7 @@ GEMINI_MODEL = env("GEMINI_MODEL", default="")
 VERO_LLM_MODE = env("VERO_LLM_MODE")
 VERO_LLM_MAX_RPM = env("VERO_LLM_MAX_RPM")
 VERO_LLM_TIMEOUT_SECONDS = env("VERO_LLM_TIMEOUT_SECONDS")
+VERO_LLM_MAX_OUTPUT_TOKENS = env("VERO_LLM_MAX_OUTPUT_TOKENS")
 VERO_RETRIEVAL_TOP_K = env("VERO_RETRIEVAL_TOP_K")
 VERO_MAX_NOTE_CHARS = env("VERO_MAX_NOTE_CHARS")
 VERO_MAX_BATCH_FILES = env("VERO_MAX_BATCH_FILES")

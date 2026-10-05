@@ -1,0 +1,13 @@
+CC: Medication check for depression; weight management.
+HPI: 59-year-old with major depressive disorder, recurrent, in partial remission on
+sertraline. PHQ-9 today 8, improved from 14. Morbid obesity with BMI 41; enrolled in
+dietician program, lost 4 lbs since last visit. Prior shoulder strain from March has
+resolved. Possible sleep apnea - partner reports snoring; sleep study ordered.
+Problem list: GERD.
+Meds: sertraline 100 mg daily, omeprazole 20 mg daily.
+Exam: BMI 41.2. Affect brighter than prior visit.
+Assessment/Plan:
+1. Major depressive disorder, recurrent, partial remission - continue sertraline 100 mg,
+   PHQ-9 improved to 8, follow up in 3 months.
+2. Morbid obesity - BMI 41.2, continue dietician program, discussed activity goals.
+3. Possible obstructive sleep apnea - rule out with home sleep study.

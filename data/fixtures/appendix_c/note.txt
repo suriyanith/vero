@@ -1,0 +1,12 @@
+CC: Follow-up diabetes and kidney function.
+HPI: 72-year-old with type 2 diabetes and CKD stage 3a. Home glucose readings 110-160.
+Reports mild ankle swelling in the evenings. History of colon cancer, s/p resection 2015,
+no recurrence on last colonoscopy.
+Meds: metformin 500 mg BID, lisinopril 10 mg daily.
+Exam: BP 128/76. Trace bilateral ankle edema.
+Labs: A1c 7.4%. eGFR 52.
+Assessment/Plan:
+1. Type 2 diabetes with CKD stage 3a - A1c 7.4%, continue metformin, eGFR stable at 52,
+   recheck BMP in 3 months.
+2. Ankle edema - likely dependent edema; rule out heart failure. Order echocardiogram.
+3. History of colon cancer - no evidence of recurrence, continue surveillance per GI.

@@ -55,4 +55,7 @@ eval:
 	@echo "TODO Phase 7: manage.py run_eval --split test"
 
 live-smoke:
-	@echo "TODO Phase 2: run 3 sample notes against the real Gemini API"
+	$(BACKEND) python manage.py code_note_file \
+		../data/samples/note_01_diabetes_ckd.txt \
+		../data/samples/note_02_chf_copd.txt \
+		../data/samples/note_03_depression_obesity.txt

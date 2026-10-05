@@ -1,0 +1,76 @@
+{
+  "conditions": [
+    {
+      "label": "type 2 diabetes with diabetic chronic kidney disease",
+      "status": "active",
+      "quotes": [
+        {
+          "text": "Type 2 diabetes with CKD stage 3a - A1c 7.4%, continue metformin",
+          "meat": [
+            "evaluate",
+            "treat"
+          ]
+        }
+      ],
+      "specificity_details": [
+        "type 2",
+        "with CKD stage 3a"
+      ]
+    },
+    {
+      "label": "chronic kidney disease stage 3a",
+      "status": "active",
+      "quotes": [
+        {
+          "text": "eGFR stable at 52, recheck BMP in 3 months",
+          "meat": [
+            "evaluate",
+            "assess",
+            "monitor"
+          ]
+        }
+      ],
+      "specificity_details": [
+        "stage 3a"
+      ]
+    },
+    {
+      "label": "ankle edema",
+      "status": "active",
+      "quotes": [
+        {
+          "text": "Trace bilateral ankle edema",
+          "meat": [
+            "evaluate"
+          ]
+        }
+      ],
+      "specificity_details": [
+        "bilateral",
+        "localized"
+      ]
+    },
+    {
+      "label": "heart failure",
+      "status": "uncertain",
+      "quotes": [
+        {
+          "text": "rule out heart failure",
+          "meat": []
+        }
+      ],
+      "specificity_details": []
+    },
+    {
+      "label": "colon cancer",
+      "status": "historical",
+      "quotes": [
+        {
+          "text": "History of colon cancer, s/p resection 2015",
+          "meat": []
+        }
+      ],
+      "specificity_details": []
+    }
+  ]
+}
