@@ -85,11 +85,27 @@ textarea:focus {
   animation: none;
 }
 
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .anim-in {
     animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .anim-pop {
     animation: scale-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .anim-drift {
+    animation: drift 7s ease-in-out infinite;
+  }
+  .anim-drift-slow {
+    animation: drift 9s ease-in-out 1.2s infinite;
   }
 }
