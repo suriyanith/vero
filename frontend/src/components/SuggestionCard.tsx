@@ -1,5 +1,6 @@
 import type { Suggestion } from '../api/types'
 import { ConfidenceBadge, DecisionBadge, HccBadge, MeatChips } from './badges'
+import { Button, Card } from './ui'
 
 export function SuggestionCard({
   suggestion,
@@ -20,78 +21,72 @@ export function SuggestionCard({
 }) {
   const decision = suggestion.latest_decision
   return (
-    <article
-      data-testid={`suggestion-${suggestion.display_code}`}
-      className={`rounded-lg border bg-white p-3 shadow-sm ${
-        focused ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200'
-      }`}
-      onMouseEnter={() => onHover?.(true)}
-      onMouseLeave={() => onHover?.(false)}
-    >
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          className="font-mono text-lg font-bold hover:underline"
-          onClick={onClickEvidence}
-          title="Scroll to evidence"
-        >
-          {suggestion.display_code}
-        </button>
-        <ConfidenceBadge level={suggestion.confidence} reasons={suggestion.confidence_reasons} />
-        <HccBadge number={suggestion.hcc_number ?? null} label={suggestion.hcc_label} />
-        <MeatChips meat={suggestion.meat} />
-        {decision && <DecisionBadge action={decision.action} />}
-      </div>
-      <p className="mt-1 text-sm text-gray-800">{suggestion.description}</p>
+    <Card className={`p-4 ${focused ? 'ring-2 ring-accent' : ''}`}>
+      <article
+        data-testid={`suggestion-${suggestion.display_code}`}
+        onMouseEnter={() => onHover?.(true)}
+        onMouseLeave={() => onHover?.(false)}
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            className="font-mono text-lg font-bold tracking-tight hover:text-accent"
+            onClick={onClickEvidence}
+            title="Scroll to evidence"
+          >
+            {suggestion.display_code}
+          </button>
+          <ConfidenceBadge level={suggestion.confidence} reasons={suggestion.confidence_reasons} />
+          <HccBadge number={suggestion.hcc_number ?? null} label={suggestion.hcc_label} />
+          <MeatChips meat={suggestion.meat} />
+          {decision && <DecisionBadge action={decision.action} />}
+        </div>
+        <p className="mt-1.5 text-sm text-stone-700">{suggestion.description}</p>
 
-      {suggestion.evidence.length > 0 && (
-        <ul className="mt-2 space-y-1">
-          {suggestion.evidence.map((quote) => (
-            <li
-              key={`${quote.start}-${quote.end}`}
-              className="border-l-2 border-gray-300 pl-2 text-sm italic text-gray-600"
-            >
-              “{quote.text}”
-            </li>
-          ))}
-        </ul>
-      )}
+        {suggestion.evidence.length > 0 && (
+          <ul className="mt-3 space-y-1.5">
+            {suggestion.evidence.map((quote) => (
+              <li
+                key={`${quote.start}-${quote.end}`}
+                className="border-l-2 border-line-strong pl-3 font-display text-[13.5px] italic leading-6 text-ink-soft"
+              >
+                “{quote.text}”
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {suggestion.rationale && <p className="mt-2 text-xs text-gray-500">{suggestion.rationale}</p>}
+        {suggestion.rationale && (
+          <p className="mt-2.5 text-xs leading-5 text-ink-faint">{suggestion.rationale}</p>
+        )}
 
-      {suggestion.flags.length > 0 && (
-        <p className="mt-1 text-xs text-amber-700">flags: {suggestion.flags.join(', ')}</p>
-      )}
+        {suggestion.flags.length > 0 && (
+          <p className="mt-1.5 text-xs font-medium text-[#8a5a12]">
+            flags: {suggestion.flags.join(', ')}
+          </p>
+        )}
 
-      {decision ? (
-        <p className="mt-2 text-xs text-gray-500">
-          {decision.action === 'modify' && (
-            <span className="mr-1 font-mono font-semibold">→ {decision.final_code}</span>
-          )}
-          by {decision.reviewer_name}
-          {decision.reason && <span> — “{decision.reason}”</span>}
-        </p>
-      ) : null}
+        {decision && (
+          <p className="mt-3 border-t border-line pt-2.5 text-xs text-ink-faint">
+            {decision.action === 'modify' && (
+              <span className="mr-1 font-mono font-semibold text-ink">→ {decision.final_code}</span>
+            )}
+            by {decision.reviewer_name}
+            {decision.reason && <span> — “{decision.reason}”</span>}
+          </p>
+        )}
 
-      <div className="mt-3 flex gap-2">
-        <button
-          className="rounded bg-green-600 px-3 py-1 text-sm font-medium text-white hover:bg-green-700"
-          onClick={onAccept}
-        >
-          Accept
-        </button>
-        <button
-          className="rounded bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700"
-          onClick={onReject}
-        >
-          Reject
-        </button>
-        <button
-          className="rounded bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700"
-          onClick={onModify}
-        >
-          Modify
-        </button>
-      </div>
-    </article>
+        <div className="mt-3.5 flex gap-2">
+          <Button variant="accept" size="sm" onClick={onAccept}>
+            Accept
+          </Button>
+          <Button variant="reject" size="sm" onClick={onReject}>
+            Reject
+          </Button>
+          <Button variant="modify" size="sm" onClick={onModify}>
+            Modify
+          </Button>
+        </div>
+      </article>
+    </Card>
   )
 }

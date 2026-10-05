@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { Finding, RunDetail, Suggestion } from '../api/types'
+import { AuditFindingsTable } from '../components/AuditFindingsTable'
 import { CodeSearchModal } from '../components/CodeSearchModal'
+import { DecisionHistory } from '../components/DecisionHistory'
 import { EvidenceHighlighter } from '../components/EvidenceHighlighter'
 import { paletteFor, type EvidenceSpan } from '../components/highlight'
 import { StatusBadge } from '../components/badges'
 import { SuggestionCard } from '../components/SuggestionCard'
-import { AuditFindingsTable } from '../components/AuditFindingsTable'
-import { DecisionHistory } from '../components/DecisionHistory'
+import { Button, Card, Dialog, MicroLabel, inputClass } from '../components/ui'
 import { useAcceptAllHigh, useDecide, useDecideFinding } from '../features/review/hooks'
 import { useRun } from '../features/runs/hooks'
 
@@ -23,109 +24,94 @@ export function RunDetailPage() {
   const { runId } = useParams<{ runId: string }>()
   const { data: run, isPending, isError } = useRun(runId)
 
-  if (isPending) return <p className="text-gray-500">Loading…</p>
-  if (isError || !run) return <p className="text-red-700">Run not found.</p>
+  if (isPending) return <p className="text-ink-faint">Loading…</p>
+  if (isError || !run) return <p className="text-[#9a2c21]">Run not found.</p>
   if (run.status === 'queued' || run.status === 'processing') {
     return (
-      <div className="py-16 text-center">
+      <Card className="mx-auto mt-16 max-w-md p-10 text-center">
         <StatusBadge status={run.status} />
-        <p className="mt-3 text-gray-600">
-          Processing “{run.note.title}”… this page updates itself.
-        </p>
-      </div>
+        <p className="mt-4 font-display text-lg">Reading “{run.note.title}”</p>
+        <p className="mt-1 text-sm text-ink-soft">This page updates itself.</p>
+      </Card>
     )
   }
   if (run.status === 'failed') {
     return (
-      <div className="py-16 text-center">
+      <Card className="mx-auto mt-16 max-w-md p-10 text-center">
         <StatusBadge status={run.status} />
-        <p className="mt-3 text-red-700">
+        <p className="mt-4 text-sm text-[#9a2c21]">
           {run.error_code}: {run.error_message}
         </p>
-      </div>
+      </Card>
     )
   }
   return run.mode === 'audit' ? <AuditView run={run} /> : <ReviewView run={run} />
 }
 
-function AuditView({ run }: { run: RunDetail }) {
-  const decideFinding = useDecideFinding(run.id)
-  const [hoveredCondition, setHoveredCondition] = useState<number | null>(null)
-
-  const spans: EvidenceSpan[] = useMemo(
-    () =>
-      run.conditions.flatMap((c) =>
-        c.quotes.map((q) => ({ start: q.start, end: q.end, conditionId: c.id })),
-      ),
-    [run.conditions],
+function RunFooter({ run }: { run: RunDetail }) {
+  const prompts = Object.entries(run.prompt_versions)
+    .map(([k, v]) => `${k} ${v}`)
+    .join(', ')
+  return (
+    <footer className="mt-8 border-t border-line pt-3 text-xs text-ink-faint">
+      model {run.model_name || '—'} · prompts {prompts || '—'} · {run.duration_ms ?? '—'} ms ·
+      tokens {run.input_tokens}/{run.output_tokens} · dropped quotes {run.dropped_quotes}
+    </footer>
   )
-  const submitted = run.findings.filter((f) => f.verdict !== 'MISSED_HCC')
-  const missed = run.findings.filter((f) => f.verdict === 'MISSED_HCC')
+}
+
+function NotePanel({
+  run,
+  spans,
+  hovered,
+  onHover,
+}: {
+  run: RunDetail
+  spans: EvidenceSpan[]
+  hovered: number | null
+  onHover: (id: number | null) => void
+}) {
+  return (
+    <section aria-label="Note with highlighted evidence" className="lg:sticky lg:top-24">
+      <MicroLabel>The note</MicroLabel>
+      <Card className="mt-2.5 max-h-[72vh] overflow-y-auto p-6">
+        <EvidenceHighlighter
+          text={run.note.text}
+          spans={spans}
+          activeConditionId={hovered}
+          onHoverCondition={onHover}
+        />
+      </Card>
+    </section>
+  )
+}
+
+function NotCodedList({ run }: { run: RunDetail }) {
   const notCoded = run.conditions.filter((c) => c.status !== 'active')
-
-  const act = (finding: Finding, action: 'accept' | 'reject') =>
-    decideFinding.mutate({ findingId: finding.id, input: { action } })
-
+  const palette = paletteFor(run.conditions.map((c) => c.id))
+  if (notCoded.length === 0) return null
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-xl font-bold">{run.note.title}</h1>
-        <StatusBadge status={run.status} />
-        <span className="rounded bg-gray-800 px-2 py-0.5 text-xs font-medium text-white">
-          audit
-        </span>
-      </div>
-
-      <div className="mt-4 grid gap-6 lg:grid-cols-2">
-        <section
-          aria-label="Note with highlighted evidence"
-          className="max-h-[75vh] overflow-y-auto rounded-lg border border-gray-200 bg-white p-4"
-        >
-          <EvidenceHighlighter
-            text={run.note.text}
-            spans={spans}
-            activeConditionId={hoveredCondition}
-            onHoverCondition={setHoveredCondition}
-          />
-        </section>
-
-        <section aria-label="Audit findings" className="space-y-5">
-          <AuditFindingsTable
-            title="Submitted codes"
-            findings={submitted}
-            onAccept={(f) => act(f, 'accept')}
-            onReject={(f) => act(f, 'reject')}
-          />
-          <AuditFindingsTable
-            title="Missed HCCs"
-            findings={missed}
-            onAccept={(f) => act(f, 'accept')}
-            onReject={(f) => act(f, 'reject')}
-          />
-          {notCoded.length > 0 && (
-            <div>
-              <h2 className="font-semibold">Not coded</h2>
-              <ul className="mt-2 space-y-1 text-sm">
-                {notCoded.map((c) => (
-                  <li key={c.id} className="rounded border border-gray-200 bg-white p-2">
-                    <span className="font-medium">{c.label}</span>
-                    <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">
-                      {c.status.replaceAll('_', ' ')}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
-      </div>
-
-      <DecisionHistory runId={run.id} />
-
-      <footer className="mt-6 border-t border-gray-200 pt-3 text-xs text-gray-500">
-        model {run.model_name || '—'} · {run.duration_ms ?? '—'} ms · tokens {run.input_tokens}/
-        {run.output_tokens}
-      </footer>
+      <MicroLabel>Not coded — and why</MicroLabel>
+      <ul className="mt-2.5 space-y-1.5">
+        {notCoded.map((c) => (
+          <li key={c.id} className="flex flex-wrap items-baseline gap-2 text-sm">
+            <span
+              aria-hidden
+              className={`inline-block h-2.5 w-2.5 translate-y-px rounded-[3px] ${
+                palette.get(c.id) ?? ''
+              }`}
+            />
+            <span className="font-medium">{c.label}</span>
+            <span className="rounded-full bg-stone-100 px-2 py-0.5 text-xs text-ink-soft">
+              {c.status.replaceAll('_', ' ')}
+            </span>
+            {c.quotes[0] && (
+              <span className="font-display italic text-ink-faint">“{c.quotes[0].text}”</span>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -148,7 +134,6 @@ function ReviewView({ run }: { run: RunDetail }) {
     [run.suggestions],
   )
   const ordered = useMemo(() => [...high, ...needsReview], [high, needsReview])
-  const notCoded = run.conditions.filter((c) => c.status !== 'active')
 
   const spans: EvidenceSpan[] = useMemo(
     () =>
@@ -157,7 +142,6 @@ function ReviewView({ run }: { run: RunDetail }) {
       ),
     [run.conditions],
   )
-  const palette = paletteFor(run.conditions.map((c) => c.id))
 
   const scrollToEvidence = (conditionId: number | null) => {
     if (conditionId == null) return
@@ -209,50 +193,42 @@ function ReviewView({ run }: { run: RunDetail }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-xl font-bold">{run.note.title}</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight">{run.note.title}</h1>
         <StatusBadge status={run.status} />
         <button
-          className="ml-auto text-xs text-gray-500 underline"
+          className="ml-auto text-xs text-ink-faint hover:text-ink"
           onClick={() => setShowShortcuts(true)}
         >
-          Keyboard shortcuts (?)
+          Keyboard shortcuts <kbd className="rounded border border-line-strong px-1">?</kbd>
         </button>
       </div>
 
-      <div className="mt-4 grid gap-6 lg:grid-cols-2">
-        {/* Left: the note with highlighted evidence */}
-        <section
-          aria-label="Note with highlighted evidence"
-          className="max-h-[75vh] overflow-y-auto rounded-lg border border-gray-200 bg-white p-4"
-        >
-          <EvidenceHighlighter
-            text={run.note.text}
-            spans={spans}
-            activeConditionId={hoveredCondition}
-            onHoverCondition={setHoveredCondition}
-          />
-        </section>
+      <div className="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_1.1fr]">
+        <NotePanel
+          run={run}
+          spans={spans}
+          hovered={hoveredCondition}
+          onHover={setHoveredCondition}
+        />
 
-        {/* Right: suggestions */}
-        <section aria-label="Suggested codes" className="space-y-4">
+        <section aria-label="Suggested codes" className="space-y-7">
           {run.suggestions.length === 0 && (
-            <p className="text-gray-500">No codes suggested for this note.</p>
+            <Card className="p-8 text-center text-sm text-ink-soft">
+              No codes suggested for this note.
+            </Card>
           )}
 
           {high.length > 0 && (
             <div>
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold">High confidence</h2>
+                <MicroLabel>High confidence</MicroLabel>
                 {high.some((s) => !s.latest_decision) && (
-                  <button
-                    className="rounded bg-green-600 px-3 py-1 text-sm font-medium text-white hover:bg-green-700"
-                    onClick={() => acceptHigh.mutate()}
-                  >
+                  <Button variant="primary" size="sm" onClick={() => acceptHigh.mutate()}>
                     Accept all High
-                  </button>
+                  </Button>
                 )}
               </div>
-              <div className="mt-2 space-y-3">
+              <div className="mt-2.5 space-y-3">
                 {high.map((s) => (
                   <SuggestionCard key={s.id} {...cardProps(s)} />
                 ))}
@@ -262,8 +238,8 @@ function ReviewView({ run }: { run: RunDetail }) {
 
           {needsReview.length > 0 && (
             <div>
-              <h2 className="font-semibold">Needs review</h2>
-              <div className="mt-2 space-y-3">
+              <MicroLabel>Needs review</MicroLabel>
+              <div className="mt-2.5 space-y-3">
                 {needsReview.map((s) => (
                   <SuggestionCard key={s.id} {...cardProps(s)} />
                 ))}
@@ -271,42 +247,12 @@ function ReviewView({ run }: { run: RunDetail }) {
             </div>
           )}
 
-          {notCoded.length > 0 && (
-            <div>
-              <h2 className="font-semibold">Not coded</h2>
-              <ul className="mt-2 space-y-2">
-                {notCoded.map((c) => (
-                  <li key={c.id} className="rounded border border-gray-200 bg-white p-2 text-sm">
-                    <span
-                      className={`mr-2 inline-block h-3 w-3 rounded-sm align-middle ${
-                        palette.get(c.id) ?? ''
-                      }`}
-                    />
-                    <span className="font-medium">{c.label}</span>
-                    <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">
-                      {c.status.replaceAll('_', ' ')}
-                    </span>
-                    {c.quotes[0] && (
-                      <span className="ml-2 italic text-gray-500">“{c.quotes[0].text}”</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <NotCodedList run={run} />
         </section>
       </div>
 
       <DecisionHistory runId={run.id} />
-
-      <footer className="mt-6 border-t border-gray-200 pt-3 text-xs text-gray-500">
-        model {run.model_name || '—'} · prompts{' '}
-        {Object.entries(run.prompt_versions)
-          .map(([k, v]) => `${k} ${v}`)
-          .join(', ') || '—'}{' '}
-        · {run.duration_ms ?? '—'} ms · tokens {run.input_tokens}/{run.output_tokens} · dropped
-        quotes {run.dropped_quotes}
-      </footer>
+      <RunFooter run={run} />
 
       {rejecting && (
         <RejectDialog
@@ -334,33 +280,81 @@ function ReviewView({ run }: { run: RunDetail }) {
       )}
 
       {showShortcuts && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-          role="dialog"
-          aria-label="Keyboard shortcuts"
-          onClick={() => setShowShortcuts(false)}
-        >
-          <div className="rounded-lg bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="font-semibold">Keyboard shortcuts</h2>
-            <table className="mt-3 text-sm">
-              <tbody>
-                {SHORTCUTS.map(([key, what]) => (
-                  <tr key={key}>
-                    <td className="pr-6 font-mono text-gray-800">{key}</td>
-                    <td className="text-gray-600">{what}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button
-              className="mt-4 rounded border border-gray-300 px-3 py-1 text-sm"
-              onClick={() => setShowShortcuts(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <Dialog label="Keyboard shortcuts" onClose={() => setShowShortcuts(false)}>
+          <h2 className="font-display text-lg font-semibold tracking-tight">Keyboard shortcuts</h2>
+          <table className="mt-4 w-full text-sm">
+            <tbody>
+              {SHORTCUTS.map(([key, what]) => (
+                <tr key={key} className="border-t border-line first:border-t-0">
+                  <td className="py-2 pr-6 font-mono text-[13px] text-ink">{key}</td>
+                  <td className="py-2 text-ink-soft">{what}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Button className="mt-4" onClick={() => setShowShortcuts(false)}>
+            Close
+          </Button>
+        </Dialog>
       )}
+    </div>
+  )
+}
+
+function AuditView({ run }: { run: RunDetail }) {
+  const decideFinding = useDecideFinding(run.id)
+  const [hoveredCondition, setHoveredCondition] = useState<number | null>(null)
+
+  const spans: EvidenceSpan[] = useMemo(
+    () =>
+      run.conditions.flatMap((c) =>
+        c.quotes.map((q) => ({ start: q.start, end: q.end, conditionId: c.id })),
+      ),
+    [run.conditions],
+  )
+  const submitted = run.findings.filter((f) => f.verdict !== 'MISSED_HCC')
+  const missed = run.findings.filter((f) => f.verdict === 'MISSED_HCC')
+
+  const act = (finding: Finding, action: 'accept' | 'reject') =>
+    decideFinding.mutate({ findingId: finding.id, input: { action } })
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-3">
+        <h1 className="font-display text-2xl font-semibold tracking-tight">{run.note.title}</h1>
+        <StatusBadge status={run.status} />
+        <span className="rounded-full bg-ink px-2.5 py-0.5 text-xs font-medium text-paper">
+          audit
+        </span>
+      </div>
+
+      <div className="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_1.2fr]">
+        <NotePanel
+          run={run}
+          spans={spans}
+          hovered={hoveredCondition}
+          onHover={setHoveredCondition}
+        />
+
+        <section aria-label="Audit findings" className="space-y-7">
+          <AuditFindingsTable
+            title="Submitted codes"
+            findings={submitted}
+            onAccept={(f) => act(f, 'accept')}
+            onReject={(f) => act(f, 'reject')}
+          />
+          <AuditFindingsTable
+            title="Missed HCCs"
+            findings={missed}
+            onAccept={(f) => act(f, 'accept')}
+            onReject={(f) => act(f, 'reject')}
+          />
+          <NotCodedList run={run} />
+        </section>
+      </div>
+
+      <DecisionHistory runId={run.id} />
+      <RunFooter run={run} />
     </div>
   )
 }
@@ -376,41 +370,26 @@ function RejectDialog({
 }) {
   const [reason, setReason] = useState('')
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      role="dialog"
-      aria-label={`Reject ${suggestion.display_code}`}
-      onClick={onCancel}
-    >
-      <div
-        className="w-full max-w-md rounded-lg bg-white p-4 shadow-xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h2 className="font-semibold">
-          Reject <span className="font-mono">{suggestion.display_code}</span>
-        </h2>
-        <label className="mt-3 block text-sm">
-          Reason (optional)
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            rows={3}
-            autoFocus
-            className="mt-1 w-full rounded border border-gray-300 p-2 text-sm focus:border-blue-500 focus:outline-none"
-          />
-        </label>
-        <div className="mt-3 flex justify-end gap-2">
-          <button className="rounded border border-gray-300 px-3 py-1 text-sm" onClick={onCancel}>
-            Cancel
-          </button>
-          <button
-            className="rounded bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700"
-            onClick={() => onConfirm(reason)}
-          >
-            Reject
-          </button>
-        </div>
+    <Dialog label={`Reject ${suggestion.display_code}`} onClose={onCancel}>
+      <h2 className="font-display text-lg font-semibold tracking-tight">
+        Reject <span className="font-mono">{suggestion.display_code}</span>
+      </h2>
+      <label className="mt-4 block text-sm font-medium">
+        Reason <span className="font-normal text-ink-faint">(optional)</span>
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          rows={3}
+          autoFocus
+          className={`mt-1.5 w-full ${inputClass}`}
+        />
+      </label>
+      <div className="mt-4 flex justify-end gap-2">
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button variant="reject" onClick={() => onConfirm(reason)}>
+          Reject
+        </Button>
       </div>
-    </div>
+    </Dialog>
   )
 }

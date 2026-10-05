@@ -14,13 +14,14 @@ import {
   YAxis,
 } from 'recharts'
 import { api } from '../api/client'
-import { useRuns } from '../features/runs/hooks'
 import { StatusBadge } from '../components/badges'
+import { Card, MicroLabel, PageTitle } from '../components/ui'
+import { useRuns } from '../features/runs/hooks'
 
 // One steady hue for single-series marks; identity never relies on color.
-const MARK_COLOR = '#2563eb'
-const GRID_COLOR = '#e5e7eb'
-const INK_MUTED = '#6b7280'
+const MARK_COLOR = '#5247c7'
+const GRID_COLOR = '#e8e4da'
+const INK_MUTED = '#a8a29e'
 
 interface Summary {
   days: number
@@ -49,11 +50,15 @@ const percent = (value: number | null | undefined) =>
 
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-3">
-      <p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-gray-900">{value}</p>
-      {hint && <p className="text-xs text-gray-500">{hint}</p>}
-    </div>
+    <Card className="p-4">
+      <MicroLabel>{label}</MicroLabel>
+      <p className="mt-1.5 text-2xl font-semibold tracking-tight tabular-nums">{value}</p>
+      {hint && (
+        <p className="mt-0.5 truncate text-xs text-ink-faint" title={hint}>
+          {hint}
+        </p>
+      )}
+    </Card>
   )
 }
 
@@ -65,13 +70,12 @@ export function DashboardPage() {
   })
   const backlog = useRuns({ status: 'ready_for_review', limit: 5 })
 
-  if (isPending) return <p className="text-gray-500">Loading…</p>
-  if (isError || !data) return <p className="text-red-700">Could not load the dashboard.</p>
+  if (isPending) return <p className="text-ink-faint">Loading…</p>
+  if (isError || !data) return <p className="text-[#9a2c21]">Could not load the dashboard.</p>
 
   const failures = Object.entries(data.failed_runs)
   const confidenceRates = ['high', 'medium', 'low'].map((level) => ({
     level,
-    rate: data.acceptance_rate_by_confidence[level],
     percent:
       data.acceptance_rate_by_confidence[level] != null
         ? Math.round((data.acceptance_rate_by_confidence[level] as number) * 100)
@@ -80,23 +84,23 @@ export function DashboardPage() {
 
   return (
     <div>
-      <div className="flex items-center gap-4">
-        <h1 className="text-xl font-bold">Dashboard</h1>
-        <label className="text-sm text-gray-600">
-          Window{' '}
-          <select
-            value={days}
-            onChange={(e) => setDays(Number(e.target.value))}
-            className="rounded border border-gray-300 px-2 py-1 text-sm"
-          >
-            <option value={7}>7 days</option>
-            <option value={30}>30 days</option>
-            <option value={90}>90 days</option>
-          </select>
-        </label>
-      </div>
+      <PageTitle title="Dashboard">
+        <div className="ml-auto inline-flex gap-0.5 rounded-full border border-line bg-stone-100 p-1">
+          {[7, 30, 90].map((window) => (
+            <button
+              key={window}
+              className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+                days === window ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
+              }`}
+              onClick={() => setDays(window)}
+            >
+              {window}d
+            </button>
+          ))}
+        </div>
+      </PageTitle>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         <MetricCard label="Notes processed" value={String(data.notes_processed)} />
         <MetricCard
           label="Failed runs"
@@ -132,10 +136,10 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-lg border border-gray-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-gray-800">Runs per day</h2>
-          <div className="mt-2 h-56">
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <Card className="p-5">
+          <MicroLabel>Runs per day</MicroLabel>
+          <div className="mt-3 h-56">
             <ResponsiveContainer>
               <LineChart
                 data={data.runs_per_day}
@@ -154,29 +158,34 @@ export function DashboardPage() {
                   tickLine={false}
                   axisLine={false}
                 />
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    borderRadius: 12,
+                    border: '1px solid #e8e4da',
+                    background: '#fffefb',
+                    fontSize: 13,
+                  }}
+                />
                 <Line
                   type="monotone"
                   dataKey="count"
                   stroke={MARK_COLOR}
                   strokeWidth={2}
-                  dot={{ r: 3, fill: MARK_COLOR }}
+                  dot={{ r: 3, fill: MARK_COLOR, strokeWidth: 0 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </section>
+        </Card>
 
-        <section className="rounded-lg border border-gray-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-gray-800">
-            Acceptance rate by confidence
-            <span className="ml-2 font-normal text-gray-500">
-              (High should beat Low, or the rules need work)
-            </span>
-          </h2>
-          <div className="mt-2 h-56">
+        <Card className="p-5">
+          <MicroLabel>Acceptance rate by confidence</MicroLabel>
+          <p className="mt-1 text-xs text-ink-faint">
+            High should beat Low, or the rules need work.
+          </p>
+          <div className="mt-2 h-[12.5rem]">
             <ResponsiveContainer>
-              <BarChart data={confidenceRates} margin={{ top: 16, right: 8, bottom: 0, left: -24 }}>
+              <BarChart data={confidenceRates} margin={{ top: 18, right: 8, bottom: 0, left: -24 }}>
                 <CartesianGrid stroke={GRID_COLOR} vertical={false} />
                 <XAxis
                   dataKey="level"
@@ -190,36 +199,45 @@ export function DashboardPage() {
                   tickLine={false}
                   axisLine={false}
                 />
-                <Tooltip formatter={(value) => [`${value}%`, 'accepted']} />
-                <Bar dataKey="percent" fill={MARK_COLOR} radius={[4, 4, 0, 0]} maxBarSize={48}>
+                <Tooltip
+                  formatter={(value) => [`${value}%`, 'accepted']}
+                  contentStyle={{
+                    borderRadius: 12,
+                    border: '1px solid #e8e4da',
+                    background: '#fffefb',
+                    fontSize: 13,
+                  }}
+                />
+                <Bar dataKey="percent" fill={MARK_COLOR} radius={[4, 4, 0, 0]} maxBarSize={44}>
                   <LabelList
                     dataKey="percent"
                     position="top"
                     formatter={(value) => (value == null ? 'n/a' : `${String(value)}%`)}
-                    style={{ fontSize: 12, fill: '#1f2937' }}
+                    style={{ fontSize: 12, fill: '#1c1917' }}
                   />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </section>
+        </Card>
       </div>
 
-      <section className="mt-6">
-        <h2 className="text-sm font-semibold text-gray-800">Waiting for review</h2>
+      <section className="mt-8">
+        <MicroLabel>Waiting for review</MicroLabel>
         {backlog.data?.items.length === 0 && (
-          <p className="mt-1 text-sm text-gray-500">Nothing waiting. </p>
+          <p className="mt-2 text-sm text-ink-faint">Nothing waiting.</p>
         )}
-        <ul className="mt-2 space-y-1">
+        <ul className="mt-2.5 space-y-2">
           {backlog.data?.items.map((run) => (
-            <li key={run.id} className="rounded border border-gray-200 bg-white p-2 text-sm">
-              <Link to={`/runs/${run.id}`} className="font-medium text-blue-700 hover:underline">
-                {run.note_title}
-              </Link>
-              <span className="ml-2">
+            <li key={run.id}>
+              <Link
+                to={`/runs/${run.id}`}
+                className="flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm transition-colors hover:border-line-strong hover:bg-stone-50"
+              >
+                <span className="font-medium">{run.note_title}</span>
                 <StatusBadge status={run.status} />
-              </span>
-              <span className="ml-2 text-gray-500">{run.suggestion_count} suggestion(s)</span>
+                <span className="ml-auto text-ink-faint">{run.suggestion_count} suggestion(s)</span>
+              </Link>
             </li>
           ))}
         </ul>

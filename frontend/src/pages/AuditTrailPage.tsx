@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import { DecisionBadge } from '../components/badges'
+import { Button, Card, MicroLabel, PageTitle, inputClass } from '../components/ui'
 
 interface TrailItem {
   id: string
@@ -19,6 +20,7 @@ interface TrailItem {
 }
 
 const PAGE_SIZE = 25
+const filterInput = `${inputClass} rounded-full py-1`
 
 export function AuditTrailPage() {
   const [reviewer, setReviewer] = useState('')
@@ -38,14 +40,20 @@ export function AuditTrailPage() {
     queryFn: () => api<{ items: TrailItem[]; count: number }>(`/decisions?${params}`),
   })
 
-  const exportUrl = `/api/decisions/export.csv?${params}`
-
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-4">
-        <h1 className="text-xl font-bold">Audit trail</h1>
-        <label className="text-sm text-gray-600">
-          Reviewer{' '}
+      <PageTitle title="Audit trail">
+        <a
+          href={`/api/decisions/export.csv?${params}`}
+          className="ml-auto rounded-full border border-line-strong px-3.5 py-1.5 text-sm font-medium text-ink-soft transition-colors hover:bg-stone-100 hover:text-ink"
+        >
+          Export CSV
+        </a>
+      </PageTitle>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <label className="flex items-center gap-2 text-sm text-ink-soft">
+          Reviewer
           <input
             value={reviewer}
             onChange={(e) => {
@@ -53,18 +61,18 @@ export function AuditTrailPage() {
               setOffset(0)
             }}
             placeholder="username"
-            className="w-28 rounded border border-gray-300 px-2 py-1 text-sm"
+            className={`w-32 ${filterInput}`}
           />
         </label>
-        <label className="text-sm text-gray-600">
-          Action{' '}
+        <label className="flex items-center gap-2 text-sm text-ink-soft">
+          Action
           <select
             value={action}
             onChange={(e) => {
               setAction(e.target.value)
               setOffset(0)
             }}
-            className="rounded border border-gray-300 px-2 py-1 text-sm"
+            className={`${filterInput}`}
           >
             <option value="">all</option>
             <option value="accept">accept</option>
@@ -72,8 +80,8 @@ export function AuditTrailPage() {
             <option value="modify">modify</option>
           </select>
         </label>
-        <label className="text-sm text-gray-600">
-          Code{' '}
+        <label className="flex items-center gap-2 text-sm text-ink-soft">
+          Code
           <input
             value={code}
             onChange={(e) => {
@@ -81,86 +89,91 @@ export function AuditTrailPage() {
               setOffset(0)
             }}
             placeholder="E11.22"
-            className="w-24 rounded border border-gray-300 px-2 py-1 font-mono text-sm"
+            className={`w-28 font-mono ${filterInput}`}
           />
         </label>
-        <a
-          href={exportUrl}
-          className="ml-auto rounded border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
-        >
-          Export CSV
-        </a>
       </div>
 
-      {isPending && <p className="mt-6 text-gray-500">Loading…</p>}
-      {isError && <p className="mt-6 text-red-700">Could not load the audit trail.</p>}
+      {isPending && <p className="mt-8 text-ink-faint">Loading…</p>}
+      {isError && <p className="mt-8 text-[#9a2c21]">Could not load the audit trail.</p>}
       {data && data.items.length === 0 && (
-        <p className="mt-6 text-gray-500">No decisions match these filters.</p>
+        <Card className="mt-8 p-10 text-center text-sm text-ink-soft">
+          No decisions match these filters.
+        </Card>
       )}
 
       {data && data.items.length > 0 && (
         <>
-          <table className="mt-4 w-full border-collapse overflow-hidden rounded-lg bg-white text-sm shadow-sm">
-            <thead>
-              <tr className="border-b border-gray-200 text-left text-xs uppercase text-gray-500">
-                <th className="px-3 py-2">When</th>
-                <th className="px-3 py-2">Reviewer</th>
-                <th className="px-3 py-2">Action</th>
-                <th className="px-3 py-2">Code</th>
-                <th className="px-3 py-2">Reason</th>
-                <th className="px-3 py-2">Run</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.items.map((item) => (
-                <tr key={item.id} className="border-b border-gray-100 hover:bg-blue-50">
-                  <td className="px-3 py-2 text-gray-500">
-                    {new Date(item.created_at).toLocaleString()}
-                  </td>
-                  <td className="px-3 py-2">{item.reviewer_name}</td>
-                  <td className="px-3 py-2">
-                    <DecisionBadge action={item.action} />
-                  </td>
-                  <td className="px-3 py-2 font-mono">
-                    {item.original_code}
-                    {item.action === 'modify' && item.final_code && (
-                      <span className="text-blue-700"> → {item.final_code}</span>
-                    )}
-                  </td>
-                  <td className="max-w-xs truncate px-3 py-2 text-gray-600" title={item.reason}>
-                    {item.reason || '—'}
-                  </td>
-                  <td className="px-3 py-2">
-                    <Link
-                      to={`/runs/${item.run_id}`}
-                      className="text-blue-700 hover:underline"
-                      title={item.note_title}
-                    >
-                      {item.run_mode} · {item.kind}
-                    </Link>
-                  </td>
+          <Card className="mt-5 overflow-hidden">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="text-left">
+                  {['When', 'Reviewer', 'Action', 'Code', 'Reason', 'Run'].map((header) => (
+                    <th key={header} className="px-4 py-3">
+                      <MicroLabel>{header}</MicroLabel>
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="mt-3 flex items-center gap-3 text-sm">
-            <button
-              className="rounded border border-gray-300 px-3 py-1 disabled:opacity-40"
+              </thead>
+              <tbody>
+                {data.items.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="border-t border-line transition-colors hover:bg-stone-50"
+                  >
+                    <td className="px-4 py-3 tabular-nums text-ink-faint">
+                      {new Date(item.created_at).toLocaleString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                      })}
+                    </td>
+                    <td className="px-4 py-3">{item.reviewer_name}</td>
+                    <td className="px-4 py-3">
+                      <DecisionBadge action={item.action} />
+                    </td>
+                    <td className="px-4 py-3 font-mono text-[13px]">
+                      {item.original_code}
+                      {item.action === 'modify' && item.final_code && (
+                        <span className="text-accent"> → {item.final_code}</span>
+                      )}
+                    </td>
+                    <td className="max-w-xs truncate px-4 py-3 text-ink-soft" title={item.reason}>
+                      {item.reason || '—'}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        to={`/runs/${item.run_id}`}
+                        className="text-accent hover:underline"
+                        title={item.note_title}
+                      >
+                        {item.run_mode} · {item.kind}
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Card>
+          <div className="mt-4 flex items-center gap-3 text-sm">
+            <Button
+              size="sm"
               disabled={offset === 0}
               onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
             >
               Previous
-            </button>
-            <span className="text-gray-500">
+            </Button>
+            <span className="tabular-nums text-ink-faint">
               {offset + 1}–{Math.min(offset + PAGE_SIZE, data.count)} of {data.count}
             </span>
-            <button
-              className="rounded border border-gray-300 px-3 py-1 disabled:opacity-40"
+            <Button
+              size="sm"
               disabled={offset + PAGE_SIZE >= data.count}
               onClick={() => setOffset(offset + PAGE_SIZE)}
             >
               Next
-            </button>
+            </Button>
           </div>
         </>
       )}

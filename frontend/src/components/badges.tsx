@@ -1,70 +1,82 @@
-// Small labeled badges. Color never carries meaning alone: every badge has text.
+// Tinted pills with a status dot. Color never carries meaning alone: every
+// badge has text, and the palette stays soft so the ink type leads.
 
-const CONFIDENCE_STYLES: Record<string, string> = {
-  high: 'bg-green-100 text-green-800 border-green-300',
-  medium: 'bg-amber-100 text-amber-800 border-amber-300',
-  low: 'bg-red-100 text-red-800 border-red-300',
-}
-
-export function ConfidenceBadge({ level, reasons }: { level: string; reasons?: string[] }) {
+function Pill({
+  tint,
+  dot,
+  title,
+  children,
+}: {
+  tint: string
+  dot?: string
+  title?: string
+  children: string
+}) {
   return (
     <span
-      className={`inline-block rounded border px-2 py-0.5 text-xs font-medium ${
-        CONFIDENCE_STYLES[level] ?? 'bg-gray-100 text-gray-700 border-gray-300'
-      }`}
-      title={reasons?.join('; ')}
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${tint}`}
+      title={title}
     >
-      {level} confidence
+      {dot && <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${dot}`} />}
+      {children}
     </span>
   )
 }
 
-const STATUS_STYLES: Record<string, string> = {
-  queued: 'bg-gray-100 text-gray-700',
-  processing: 'bg-blue-100 text-blue-800',
-  ready_for_review: 'bg-amber-100 text-amber-800',
-  completed: 'bg-green-100 text-green-800',
-  failed: 'bg-red-100 text-red-800',
+const CONFIDENCE: Record<string, [string, string]> = {
+  high: ['bg-[#e3f1e5] text-[#1b5e2f]', 'bg-[#2e8b4a]'],
+  medium: ['bg-[#faf0d7] text-[#8a5a12]', 'bg-[#d19a2f]'],
+  low: ['bg-[#fbe7e5] text-[#9a2c21]', 'bg-[#cd5247]'],
+}
+
+export function ConfidenceBadge({ level, reasons }: { level: string; reasons?: string[] }) {
+  const [tint, dot] = CONFIDENCE[level] ?? ['bg-stone-100 text-ink-soft', 'bg-stone-400']
+  return (
+    <Pill tint={tint} dot={dot} title={reasons?.join('; ')}>
+      {`${level} confidence`}
+    </Pill>
+  )
+}
+
+const STATUS: Record<string, [string, string]> = {
+  queued: ['bg-stone-100 text-ink-soft', 'bg-stone-400'],
+  processing: ['bg-accent-soft text-accent', 'bg-accent'],
+  ready_for_review: ['bg-[#faf0d7] text-[#8a5a12]', 'bg-[#d19a2f]'],
+  completed: ['bg-[#e3f1e5] text-[#1b5e2f]', 'bg-[#2e8b4a]'],
+  failed: ['bg-[#fbe7e5] text-[#9a2c21]', 'bg-[#cd5247]'],
 }
 
 export function StatusBadge({ status }: { status: string }) {
+  const [tint, dot] = STATUS[status] ?? ['bg-stone-100 text-ink-soft', 'bg-stone-400']
   return (
-    <span
-      className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${
-        STATUS_STYLES[status] ?? 'bg-gray-100 text-gray-700'
-      }`}
-    >
+    <Pill tint={tint} dot={dot}>
       {status.replaceAll('_', ' ')}
-    </span>
+    </Pill>
   )
 }
 
 export function HccBadge({ number, label }: { number: number | null; label?: string | null }) {
   if (number == null) {
-    return (
-      <span className="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
-        no HCC
-      </span>
-    )
+    return <Pill tint="bg-stone-100 text-ink-faint">no HCC</Pill>
   }
   return (
-    <span
-      className="inline-block rounded bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800"
-      title={label ?? undefined}
-    >
-      HCC {number}
-    </span>
+    <Pill tint="bg-accent-soft text-accent" title={label ?? undefined}>
+      {`HCC ${number}`}
+    </Pill>
   )
 }
 
 export function MeatChips({ meat }: { meat: string[] }) {
   if (meat.length === 0) {
-    return <span className="text-xs text-red-700">no MEAT</span>
+    return <Pill tint="bg-[#fbe7e5] text-[#9a2c21]">no MEAT</Pill>
   }
   return (
     <span className="inline-flex gap-1">
       {meat.map((m) => (
-        <span key={m} className="rounded bg-sky-100 px-1.5 py-0.5 text-xs text-sky-800">
+        <span
+          key={m}
+          className="rounded-full bg-[#e9eef5] px-2 py-0.5 text-xs font-medium text-[#3b5572]"
+        >
           {m}
         </span>
       ))}
@@ -72,45 +84,39 @@ export function MeatChips({ meat }: { meat: string[] }) {
   )
 }
 
+const DECISION: Record<string, [string, string, string]> = {
+  accept: ['bg-[#e3f1e5] text-[#1b5e2f]', 'bg-[#2e8b4a]', 'accepted'],
+  reject: ['bg-[#fbe7e5] text-[#9a2c21]', 'bg-[#cd5247]', 'rejected'],
+  modify: ['bg-accent-soft text-accent', 'bg-accent', 'modified'],
+}
+
 export function DecisionBadge({ action }: { action: string }) {
-  const styles: Record<string, string> = {
-    accept: 'bg-green-600 text-white',
-    reject: 'bg-red-600 text-white',
-    modify: 'bg-blue-600 text-white',
-  }
-  const labels: Record<string, string> = {
-    accept: 'accepted',
-    reject: 'rejected',
-    modify: 'modified',
-  }
+  const [tint, dot, label] = DECISION[action] ?? [
+    'bg-stone-100 text-ink-soft',
+    'bg-stone-400',
+    action,
+  ]
   return (
-    <span
-      className={`inline-block rounded px-2 py-0.5 text-xs font-semibold ${
-        styles[action] ?? 'bg-gray-500 text-white'
-      }`}
-    >
-      {labels[action] ?? action}
-    </span>
+    <Pill tint={tint} dot={dot}>
+      {label}
+    </Pill>
   )
 }
 
-const VERDICT_STYLES: Record<string, string> = {
-  SUPPORTED: 'bg-green-100 text-green-800 border-green-300',
-  WEAK_SUPPORT: 'bg-amber-100 text-amber-800 border-amber-300',
-  SPECIFICITY_MISMATCH: 'bg-blue-100 text-blue-800 border-blue-300',
-  NOT_SUPPORTED: 'bg-red-100 text-red-800 border-red-300',
-  INVALID_CODE: 'bg-red-100 text-red-800 border-red-300',
-  MISSED_HCC: 'bg-purple-100 text-purple-800 border-purple-300',
+const VERDICT: Record<string, [string, string]> = {
+  SUPPORTED: ['bg-[#e3f1e5] text-[#1b5e2f]', 'bg-[#2e8b4a]'],
+  WEAK_SUPPORT: ['bg-[#faf0d7] text-[#8a5a12]', 'bg-[#d19a2f]'],
+  SPECIFICITY_MISMATCH: ['bg-[#e3ecf8] text-[#2a4e8b]', 'bg-[#4472ba]'],
+  NOT_SUPPORTED: ['bg-[#fbe7e5] text-[#9a2c21]', 'bg-[#cd5247]'],
+  INVALID_CODE: ['bg-[#fbe7e5] text-[#9a2c21]', 'bg-[#cd5247]'],
+  MISSED_HCC: ['bg-accent-soft text-accent', 'bg-accent'],
 }
 
 export function VerdictBadge({ verdict }: { verdict: string }) {
+  const [tint, dot] = VERDICT[verdict] ?? ['bg-stone-100 text-ink-soft', 'bg-stone-400']
   return (
-    <span
-      className={`inline-block rounded border px-2 py-0.5 text-xs font-semibold ${
-        VERDICT_STYLES[verdict] ?? 'bg-gray-100 text-gray-700 border-gray-300'
-      }`}
-    >
+    <Pill tint={tint} dot={dot}>
       {verdict.replaceAll('_', ' ')}
-    </span>
+    </Pill>
   )
 }

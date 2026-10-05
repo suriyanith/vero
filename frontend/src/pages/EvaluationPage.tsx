@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { api, ApiError } from '../api/client'
+import { Card as UICard, MicroLabel, PageTitle } from '../components/ui'
 
 interface EvalRunListItem {
   id: string
@@ -47,12 +48,16 @@ const pct = (value: number | null | undefined) =>
 
 function Card({ label, value, warn }: { label: string; value: string; warn?: boolean }) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-3">
-      <p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
-      <p className={`mt-1 text-2xl font-bold ${warn ? 'text-red-700' : 'text-gray-900'}`}>
+    <UICard className="p-4">
+      <MicroLabel>{label}</MicroLabel>
+      <p
+        className={`mt-1.5 text-2xl font-semibold tracking-tight tabular-nums ${
+          warn ? 'text-[#9a2c21]' : ''
+        }`}
+      >
         {value}
       </p>
-    </div>
+    </UICard>
   )
 }
 
@@ -73,15 +78,15 @@ export function EvaluationPage() {
   if (runs.isError) {
     const forbidden = runs.error instanceof ApiError && runs.error.status === 403
     return (
-      <p className="text-red-700">
+      <p className="text-[#9a2c21]">
         {forbidden ? 'The evaluation page is admin-only.' : 'Could not load evaluations.'}
       </p>
     )
   }
-  if (runs.isPending) return <p className="text-gray-500">Loading…</p>
+  if (runs.isPending) return <p className="text-ink-faint">Loading…</p>
   if (runs.data.length === 0) {
     return (
-      <p className="text-gray-500">
+      <p className="text-ink-faint">
         No evaluations yet. Run <code>make eval</code> after reviewing the answer key.
       </p>
     )
@@ -92,9 +97,9 @@ export function EvaluationPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold">Evaluation</h1>
+      <PageTitle title="Evaluation" />
       {detail.data?.provisional && (
-        <p className="mt-2 rounded border border-amber-300 bg-amber-50 p-2 text-sm text-amber-800">
+        <p className="mt-2 rounded-xl bg-[#faf0d7] px-3 py-2 text-sm text-[#8a5a12]">
           Provisional: this evaluation ran against unreviewed labels.
         </p>
       )}
@@ -121,29 +126,31 @@ export function EvaluationPage() {
           </div>
 
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            <section className="rounded-lg border border-gray-200 bg-white p-4">
-              <h2 className="text-sm font-semibold">Accuracy by confidence</h2>
+            <section className="rounded-2xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(28,25,23,0.04)]">
+              <h2 className="text-sm font-semibold tracking-tight">Accuracy by confidence</h2>
               <table className="mt-2 w-full text-sm">
                 <tbody>
                   {Object.entries(coding.accuracy_by_confidence).map(([level, accuracy]) => (
-                    <tr key={level} className="border-t border-gray-100">
+                    <tr key={level} className="border-t border-line">
                       <td className="py-1 capitalize">{level}</td>
                       <td className="py-1 text-right font-mono">{pct(accuracy)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-ink-faint">
                 High should clearly beat Low; if not, the confidence rules need work.
               </p>
             </section>
 
-            <section className="rounded-lg border border-gray-200 bg-white p-4">
-              <h2 className="text-sm font-semibold">Hard cases (correctly left uncoded)</h2>
+            <section className="rounded-2xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(28,25,23,0.04)]">
+              <h2 className="text-sm font-semibold tracking-tight">
+                Hard cases (correctly left uncoded)
+              </h2>
               <table className="mt-2 w-full text-sm">
                 <tbody>
                   {Object.entries(coding.hard_cases).map(([reason, row]) => (
-                    <tr key={reason} className="border-t border-gray-100">
+                    <tr key={reason} className="border-t border-line">
                       <td className="py-1">{reason.replaceAll('_', ' ')}</td>
                       <td className="py-1 text-right font-mono">
                         {row.correctly_not_coded}/{row.total} ({pct(row.accuracy)})
@@ -158,8 +165,8 @@ export function EvaluationPage() {
       )}
 
       {audit && (
-        <section className="mt-6 rounded-lg border border-gray-200 bg-white p-4">
-          <h2 className="text-sm font-semibold">Audit mode</h2>
+        <section className="mt-8 rounded-2xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(28,25,23,0.04)]">
+          <h2 className="text-sm font-semibold tracking-tight">Audit mode</h2>
           <div className="mt-2 grid grid-cols-3 gap-3">
             <Card label="Verdict accuracy" value={pct(audit.overall_accuracy)} />
             <Card label="Unsupported caught" value={pct(audit.unsupported_caught_rate)} />
@@ -171,7 +178,7 @@ export function EvaluationPage() {
           <table className="mt-3 w-full text-sm">
             <tbody>
               {Object.entries(audit.per_verdict_accuracy).map(([verdict, accuracy]) => (
-                <tr key={verdict} className="border-t border-gray-100">
+                <tr key={verdict} className="border-t border-line">
                   <td className="py-1">{verdict.replaceAll('_', ' ')}</td>
                   <td className="py-1 text-right font-mono">{pct(accuracy)}</td>
                 </tr>
@@ -182,12 +189,12 @@ export function EvaluationPage() {
       )}
 
       <section className="mt-6">
-        <h2 className="text-sm font-semibold text-gray-800">Past evaluations</h2>
+        <MicroLabel>Past evaluations</MicroLabel>
         <ul className="mt-2 space-y-1">
           {runs.data.map((run) => (
             <li key={run.id}>
               <button
-                className={`w-full rounded border p-2 text-left text-sm ${
+                className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition-colors ${
                   run.id === activeId
                     ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 bg-white hover:bg-gray-50'
@@ -196,7 +203,7 @@ export function EvaluationPage() {
               >
                 {new Date(run.created_at).toLocaleString()} — {run.mode} on {run.split} —{' '}
                 {run.model_name}
-                {run.provisional && <span className="ml-2 text-amber-700">provisional</span>}
+                {run.provisional && <span className="ml-2 text-[#8a5a12]">provisional</span>}
               </button>
             </li>
           ))}

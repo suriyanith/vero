@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../api/client'
 import { DecisionBadge } from './badges'
+import { MicroLabel } from './ui'
 
 interface HistoryItem {
   id: string
@@ -22,32 +23,37 @@ export function DecisionHistory({ runId }: { runId: string }) {
   })
 
   return (
-    <section aria-label="Decision history" className="mt-6 border-t border-gray-200 pt-4">
+    <section aria-label="Decision history" className="mt-10">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold">Decision history</h2>
+        <MicroLabel>Decision history</MicroLabel>
         <a
           href={`/api/runs/${runId}/export.csv`}
-          className="rounded border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
+          className="rounded-full border border-line-strong px-3 py-1 text-[13px] font-medium text-ink-soft transition-colors hover:bg-stone-100 hover:text-ink"
         >
           Export CSV
         </a>
       </div>
       {data && data.items.length === 0 && (
-        <p className="mt-2 text-sm text-gray-500">No decisions yet.</p>
+        <p className="mt-2.5 text-sm text-ink-faint">No decisions yet.</p>
       )}
-      <ul className="mt-2 space-y-1">
+      <ul className="mt-2.5 space-y-1.5">
         {data?.items.map((item) => (
-          <li key={item.id} className="flex items-baseline gap-2 text-sm">
-            <span className="w-40 shrink-0 text-xs text-gray-500">
-              {new Date(item.created_at).toLocaleString()}
+          <li key={item.id} className="flex items-baseline gap-2.5 text-sm">
+            <span className="w-36 shrink-0 text-xs tabular-nums text-ink-faint">
+              {new Date(item.created_at).toLocaleString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+              })}
             </span>
             <DecisionBadge action={item.action} />
-            <span className="font-mono">
+            <span className="font-mono text-[13px] font-medium">
               {item.original_code}
               {item.action === 'modify' && item.final_code && <> → {item.final_code}</>}
             </span>
-            <span className="text-gray-600">by {item.reviewer_name}</span>
-            {item.reason && <span className="truncate text-gray-500">— “{item.reason}”</span>}
+            <span className="text-ink-soft">by {item.reviewer_name}</span>
+            {item.reason && <span className="truncate text-ink-faint">— “{item.reason}”</span>}
           </li>
         ))}
       </ul>

@@ -1,5 +1,5 @@
-// Renders the note with each condition's evidence highlighted by character
-// offsets. Overlapping quotes are split into segments so nothing is lost.
+// Renders the note like a document sheet with each condition's evidence
+// highlighted by character offsets. Overlaps split into segments.
 import { paletteFor, segment, type EvidenceSpan } from './highlight'
 
 export function EvidenceHighlighter({
@@ -15,7 +15,7 @@ export function EvidenceHighlighter({
 }) {
   const palette = paletteFor(spans.map((s) => s.conditionId))
   return (
-    <pre className="whitespace-pre-wrap break-words font-mono text-sm leading-6">
+    <pre className="m-0 whitespace-pre-wrap break-words font-sans text-[13.5px] leading-7 text-stone-800">
       {segment(text.length, spans).map((seg) => {
         const slice = text.slice(seg.start, seg.end)
         if (seg.conditionIds.length === 0) {
@@ -28,8 +28,8 @@ export function EvidenceHighlighter({
             key={seg.start}
             id={`evidence-${primary}-${seg.start}`}
             data-condition-id={primary}
-            className={`rounded-sm px-0.5 ${palette.get(primary) ?? ''} ${
-              isActive ? 'ring-2 ring-gray-900' : ''
+            className={`rounded-[4px] px-[3px] py-[1px] text-ink ${palette.get(primary) ?? ''} ${
+              isActive ? 'ring-2 ring-ink/70' : ''
             }`}
             onMouseEnter={() => onHoverCondition?.(primary)}
             onMouseLeave={() => onHoverCondition?.(null)}

@@ -7,16 +7,17 @@ export interface EvidenceSpan {
   conditionId: number
 }
 
-// One background per condition, cycled. Text stays dark for contrast.
+// One soft pastel per condition, cycled. Ink text stays readable on all of
+// them; the active state adds a ring so color is never the only signal.
 export const HIGHLIGHT_PALETTE = [
-  'bg-yellow-200',
-  'bg-green-200',
-  'bg-sky-200',
-  'bg-pink-200',
-  'bg-orange-200',
-  'bg-violet-200',
-  'bg-lime-200',
-  'bg-cyan-200',
+  'bg-[#fdeeb8]',
+  'bg-[#d8efd9]',
+  'bg-[#d8eaf8]',
+  'bg-[#fbdde4]',
+  'bg-[#fde4c8]',
+  'bg-[#e8e2fa]',
+  'bg-[#e4f0c0]',
+  'bg-[#d4f0ef]',
 ]
 
 export function paletteFor(conditionIds: number[]): Map<number, string> {

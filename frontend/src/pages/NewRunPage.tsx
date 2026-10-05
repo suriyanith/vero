@@ -1,12 +1,50 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
+import { Button, Card, MicroLabel, PageTitle, inputClass } from '../components/ui'
 import { useCreateBatch, useCreateRun, useSamples } from '../features/runs/hooks'
 
 type Tab = 'paste' | 'sample' | 'batch'
 type Mode = 'coding' | 'audit'
 
 const CODE_FORMAT = /^[A-TV-Z][0-9][0-9A-Z](\.[0-9A-Z]{1,4})?$/
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'paste', label: 'Paste a note' },
+  { id: 'sample', label: 'Pick a sample' },
+  { id: 'batch', label: 'Upload a batch' },
+]
+
+function Segmented<T extends string>({
+  options,
+  value,
+  onChange,
+}: {
+  options: { id: T; label: string }[]
+  value: T
+  onChange: (next: T) => void
+}) {
+  return (
+    <div
+      role="tablist"
+      className="inline-flex gap-0.5 rounded-full border border-line bg-stone-100 p-1"
+    >
+      {options.map((option) => (
+        <button
+          key={option.id}
+          role="tab"
+          aria-selected={value === option.id}
+          className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+            value === option.id ? 'bg-surface text-ink shadow-sm' : 'text-ink-soft hover:text-ink'
+          }`}
+          onClick={() => onChange(option.id)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 export function NewRunPage() {
   const [tab, setTab] = useState<Tab>('paste')
@@ -67,41 +105,28 @@ export function NewRunPage() {
     })
   }
 
-  const tabClass = (t: Tab) =>
-    `rounded-t px-4 py-2 text-sm font-medium ${
-      tab === t
-        ? 'bg-white border border-b-white border-gray-200 text-blue-700'
-        : 'text-gray-600 hover:text-gray-900'
-    }`
+  const submitLabel = createRun.isPending
+    ? 'Submitting…'
+    : mode === 'audit'
+      ? 'Run audit'
+      : 'Run coding'
 
   const auditControls = tab !== 'batch' && (
-    <fieldset className="mb-3">
+    <fieldset className="mb-5">
       <legend className="sr-only">Run mode</legend>
-      <div className="flex items-center gap-4 text-sm">
-        <label className="flex items-center gap-1">
-          <input
-            type="radio"
-            name="mode"
-            checked={mode === 'coding'}
-            onChange={() => setMode('coding')}
-          />
-          Coding
-        </label>
-        <label className="flex items-center gap-1">
-          <input
-            type="radio"
-            name="mode"
-            checked={mode === 'audit'}
-            onChange={() => setMode('audit')}
-          />
-          Audit submitted codes
-        </label>
-      </div>
+      <Segmented<Mode>
+        options={[
+          { id: 'coding', label: 'Coding' },
+          { id: 'audit', label: 'Audit submitted codes' },
+        ]}
+        value={mode}
+        onChange={setMode}
+      />
       {mode === 'audit' && (
-        <div className="mt-2">
-          <label className="block text-sm">
+        <div className="mt-4">
+          <label className="block text-sm font-medium">
             Submitted codes
-            <span className="ml-1 text-xs text-gray-500">(press Enter to add)</span>
+            <span className="ml-1.5 font-normal text-ink-faint">press Enter to add</span>
             <input
               value={codeDraft}
               onChange={(e) => setCodeDraft(e.target.value)}
@@ -112,20 +137,20 @@ export function NewRunPage() {
                 }
               }}
               placeholder="e.g. E11.9"
-              className="mt-1 w-48 rounded border border-gray-300 px-2 py-1 font-mono text-sm focus:border-blue-500 focus:outline-none"
+              className={`mt-1.5 block w-44 font-mono ${inputClass}`}
             />
           </label>
           {submittedCodes.length > 0 && (
-            <ul className="mt-2 flex flex-wrap gap-1">
+            <ul className="mt-2.5 flex flex-wrap gap-1.5">
               {submittedCodes.map((code) => (
                 <li
                   key={code}
-                  className="flex items-center gap-1 rounded-full bg-gray-200 px-2 py-0.5 font-mono text-xs"
+                  className="flex items-center gap-1.5 rounded-full bg-stone-200/70 py-1 pl-3 pr-2 font-mono text-xs font-medium"
                 >
                   {code}
                   <button
                     aria-label={`Remove ${code}`}
-                    className="text-gray-500 hover:text-gray-900"
+                    className="flex h-4 w-4 items-center justify-center rounded-full text-ink-faint hover:bg-stone-300 hover:text-ink"
                     onClick={() => setSubmittedCodes(submittedCodes.filter((c) => c !== code))}
                   >
                     ✕
@@ -141,39 +166,16 @@ export function NewRunPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-xl font-bold">New run</h1>
-      <p className="mt-2 rounded border border-amber-300 bg-amber-50 p-2 text-xs text-amber-800">
+      <PageTitle title="New run" />
+      <p className="mt-2 text-sm text-ink-soft">
         Synthetic notes only — Vero rejects anything that looks like real patient identifiers.
       </p>
 
-      <div className="mt-4 flex gap-1 border-b border-gray-200" role="tablist">
-        <button
-          role="tab"
-          aria-selected={tab === 'paste'}
-          className={tabClass('paste')}
-          onClick={() => setTab('paste')}
-        >
-          Paste a note
-        </button>
-        <button
-          role="tab"
-          aria-selected={tab === 'sample'}
-          className={tabClass('sample')}
-          onClick={() => setTab('sample')}
-        >
-          Pick a sample
-        </button>
-        <button
-          role="tab"
-          aria-selected={tab === 'batch'}
-          className={tabClass('batch')}
-          onClick={() => setTab('batch')}
-        >
-          Upload a batch
-        </button>
+      <div className="mt-6">
+        <Segmented<Tab> options={TABS} value={tab} onChange={setTab} />
       </div>
 
-      <div className="rounded-b border border-t-0 border-gray-200 bg-white p-4">
+      <Card className="mt-4 p-6">
         {tab === 'paste' && (
           <div>
             {auditControls}
@@ -184,87 +186,99 @@ export function NewRunPage() {
                 onChange={(e) => setText(e.target.value)}
                 rows={14}
                 placeholder="Paste a synthetic outpatient note…"
-                className="mt-1 w-full rounded border border-gray-300 p-3 font-mono text-sm focus:border-blue-500 focus:outline-none"
+                className={`mt-1.5 w-full font-mono text-[13px] leading-6 ${inputClass}`}
               />
             </label>
-            <button
-              className="mt-3 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            <Button
+              variant="primary"
+              className="mt-4"
               disabled={!text.trim() || createRun.isPending}
               onClick={() => submitRun({ text })}
             >
-              {createRun.isPending ? 'Submitting…' : mode === 'audit' ? 'Run audit' : 'Run coding'}
-            </button>
+              {submitLabel}
+            </Button>
           </div>
         )}
 
         {tab === 'sample' && (
           <div>
             {auditControls}
-            {samples.isPending && <p className="text-sm text-gray-500">Loading samples…</p>}
-            {samples.isError && <p className="text-sm text-red-700">Could not load samples.</p>}
+            {samples.isPending && <p className="text-sm text-ink-faint">Loading samples…</p>}
+            {samples.isError && <p className="text-sm text-[#9a2c21]">Could not load samples.</p>}
             {samples.data?.length === 0 && (
-              <p className="text-sm text-gray-500">No samples loaded. Run `make init`.</p>
+              <p className="text-sm text-ink-faint">No samples loaded. Run `make init`.</p>
             )}
-            <ul className="space-y-2">
+            <ul className="grid gap-2 sm:grid-cols-2">
               {samples.data?.map((sample) => (
                 <li key={sample.id}>
-                  <label className="flex cursor-pointer items-start gap-2 rounded border border-gray-200 p-2 hover:bg-blue-50">
+                  <label
+                    className={`block h-full cursor-pointer rounded-xl border p-3 transition-colors ${
+                      sampleId === sample.id
+                        ? 'border-accent bg-accent-soft/40'
+                        : 'border-line hover:border-line-strong hover:bg-stone-50'
+                    }`}
+                  >
                     <input
                       type="radio"
                       name="sample"
                       checked={sampleId === sample.id}
                       onChange={() => setSampleId(sample.id)}
-                      className="mt-1"
+                      className="sr-only"
                     />
-                    <span>
-                      <span className="block text-sm font-medium">{sample.title}</span>
-                      <span className="block text-xs text-gray-500">{sample.preview}…</span>
+                    <span className="block text-sm font-medium">{sample.title}</span>
+                    <span className="mt-1 line-clamp-2 block text-xs leading-5 text-ink-faint">
+                      {sample.preview}…
                     </span>
                   </label>
                 </li>
               ))}
             </ul>
-            <button
-              className="mt-3 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            <Button
+              variant="primary"
+              className="mt-4"
               disabled={!sampleId || createRun.isPending}
               onClick={() => sampleId && submitRun({ sample_id: sampleId })}
             >
-              {createRun.isPending ? 'Submitting…' : mode === 'audit' ? 'Run audit' : 'Run coding'}
-            </button>
+              {submitLabel}
+            </Button>
           </div>
         )}
 
         {tab === 'batch' && (
           <div>
-            <label className="block text-sm font-medium">
-              Up to 25 .txt files
+            <MicroLabel>Up to 25 .txt files · coding mode</MicroLabel>
+            <label className="mt-2 block cursor-pointer rounded-xl border border-dashed border-line-strong p-8 text-center transition-colors hover:border-accent hover:bg-accent-soft/20">
               <input
                 type="file"
                 multiple
                 accept=".txt"
-                onChange={(e) => setFiles([...(e.target.files ?? [])])}
-                className="mt-2 block text-sm"
+                onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+                className="sr-only"
               />
+              <span className="block text-sm font-medium">
+                {files.length > 0 ? `${files.length} file(s) selected` : 'Choose .txt files'}
+              </span>
+              <span className="mt-1 block text-xs text-ink-faint">
+                Each file becomes its own note and run.
+              </span>
             </label>
-            {files.length > 0 && (
-              <p className="mt-2 text-xs text-gray-500">{files.length} file(s) selected</p>
-            )}
-            <button
-              className="mt-3 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            <Button
+              variant="primary"
+              className="mt-4"
               disabled={files.length === 0 || createBatch.isPending}
               onClick={submitBatch}
             >
               {createBatch.isPending ? 'Uploading…' : `Submit ${files.length || ''} note(s)`}
-            </button>
+            </Button>
           </div>
         )}
 
         {error && (
-          <p role="alert" className="mt-3 text-sm text-red-700">
+          <p role="alert" className="mt-4 text-sm text-[#9a2c21]">
             {error}
           </p>
         )}
-      </div>
+      </Card>
     </div>
   )
 }
