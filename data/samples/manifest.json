@@ -121,7 +121,7 @@
       {
         "condition_label": "GERD",
         "reason": "no_meat",
-        "rationale": "Problem-list only, never addressed."
+        "rationale": "Problem-list only; omeprazole appears in the med list but an unlinked med list alone does not establish MEAT at this visit."
       }
     ],
     "audit_case": null
@@ -148,7 +148,7 @@
       {
         "condition_label": "GERD",
         "reason": "no_meat",
-        "rationale": "Problem-list only, never addressed."
+        "rationale": "Problem-list only; omeprazole appears in the med list but an unlinked med list alone does not establish MEAT at this visit."
       }
     ],
     "audit_case": null
@@ -217,8 +217,8 @@
         "rationale": "CKD stage 4 with eGFR 26, nephrology following."
       },
       {
-        "display_code": "I10",
-        "rationale": "Hypertension above goal, lisinopril added."
+        "display_code": "I12.9",
+        "rationale": "Hypertension and CKD in the same record are presumed linked ('with' convention): hypertensive CKD stage 1-4, treated with lisinopril added. Plain I10 would miss the mandated linkage."
       }
     ],
     "gold_non_codes": [],
@@ -231,7 +231,7 @@
       "expected_verdicts": {
         "E11.9": "SPECIFICITY_MISMATCH",
         "N18.4": "SUPPORTED",
-        "I10": "SUPPORTED"
+        "I10": "SPECIFICITY_MISMATCH"
       }
     }
   },
@@ -251,7 +251,7 @@
       },
       {
         "display_code": "E66.9",
-        "rationale": "Obesity BMI 38 (not morbid), assessed with plan."
+        "rationale": "Obesity documented with BMI 38; class not stated by the provider, so unspecified obesity rather than a class-specific E66.81x code."
       }
     ],
     "gold_non_codes": [
@@ -309,7 +309,7 @@
       {
         "condition_label": "myocardial infarction",
         "reason": "historical",
-        "rationale": "MI in 2019, s/p stent, asymptomatic."
+        "rationale": "MI 2019, s/p stent, asymptomatic. A certified coder could assign I25.2 (old MI) given the continued aspirin/statin management; v1 scope treats history-of conditions as not coded (see DATASET_CARD)."
       },
       {
         "condition_label": "chest pain",
@@ -393,8 +393,8 @@
     ],
     "gold_labels": [
       {
-        "display_code": "E11.9",
-        "rationale": "Diabetes without documented type defaults to E11 per guidelines; no complications stated."
+        "display_code": "E11.22",
+        "rationale": "Type unstated defaults to E11; CKD is documented and addressed, so the 'with' convention presumes diabetic CKD (the note's PRESUMED_LINK scenario) even though the link is never written."
       },
       {
         "display_code": "N18.9",

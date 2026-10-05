@@ -63,6 +63,26 @@ the UI.
 - `PROBLEM_LIST_ONLY` conditions get a `GoldNonCode` with reason `no_meat`.
 - Tricky calls are explained in each label's `rationale` field.
 
+## Review notes (2026-10-05 verification pass)
+
+A full re-derivation pass over every label against the loaded FY2027 code
+set caught and fixed two errors, both linkage-presumption misses:
+
+- note_06: plain `I10` corrected to `I12.9` — hypertension with documented
+  CKD is presumed hypertensive CKD under the "with" convention.
+- note_12: `E11.9` corrected to `E11.22` — diabetes with documented CKD is
+  presumed linked even when the note never states the link.
+
+Borderline calls, documented in the label rationales: problem-list GERD
+with omeprazole on an unlinked med list stays `no_meat` (a med list alone
+does not establish MEAT); note_09's old MI stays uncoded although a
+certified coder could assign `I25.2` given continued management — v1 scope
+treats history-of conditions as not coded; note_07's BMI-38 obesity stays
+`E66.9` because the provider did not document an obesity class.
+
+This pass was performed by the same (AI) author who drafted the labels —
+it is verification, not independent review.
+
 ## Known limits
 
 - Small (12 notes); metrics have wide error bars and are directional only.
