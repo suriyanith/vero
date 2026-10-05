@@ -1,6 +1,13 @@
+import { useState } from 'react'
 import type { Suggestion } from '../api/types'
 import { ConfidenceBadge, DecisionBadge, HccBadge, MeatChips } from './badges'
 import { Button, Card } from './ui'
+
+const RESOLVED_TINT: Record<string, string> = {
+  accept: 'bg-[#eef7ef]',
+  reject: 'bg-[#fdf1f0]',
+  modify: 'bg-[#f1effc]',
+}
 
 export function SuggestionCard({
   suggestion,
@@ -20,6 +27,20 @@ export function SuggestionCard({
   onClickEvidence?: () => void
 }) {
   const decision = suggestion.latest_decision
+  // "Change" re-opens the action buttons on an already-decided card; any new
+  // decision (or an optimistic update) closes them again.
+  const [changing, setChanging] = useState(false)
+  // Reset "changing" whenever a new decision lands (render-phase adjustment,
+  // the React-sanctioned alternative to a setState-in-effect cascade).
+  const decisionKey = decision ? `${decision.action}:${decision.created_at}` : ''
+  const [prevDecisionKey, setPrevDecisionKey] = useState(decisionKey)
+  if (prevDecisionKey !== decisionKey) {
+    setPrevDecisionKey(decisionKey)
+    setChanging(false)
+  }
+
+  const showButtons = !decision || changing
+
   return (
     <Card className={`p-4 ${focused ? 'ring-2 ring-accent' : ''}`}>
       <article
@@ -38,7 +59,6 @@ export function SuggestionCard({
           <ConfidenceBadge level={suggestion.confidence} reasons={suggestion.confidence_reasons} />
           <HccBadge number={suggestion.hcc_number ?? null} label={suggestion.hcc_label} />
           <MeatChips meat={suggestion.meat} />
-          {decision && <DecisionBadge action={decision.action} />}
         </div>
         <p className="mt-1.5 text-sm text-stone-700">{suggestion.description}</p>
 
@@ -66,26 +86,48 @@ export function SuggestionCard({
         )}
 
         {decision && (
-          <p className="mt-3 border-t border-line pt-2.5 text-xs text-ink-faint">
-            {decision.action === 'modify' && (
-              <span className="mr-1 font-mono font-semibold text-ink">→ {decision.final_code}</span>
+          <div
+            className={`mt-3.5 flex flex-wrap items-center gap-2 rounded-xl px-3 py-2 ${
+              RESOLVED_TINT[decision.action] ?? 'bg-stone-100'
+            }`}
+          >
+            <DecisionBadge action={decision.action} />
+            {decision.action === 'modify' && decision.final_code && (
+              <span className="font-mono text-sm font-semibold">→ {decision.final_code}</span>
             )}
-            by {decision.reviewer_name}
-            {decision.reason && <span> — “{decision.reason}”</span>}
-          </p>
+            <span className="text-xs text-ink-soft">by {decision.reviewer_name}</span>
+            {decision.reason && (
+              <span className="truncate text-xs text-ink-faint">— “{decision.reason}”</span>
+            )}
+            {!changing && (
+              <button
+                className="ml-auto rounded-full px-2.5 py-1 text-xs font-medium text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink"
+                onClick={() => setChanging(true)}
+              >
+                Change
+              </button>
+            )}
+          </div>
         )}
 
-        <div className="mt-3.5 flex gap-2">
-          <Button variant="accept" size="sm" onClick={onAccept}>
-            Accept
-          </Button>
-          <Button variant="reject" size="sm" onClick={onReject}>
-            Reject
-          </Button>
-          <Button variant="modify" size="sm" onClick={onModify}>
-            Modify
-          </Button>
-        </div>
+        {showButtons && (
+          <div className="mt-3.5 flex flex-wrap items-center gap-2">
+            <Button variant="accept" size="sm" onClick={onAccept}>
+              Accept
+            </Button>
+            <Button variant="reject" size="sm" onClick={onReject}>
+              Reject
+            </Button>
+            <Button variant="modify" size="sm" onClick={onModify}>
+              Modify
+            </Button>
+            {changing && (
+              <Button variant="ghost" size="sm" onClick={() => setChanging(false)}>
+                Cancel
+              </Button>
+            )}
+          </div>
+        )}
       </article>
     </Card>
   )

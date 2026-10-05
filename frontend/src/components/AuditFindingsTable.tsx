@@ -1,6 +1,58 @@
+import { useState } from 'react'
 import type { Finding } from '../api/types'
 import { DecisionBadge, VerdictBadge } from './badges'
 import { Button, Card, MicroLabel } from './ui'
+
+function FindingDecisionCell({
+  finding,
+  onAccept,
+  onReject,
+}: {
+  finding: Finding
+  onAccept: () => void
+  onReject: () => void
+}) {
+  const decision = finding.latest_decision
+  const [changing, setChanging] = useState(false)
+  // Reset "changing" whenever a new decision lands (render-phase adjustment,
+  // the React-sanctioned alternative to a setState-in-effect cascade).
+  const decisionKey = decision ? `${decision.action}:${decision.created_at}` : ''
+  const [prevDecisionKey, setPrevDecisionKey] = useState(decisionKey)
+  if (prevDecisionKey !== decisionKey) {
+    setPrevDecisionKey(decisionKey)
+    setChanging(false)
+  }
+
+  if (decision && !changing) {
+    return (
+      <div className="text-xs text-ink-faint">
+        <DecisionBadge action={decision.action} />
+        <p className="mt-1.5">by {decision.reviewer_name}</p>
+        <button
+          className="mt-1 font-medium text-ink-soft underline-offset-2 hover:text-ink hover:underline"
+          onClick={() => setChanging(true)}
+        >
+          Change
+        </button>
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      <Button variant="accept" size="sm" onClick={onAccept}>
+        Accept
+      </Button>
+      <Button variant="reject" size="sm" onClick={onReject}>
+        Reject
+      </Button>
+      {changing && (
+        <Button variant="ghost" size="sm" onClick={() => setChanging(false)}>
+          Cancel
+        </Button>
+      )}
+    </div>
+  )
+}
 
 // The audit verdict table: submitted codes first, then the missed-HCC
 // two-way findings, each row with its own accept/reject decision.
@@ -57,21 +109,11 @@ export function AuditFindingsTable({
                   </td>
                   <td className="px-4 py-3 font-mono">{finding.suggested_code || '—'}</td>
                   <td className="px-4 py-3">
-                    {finding.latest_decision ? (
-                      <div className="text-xs text-ink-faint">
-                        <DecisionBadge action={finding.latest_decision.action} />
-                        <p className="mt-1.5">by {finding.latest_decision.reviewer_name}</p>
-                      </div>
-                    ) : (
-                      <div className="flex gap-1.5">
-                        <Button variant="accept" size="sm" onClick={() => onAccept(finding)}>
-                          Accept
-                        </Button>
-                        <Button variant="reject" size="sm" onClick={() => onReject(finding)}>
-                          Reject
-                        </Button>
-                      </div>
-                    )}
+                    <FindingDecisionCell
+                      finding={finding}
+                      onAccept={() => onAccept(finding)}
+                      onReject={() => onReject(finding)}
+                    />
                   </td>
                 </tr>
               ))}
