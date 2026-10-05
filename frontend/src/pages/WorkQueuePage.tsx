@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { StatusBadge } from '../components/badges'
 import { Button, Card, Checkbox, MicroLabel, PageTitle, Select } from '../components/ui'
 import { useRetryRun, useRuns } from '../features/runs/hooks'
@@ -13,6 +13,7 @@ export function WorkQueuePage() {
   const [offset, setOffset] = useState(0)
   const runs = useRuns({ status: status || undefined, mine, offset, limit: PAGE_SIZE })
   const retry = useRetryRun()
+  const navigate = useNavigate()
 
   return (
     <div>
@@ -88,7 +89,8 @@ export function WorkQueuePage() {
                   {runs.data.items.map((run) => (
                     <tr
                       key={run.id}
-                      className="border-t border-line transition-colors hover:bg-stone-50"
+                      className="group cursor-pointer border-t border-line transition-colors hover:bg-stone-50"
+                      onClick={() => navigate(`/runs/${run.id}`)}
                     >
                       <td className="px-4 py-3">
                         <Link
