@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.postgres",
+    "ninja",  # for the export_openapi_schema management command
     "django_tasks_db",
     "apps.accounts",
     "apps.reference",
     "apps.llm",
     "apps.notes",
     "apps.runs",
+    "apps.review",
 ]
 
 MIDDLEWARE = [

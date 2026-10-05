@@ -1,0 +1,1659 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Vero API",
+    "version": "0.1.0",
+    "description": ""
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "config_api_health",
+        "summary": "Health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthOut"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/csrf": {
+      "get": {
+        "operationId": "apps_accounts_api_csrf",
+        "summary": "Csrf",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "apps_accounts_api_login_view",
+        "summary": "Login View",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOut"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginIn"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "apps_accounts_api_logout_view",
+        "summary": "Logout View",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "operationId": "apps_accounts_api_me",
+        "summary": "Me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/codes/search": {
+      "get": {
+        "operationId": "apps_reference_api_search_codes",
+        "summary": "Search Codes",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "title": "Q",
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 20,
+              "title": "Limit",
+              "type": "integer"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CodeOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "codes"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/codes/{display_code}": {
+      "get": {
+        "operationId": "apps_reference_api_get_code",
+        "summary": "Get Code",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "display_code",
+            "schema": {
+              "title": "Display Code",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeDetailOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "codes"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/samples": {
+      "get": {
+        "operationId": "apps_runs_api_list_samples",
+        "summary": "List Samples",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SampleOut"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "runs"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/runs": {
+      "post": {
+        "operationId": "apps_runs_api_create_run_view",
+        "summary": "Create Run View",
+        "parameters": [],
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunCreatedOut"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "runs"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "apps_runs_api_list_runs",
+        "summary": "List Runs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "mode",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mode"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "batch",
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Batch"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "mine",
+            "schema": {
+              "default": false,
+              "title": "Mine",
+              "type": "boolean"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedRunListItemOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "runs"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/batches": {
+      "post": {
+        "operationId": "apps_runs_api_create_batch_view",
+        "summary": "Create Batch View",
+        "parameters": [],
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchCreatedOut"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "runs"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "title": "MultiPartBodyParams",
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "coding",
+                      "audit"
+                    ],
+                    "title": "Mode",
+                    "type": "string"
+                  },
+                  "files": {
+                    "items": {
+                      "format": "binary",
+                      "type": "string"
+                    },
+                    "title": "Files",
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "files"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/runs/{run_id}": {
+      "get": {
+        "operationId": "apps_runs_api_get_run",
+        "summary": "Get Run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetailOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "runs"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/runs/{run_id}/retry": {
+      "post": {
+        "operationId": "apps_runs_api_retry_run_view",
+        "summary": "Retry Run View",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunCreatedOut"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "runs"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/suggestions/{suggestion_id}/decisions": {
+      "post": {
+        "operationId": "apps_review_api_create_decision",
+        "summary": "Create Decision",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "suggestion_id",
+            "schema": {
+              "title": "Suggestion Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionOut"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "review"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/api/runs/{run_id}/accept-high": {
+      "post": {
+        "operationId": "apps_review_api_accept_high",
+        "summary": "Accept High",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptHighOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "review"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthOut": {
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "database": {
+            "title": "Database",
+            "type": "boolean"
+          },
+          "code_set_loaded": {
+            "title": "Code Set Loaded",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "database",
+          "code_set_loaded"
+        ],
+        "title": "HealthOut",
+        "type": "object"
+      },
+      "ErrorOut": {
+        "properties": {
+          "error": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Error",
+            "type": "object"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "ErrorOut",
+        "type": "object"
+      },
+      "OkOut": {
+        "properties": {
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "title": "OkOut",
+        "type": "object"
+      },
+      "UserOut": {
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "display_name",
+          "role"
+        ],
+        "title": "UserOut",
+        "type": "object"
+      },
+      "LoginIn": {
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginIn",
+        "type": "object"
+      },
+      "CodeOut": {
+        "properties": {
+          "display_code": {
+            "title": "Display Code",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "is_billable": {
+            "title": "Is Billable",
+            "type": "boolean"
+          },
+          "hcc_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hcc Number"
+          },
+          "hcc_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hcc Label"
+          }
+        },
+        "required": [
+          "display_code",
+          "description",
+          "is_billable",
+          "hcc_number",
+          "hcc_label"
+        ],
+        "title": "CodeOut",
+        "type": "object"
+      },
+      "CodeDetailOut": {
+        "properties": {
+          "display_code": {
+            "title": "Display Code",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "is_billable": {
+            "title": "Is Billable",
+            "type": "boolean"
+          },
+          "hcc_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hcc Number"
+          },
+          "hcc_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hcc Label"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "notes": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Notes",
+            "type": "object"
+          }
+        },
+        "required": [
+          "display_code",
+          "description",
+          "is_billable",
+          "hcc_number",
+          "hcc_label",
+          "category",
+          "notes"
+        ],
+        "title": "CodeDetailOut",
+        "type": "object"
+      },
+      "SampleOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "preview": {
+            "title": "Preview",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "preview"
+        ],
+        "title": "SampleOut",
+        "type": "object"
+      },
+      "RunCreatedOut": {
+        "properties": {
+          "run_id": {
+            "format": "uuid",
+            "title": "Run Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id"
+        ],
+        "title": "RunCreatedOut",
+        "type": "object"
+      },
+      "Mode": {
+        "enum": [
+          "coding",
+          "audit"
+        ],
+        "title": "Mode",
+        "type": "string"
+      },
+      "RunCreateIn": {
+        "properties": {
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "sample_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Id"
+          },
+          "mode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Mode"
+              }
+            ],
+            "default": "coding"
+          },
+          "submitted_codes": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Submitted Codes",
+            "type": "array"
+          }
+        },
+        "title": "RunCreateIn",
+        "type": "object"
+      },
+      "Input": {
+        "properties": {
+          "limit": {
+            "default": 100,
+            "minimum": 1,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "default": 0,
+            "minimum": 0,
+            "title": "Offset",
+            "type": "integer"
+          }
+        },
+        "title": "Input",
+        "type": "object"
+      },
+      "PagedRunListItemOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RunListItemOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "count"
+        ],
+        "title": "PagedRunListItemOut",
+        "type": "object"
+      },
+      "RunListItemOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "note_title": {
+            "title": "Note Title",
+            "type": "string"
+          },
+          "created_by_name": {
+            "title": "Created By Name",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "suggestion_count": {
+            "title": "Suggestion Count",
+            "type": "integer"
+          },
+          "error_code": {
+            "title": "Error Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "mode",
+          "note_title",
+          "created_by_name",
+          "created_at",
+          "suggestion_count",
+          "error_code"
+        ],
+        "title": "RunListItemOut",
+        "type": "object"
+      },
+      "BatchCreatedOut": {
+        "properties": {
+          "batch_id": {
+            "format": "uuid",
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "run_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Run Ids",
+            "type": "array"
+          },
+          "rejected": {
+            "items": {
+              "$ref": "#/components/schemas/RejectedFileOut"
+            },
+            "title": "Rejected",
+            "type": "array"
+          }
+        },
+        "required": [
+          "batch_id",
+          "run_ids",
+          "rejected"
+        ],
+        "title": "BatchCreatedOut",
+        "type": "object"
+      },
+      "RejectedFileOut": {
+        "properties": {
+          "filename": {
+            "title": "Filename",
+            "type": "string"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "filename",
+          "code",
+          "reason"
+        ],
+        "title": "RejectedFileOut",
+        "type": "object"
+      },
+      "ConditionOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "specificity_details": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Specificity Details",
+            "type": "array"
+          },
+          "quotes": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Quotes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "status",
+          "specificity_details",
+          "quotes"
+        ],
+        "title": "ConditionOut",
+        "type": "object"
+      },
+      "LatestDecisionOut": {
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "final_code": {
+            "title": "Final Code",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reviewer_name": {
+            "title": "Reviewer Name",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "final_code",
+          "reason",
+          "reviewer_name",
+          "created_at"
+        ],
+        "title": "LatestDecisionOut",
+        "type": "object"
+      },
+      "NoteOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "text"
+        ],
+        "title": "NoteOut",
+        "type": "object"
+      },
+      "QuoteOut": {
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "start": {
+            "title": "Start",
+            "type": "integer"
+          },
+          "end": {
+            "title": "End",
+            "type": "integer"
+          },
+          "meat": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Meat",
+            "type": "array"
+          },
+          "match_type": {
+            "title": "Match Type",
+            "type": "string"
+          },
+          "ambiguous": {
+            "title": "Ambiguous",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "text",
+          "start",
+          "end",
+          "meat",
+          "match_type",
+          "ambiguous"
+        ],
+        "title": "QuoteOut",
+        "type": "object"
+      },
+      "RunDetailOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "note": {
+            "$ref": "#/components/schemas/NoteOut"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/components/schemas/ConditionOut"
+            },
+            "title": "Conditions",
+            "type": "array"
+          },
+          "suggestions": {
+            "items": {
+              "$ref": "#/components/schemas/SuggestionOut"
+            },
+            "title": "Suggestions",
+            "type": "array"
+          },
+          "submitted_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Submitted Codes",
+            "type": "array"
+          },
+          "model_name": {
+            "title": "Model Name",
+            "type": "string"
+          },
+          "prompt_versions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Prompt Versions",
+            "type": "object"
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Ms"
+          },
+          "input_tokens": {
+            "title": "Input Tokens",
+            "type": "integer"
+          },
+          "output_tokens": {
+            "title": "Output Tokens",
+            "type": "integer"
+          },
+          "dropped_quotes": {
+            "title": "Dropped Quotes",
+            "type": "integer"
+          },
+          "error_code": {
+            "title": "Error Code",
+            "type": "string"
+          },
+          "error_message": {
+            "title": "Error Message",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "mode",
+          "note",
+          "conditions",
+          "suggestions",
+          "submitted_codes",
+          "model_name",
+          "prompt_versions",
+          "duration_ms",
+          "input_tokens",
+          "output_tokens",
+          "dropped_quotes",
+          "error_code",
+          "error_message",
+          "created_at"
+        ],
+        "title": "RunDetailOut",
+        "type": "object"
+      },
+      "SuggestionOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "condition_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition Id"
+          },
+          "display_code": {
+            "title": "Display Code",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "hcc_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hcc Number"
+          },
+          "hcc_label": {
+            "title": "Hcc Label",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "meat": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Meat",
+            "type": "array"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "string"
+          },
+          "confidence_reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Confidence Reasons",
+            "type": "array"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Flags",
+            "type": "array"
+          },
+          "candidate_rank": {
+            "title": "Candidate Rank",
+            "type": "integer"
+          },
+          "latest_decision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LatestDecisionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "condition_id",
+          "display_code",
+          "description",
+          "hcc_number",
+          "hcc_label",
+          "evidence",
+          "meat",
+          "confidence",
+          "confidence_reasons",
+          "rationale",
+          "flags",
+          "candidate_rank",
+          "latest_decision"
+        ],
+        "title": "SuggestionOut",
+        "type": "object"
+      },
+      "DecisionOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "original_code": {
+            "title": "Original Code",
+            "type": "string"
+          },
+          "final_code": {
+            "title": "Final Code",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "reviewer_name": {
+            "title": "Reviewer Name",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "original_code",
+          "final_code",
+          "reason",
+          "reviewer_name",
+          "created_at"
+        ],
+        "title": "DecisionOut",
+        "type": "object"
+      },
+      "Action": {
+        "enum": [
+          "accept",
+          "reject",
+          "modify"
+        ],
+        "title": "Action",
+        "type": "string"
+      },
+      "DecisionIn": {
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/Action"
+          },
+          "final_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Code"
+          },
+          "reason": {
+            "default": "",
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "DecisionIn",
+        "type": "object"
+      },
+      "AcceptHighOut": {
+        "properties": {
+          "accepted": {
+            "title": "Accepted",
+            "type": "integer"
+          },
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionOut"
+            },
+            "title": "Decisions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "accepted",
+          "decisions"
+        ],
+        "title": "AcceptHighOut",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "SessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid"
+      }
+    }
+  },
+  "servers": []
+}

@@ -42,6 +42,11 @@ jobs:
         run: uv run mypy .
       - name: Missing migrations check
         run: uv run python manage.py makemigrations --check --dry-run
+      - name: OpenAPI schema freshness
+        run: |
+          uv run python manage.py export_openapi_schema --api config.api.api \
+            --output /tmp/openapi.json --indent 2
+          diff /tmp/openapi.json ../frontend/openapi.json
       - name: Tests
         run: uv run pytest --cov
 
@@ -67,6 +72,10 @@ jobs:
         run: npm run typecheck
       - name: Tests
         run: npm test -- --run
+      - name: Generated API types freshness
+        run: |
+          npm run gen:api
+          git diff --exit-code src/api/schema.d.ts
       - name: Build
         run: npm run build
 

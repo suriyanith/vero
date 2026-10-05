@@ -86,6 +86,14 @@ class ConditionOut(Schema):
     quotes: list[QuoteOut]
 
 
+class LatestDecisionOut(Schema):
+    action: str
+    final_code: str
+    reason: str
+    reviewer_name: str
+    created_at: datetime
+
+
 class SuggestionOut(Schema):
     id: int
     condition_id: int | None
@@ -100,6 +108,7 @@ class SuggestionOut(Schema):
     rationale: str
     flags: list[str]
     candidate_rank: int
+    latest_decision: LatestDecisionOut | None
 
 
 class NoteOut(Schema):
@@ -231,14 +240,38 @@ def list_runs(
 
 @router.get("/runs/{run_id}", response={200: RunDetailOut, 404: ErrorOut})
 def get_run(request: HttpRequest, run_id: uuid.UUID) -> Status[object]:
+    from django.db.models import Prefetch
+
+    from apps.review.models import ReviewDecision
+
     run = (
         Run.objects.select_related("note")
-        .prefetch_related("conditions", "suggestions")
+        .prefetch_related(
+            "conditions",
+            Prefetch(
+                "suggestions__decisions",
+                queryset=ReviewDecision.objects.select_related("reviewer").order_by("-created_at"),
+            ),
+        )
         .filter(id=run_id)
         .first()
     )
     if run is None:
         return Status(404, {"error": {"code": "RUN_NOT_FOUND", "message": "Unknown run."}})
+
+    def latest_decision(s: object) -> LatestDecisionOut | None:
+        decisions = list(s.decisions.all())  # type: ignore[attr-defined]
+        if not decisions:
+            return None
+        d = decisions[0]
+        return LatestDecisionOut(
+            action=d.action,
+            final_code=d.final_code,
+            reason=d.reason,
+            reviewer_name=d.reviewer.display_name or d.reviewer.username,
+            created_at=d.created_at,
+        )
+
     return Status(
         200,
         RunDetailOut(
@@ -271,6 +304,7 @@ def get_run(request: HttpRequest, run_id: uuid.UUID) -> Status[object]:
                     rationale=s.rationale,
                     flags=s.flags,
                     candidate_rank=s.candidate_rank,
+                    latest_decision=latest_decision(s),
                 )
                 for s in run.suggestions.all()
             ],

@@ -50,7 +50,8 @@ fmt:
 	$(FRONTEND) run format
 
 gen-api:
-	@echo "TODO Phase 4: openapi-typescript from /api/openapi.json"
+	$(BACKEND) python manage.py export_openapi_schema --api config.api.api --output ../frontend/openapi.json --indent 2
+	$(FRONTEND) run gen:api
 
 eval:
 	@echo "TODO Phase 7: manage.py run_eval --split test"

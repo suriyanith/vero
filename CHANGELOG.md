@@ -7,6 +7,15 @@ All notable changes to Vero are documented here. The format follows
 
 ### Added
 
+- Phase 4: coding UI and review — append-only `ReviewDecision` with evidence
+  snapshots (save/delete raise, admin read-only), decision endpoints with
+  billable-code validation on modify, "Accept all High", runs auto-complete
+  when every suggestion is decided; React pages for login, new run (paste /
+  sample / batch tabs), work queue (filters, polling, pagination), and run
+  detail with offset-based evidence highlighting, suggestion cards grouped
+  by confidence, keyboard shortcuts (j/k/a/r/m/?), reject-reason dialog,
+  code-search modal, and optimistic decision updates; TypeScript API types
+  generated from the OpenAPI schema with freshness checks in CI.
 - Phase 3: notes and runs — Note/Batch/Run/Condition/Suggestion models, the
   PHI tripwire (rejects SSN/phone/email/MRN/DOB patterns, passes clinical
   numbers), `process_run` background task on the database queue (idempotent,
