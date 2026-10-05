@@ -1,14 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { StatusBadge } from '../components/badges'
-import { Button, Card, MicroLabel, PageTitle } from '../components/ui'
+import { Button, Card, Checkbox, MicroLabel, PageTitle, Select } from '../components/ui'
 import { useRetryRun, useRuns } from '../features/runs/hooks'
 
 const PAGE_SIZE = 20
 const STATUSES = ['', 'queued', 'processing', 'ready_for_review', 'completed', 'failed']
-
-const selectClass =
-  'rounded-full border border-line-strong bg-surface px-3 py-1 text-sm text-ink focus:border-accent focus:outline-none'
 
 export function WorkQueuePage() {
   const [status, setStatus] = useState('')
@@ -23,25 +20,22 @@ export function WorkQueuePage() {
         <div className="ml-auto flex items-center gap-4">
           <label className="flex items-center gap-2 text-sm text-ink-soft">
             Status
-            <select
+            <Select
+              pill
               value={status}
               onChange={(e) => {
                 setStatus(e.target.value)
                 setOffset(0)
               }}
-              className={selectClass}
             >
               {STATUSES.map((s) => (
                 <option key={s} value={s}>
                   {s === '' ? 'all' : s.replaceAll('_', ' ')}
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
-          <label className="flex items-center gap-1.5 text-sm text-ink-soft">
-            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} />
-            Only mine
-          </label>
+          <Checkbox label="Only mine" checked={mine} onChange={setMine} />
         </div>
       </PageTitle>
 

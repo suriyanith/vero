@@ -1,6 +1,11 @@
 // The small vocabulary every page is built from. One surface, one hairline,
 // one accent; hierarchy comes from type and spacing, not boxes.
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type {
+  ButtonHTMLAttributes,
+  ComponentPropsWithRef,
+  ReactNode,
+  SelectHTMLAttributes,
+} from 'react'
 
 export function Card({
   className = '',
@@ -77,7 +82,7 @@ export function Button({
 }
 
 export const inputClass =
-  'rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none'
+  'rounded-xl border border-line-strong bg-surface px-3.5 py-2 text-sm text-ink shadow-[inset_0_1px_2px_rgba(28,25,23,0.03)] placeholder:text-ink-faint transition-[border-color,box-shadow] duration-150 hover:border-[#c2bbab] focus:border-accent focus:shadow-[0_0_0_3px_rgba(82,71,199,0.14)] focus:outline-none'
 
 // Segmented control (iOS-style) shared by tabs, modes, and time windows.
 export function Segmented<T extends string>({
@@ -156,5 +161,114 @@ export function Dialog({
         {children}
       </div>
     </div>
+  )
+}
+
+// ---- form fields ----------------------------------------------------------
+// Shared look: warm surface, hairline border, soft inner shadow, and a
+// gentle accent ring on focus (no hard outlines on fields).
+
+const FIELD_BASE =
+  'border border-line-strong bg-surface text-sm text-ink shadow-[inset_0_1px_2px_rgba(28,25,23,0.03)] placeholder:text-ink-faint transition-[border-color,box-shadow] duration-150 hover:border-[#c2bbab] focus:border-accent focus:shadow-[0_0_0_3px_rgba(82,71,199,0.14)]'
+
+export const fieldPillClass = `${FIELD_BASE} rounded-full px-3.5 py-1.5`
+
+function Chevron() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 16 16"
+      className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-faint"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 6l4 4 4-4" />
+    </svg>
+  )
+}
+
+export function Select({
+  pill = false,
+  className = '',
+  children,
+  ...props
+}: SelectHTMLAttributes<HTMLSelectElement> & { pill?: boolean }) {
+  const shape = pill ? 'rounded-full py-1.5' : 'rounded-xl py-2'
+  return (
+    <span className={`relative inline-block ${className}`}>
+      <select
+        className={`${FIELD_BASE} ${shape} w-full cursor-pointer appearance-none pl-3.5 pr-9`}
+        {...props}
+      >
+        {children}
+      </select>
+      <Chevron />
+    </span>
+  )
+}
+
+export function Checkbox({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string
+  checked: boolean
+  onChange: (next: boolean) => void
+}) {
+  return (
+    <label className="inline-flex cursor-pointer select-none items-center gap-2 text-sm text-ink-soft transition-colors hover:text-ink">
+      <input
+        type="checkbox"
+        className="peer sr-only"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      <span
+        aria-hidden
+        className="flex h-[1.15rem] w-[1.15rem] items-center justify-center rounded-md border border-line-strong bg-surface shadow-[inset_0_1px_2px_rgba(28,25,23,0.03)] transition-all duration-150 peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:shadow-[0_0_0_3px_rgba(82,71,199,0.2)] peer-checked:[&>svg]:opacity-100"
+      >
+        <svg
+          viewBox="0 0 16 16"
+          className="h-3 w-3 text-white opacity-0 transition-opacity duration-150"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M3.5 8.5l3 3 6-7" />
+        </svg>
+      </span>
+      {label}
+    </label>
+  )
+}
+
+export function SearchInput({
+  pill = false,
+  className = '',
+  ...props
+}: ComponentPropsWithRef<'input'> & { pill?: boolean }) {
+  const shape = pill ? 'rounded-full py-1.5' : 'rounded-xl py-2'
+  return (
+    <span className={`relative block ${className}`}>
+      <svg
+        aria-hidden
+        viewBox="0 0 16 16"
+        className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      >
+        <circle cx="7" cy="7" r="4.5" />
+        <path d="M10.5 10.5L14 14" />
+      </svg>
+      <input className={`${FIELD_BASE} ${shape} w-full pl-10 pr-3.5`} {...props} />
+    </span>
   )
 }

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import { DecisionBadge } from '../components/badges'
-import { Button, Card, MicroLabel, PageTitle, inputClass } from '../components/ui'
+import { Button, Card, MicroLabel, PageTitle, Select, fieldPillClass } from '../components/ui'
 
 interface TrailItem {
   id: string
@@ -20,7 +20,6 @@ interface TrailItem {
 }
 
 const PAGE_SIZE = 25
-const filterInput = `${inputClass} rounded-full py-1`
 
 export function AuditTrailPage() {
   const [reviewer, setReviewer] = useState('')
@@ -61,24 +60,24 @@ export function AuditTrailPage() {
               setOffset(0)
             }}
             placeholder="username"
-            className={`w-32 ${filterInput}`}
+            className={`w-32 ${fieldPillClass}`}
           />
         </label>
         <label className="flex items-center gap-2 text-sm text-ink-soft">
           Action
-          <select
+          <Select
+            pill
             value={action}
             onChange={(e) => {
               setAction(e.target.value)
               setOffset(0)
             }}
-            className={`${filterInput}`}
           >
             <option value="">all</option>
             <option value="accept">accept</option>
             <option value="reject">reject</option>
             <option value="modify">modify</option>
-          </select>
+          </Select>
         </label>
         <label className="flex items-center gap-2 text-sm text-ink-soft">
           Code
@@ -89,7 +88,7 @@ export function AuditTrailPage() {
               setOffset(0)
             }}
             placeholder="E11.22"
-            className={`w-28 font-mono ${filterInput}`}
+            className={`w-28 font-mono ${fieldPillClass}`}
           />
         </label>
       </div>

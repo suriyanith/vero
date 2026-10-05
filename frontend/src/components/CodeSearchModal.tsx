@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '../api/client'
 import type { CodeHit } from '../api/types'
-import { Dialog, inputClass } from './ui'
+import { Dialog, SearchInput } from './ui'
 
 // Search the real code set and pick a billable replacement code.
 export function CodeSearchModal({
@@ -44,12 +44,11 @@ export function CodeSearchModal({
       </div>
       <label className="block">
         <span className="sr-only">Search codes</span>
-        <input
+        <SearchInput
           ref={inputRef}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by description or code, e.g. “type 2 diabetes CKD”"
-          className={`w-full ${inputClass}`}
         />
       </label>
       <ul className="mt-3 max-h-80 divide-y divide-line overflow-y-auto">
