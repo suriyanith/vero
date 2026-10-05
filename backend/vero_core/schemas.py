@@ -14,6 +14,18 @@ class Strict(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class AIOutput(BaseModel):
+    """Base for models sent to Gemini as response schemas.
+
+    The structured-output API rejects schemas containing
+    ``additionalProperties`` (which ``extra="forbid"`` emits), so AI-output
+    models ignore unexpected fields instead of forbidding them. Everything
+    the pipeline stores still goes through the Strict internal models.
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+
 class ConditionStatus(StrEnum):
     ACTIVE = "active"
     HISTORICAL = "historical"
@@ -37,29 +49,29 @@ class Certainty(StrEnum):
 
 
 # ---------- AI output: Step 1 (extract) ----------
-class ExtractedQuote(Strict):
+class ExtractedQuote(AIOutput):
     text: str
     meat: list[Meat]
 
 
-class ExtractedCondition(Strict):
+class ExtractedCondition(AIOutput):
     label: str
     status: ConditionStatus
     quotes: list[ExtractedQuote]
     specificity_details: list[str]
 
 
-class ExtractionResult(Strict):
+class ExtractionResult(AIOutput):
     conditions: list[ExtractedCondition]
 
 
 # ---------- AI output: Step 4 (select, batched) ----------
-class CodeChoice(Strict):
+class CodeChoice(AIOutput):
     code: str  # dotted code; must be in this condition's candidate list
     rationale: str
 
 
-class ConditionSelection(Strict):
+class ConditionSelection(AIOutput):
     condition_index: int  # matches the numbering in the prompt (1-based)
     codes: list[CodeChoice]
     no_fit: bool
@@ -67,7 +79,7 @@ class ConditionSelection(Strict):
     certainty: Certainty
 
 
-class SelectionResult(Strict):
+class SelectionResult(AIOutput):
     selections: list[ConditionSelection]
 
 

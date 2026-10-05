@@ -52,9 +52,10 @@ findings for documented HCC conditions never submitted.
 
 ## Quickstart
 
-Prerequisites: Docker (or local Python 3.12+/Node 22+/Postgres 16), a free
-[Google AI Studio](https://aistudio.google.com/) key (do **not** enable
-billing on its project), and the CMS reference files (URLs + checksums in
+Prerequisites: Docker (or local Python 3.12+/Node 22+/Postgres 16), a
+[Google AI Studio](https://aistudio.google.com/) key — new accounts use
+prepaid credits (load a small amount at ai.studio/projects; prepay acts as
+a hard spending cap) — and the CMS reference files (URLs + checksums in
 `data/SOURCES.md`) downloaded into `data/raw/`.
 
 ```bash
