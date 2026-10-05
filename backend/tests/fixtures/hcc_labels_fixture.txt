@@ -1,0 +1,10 @@
+  %MACRO V28115L3;
+ %*** test fixture: HCC V28 labels;
+ LABEL
+ HCC36 ="Diabetes with Severe Acute Complications "
+ HCC37 ="Diabetes with Chronic Complications "
+ HCC38 ="Diabetes with Glycemic, Unspecified, or No Complications "
+ HCC226 ="Congestive Heart Failure "
+ HCC329 ="Chronic Kidney Disease, Moderate (Stage 3B) "
+ ;
+ %MEND V28115L3;

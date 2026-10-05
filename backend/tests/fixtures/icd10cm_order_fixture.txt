@@ -1,0 +1,21 @@
+00001 E11     0 Type 2 diabetes mellitus                                     Type 2 diabetes mellitus
+00002 E112    0 Type 2 diabetes mellitus w kidney complications              Type 2 diabetes mellitus with kidney complications
+00003 E1121   1 Type 2 diabetes mellitus w diabetic nephropathy              Type 2 diabetes mellitus with diabetic nephropathy
+00004 E1122   1 Type 2 diabetes mellitus w diabetic chronic kidney disease   Type 2 diabetes mellitus with diabetic chronic kidney disease
+00005 E1129   1 Type 2 diabetes w oth diabetic kidney complication           Type 2 diabetes mellitus with other diabetic kidney complication
+00006 E119    1 Type 2 diabetes mellitus without complications               Type 2 diabetes mellitus without complications
+00007 E109    1 Type 1 diabetes mellitus without complications               Type 1 diabetes mellitus without complications
+00008 N18     0 Chronic kidney disease (CKD)                                 Chronic kidney disease (CKD)
+00009 N183    0 Chronic kidney disease, stage 3 (moderate)                   Chronic kidney disease, stage 3 (moderate)
+00010 N1831   1 Chronic kidney disease, stage 3a                             Chronic kidney disease, stage 3a
+00011 N1832   1 Chronic kidney disease, stage 3b                             Chronic kidney disease, stage 3b
+00012 I10     1 Essential (primary) hypertension                             Essential (primary) hypertension
+00013 I509    1 Heart failure, unspecified                                   Heart failure, unspecified
+00014 R600    1 Localized edema                                              Localized edema
+00015 J449    1 Chronic obstructive pulmonary disease, unspecified           Chronic obstructive pulmonary disease, unspecified
+00016 C189    1 Malignant neoplasm of colon, unspecified                     Malignant neoplasm of colon, unspecified
+00017 S72     0 Fracture of femur                                            Fracture of femur
+00018 S720    0 Fracture of head and neck of femur                           Fracture of head and neck of femur
+00019 S7200   0 Fracture of unsp part of neck of femur                       Fracture of unspecified part of neck of femur
+00020 S72001  0 Fracture of unsp part of neck of right femur                 Fracture of unspecified part of neck of right femur
+00021 S72001A 1 Fracture of unsp part of neck of right femur, init           Fracture of unspecified part of neck of right femur, initial encounter for closed fracture

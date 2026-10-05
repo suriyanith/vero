@@ -17,9 +17,16 @@ up:
 down:
 	docker compose down
 
+# Raw CMS files (see data/SOURCES.md for URLs and checksums)
+ICD10_ORDER = ../data/raw/Code Descriptions/icd10cm_order_2027.txt
+ICD10_XML   = ../data/raw/Table and Index/icd10cm_tabular_2027.xml
+HCC_CSV     = ../data/raw/2027 Initial ICD-10-CM Mappings.csv
+HCC_LABELS  = ../data/raw/model-software/V28/V28115L3.TXT
+
 init:
 	$(BACKEND) python manage.py migrate
-	@echo "TODO Phase 1: load_icd10cm, load_hcc_map"
+	$(BACKEND) python manage.py load_icd10cm --fy 2027 --order-file "$(ICD10_ORDER)" --tabular-xml "$(ICD10_XML)"
+	$(BACKEND) python manage.py load_hcc_map --model V28 --payment-year 2027 --file "$(HCC_CSV)" --labels-file "$(HCC_LABELS)"
 	@echo "TODO Phase 3: seed_users, load_samples"
 
 test:

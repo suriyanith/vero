@@ -1,0 +1,50 @@
+"ICD-10-CM Codes, ESRD, CMS-HCC and RxHCC Models",,,,,,,,,,,
+Includes ICD-10 codes valid in FY2025 and FY2026,,,,,,,,,,,
+,,,,,,,,,,,
+"Diagnosis
+Code",Description,"CMS-HCC
+ESRD
+Model
+Category
+V21","CMS-HCC
+ESRD
+Model
+Category
+V24","CMS-HCC
+Model
+Category
+V22","CMS-HCC
+Model
+Category
+V28","RxHCC
+Model
+Category
+V08","CMS-HCC
+ESRD Model
+Category
+V21 for 2026
+Payment Year","CMS-HCC
+ESRD Model
+Category
+V24 for 2026
+Payment Year","CMS-HCC
+Model
+Category
+V22 for 2026
+Payment Year","CMS-HCC
+Model
+Category
+V28 for 2026
+Payment Year","RxHCC
+Model
+Category
+V08 for 2026
+Payment Year"
+E1121,Type 2 diabetes mellitus with diabetic nephropathy,18,18,18,37,30,Yes,Yes,Yes,Yes,Yes
+E1122,Type 2 diabetes mellitus with diabetic chronic kidney disease,18,18,18,37,30,Yes,Yes,Yes,Yes,Yes
+E1122,Type 2 diabetes mellitus with diabetic chronic kidney disease,139,,,,,Yes,--,--,--,--
+E119,Type 2 diabetes mellitus without complications,19,19,19,38,30,Yes,Yes,Yes,Yes,Yes
+N1831,"Chronic kidney disease, stage 3a",138,138,,329,,Yes,Yes,No,Yes,No
+N1832,"Chronic kidney disease, stage 3b",138,138,,329,,Yes,Yes,No,Yes,No
+I509,"Heart failure, unspecified",85,85,85,226,87,Yes,Yes,Yes,Yes,Yes
+I10,Essential (primary) hypertension,,,,,187,No,No,No,No,Yes

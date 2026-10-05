@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ICD10CM.tabular>
+  <version>2027</version>
+  <chapter>
+    <name>4</name>
+    <desc>Endocrine, nutritional and metabolic diseases (E00-E89)</desc>
+    <section id="E08-E13">
+      <desc>Diabetes mellitus (E08-E13)</desc>
+      <diag>
+        <name>E11</name>
+        <desc>Type 2 diabetes mellitus</desc>
+        <inclusionTerm>
+          <note>diabetes (mellitus) due to insulin secretory defect</note>
+          <note>insulin resistant diabetes (mellitus)</note>
+        </inclusionTerm>
+        <excludes1>
+          <note>diabetes mellitus due to underlying condition (E08.-)</note>
+          <note>type 1 diabetes mellitus (E10.-)</note>
+        </excludes1>
+        <useAdditionalCode>
+          <note>code to identify control using insulin (Z79.4)</note>
+        </useAdditionalCode>
+        <diag>
+          <name>E11.2</name>
+          <desc>Type 2 diabetes mellitus with kidney complications</desc>
+          <diag>
+            <name>E11.21</name>
+            <desc>Type 2 diabetes mellitus with diabetic nephropathy</desc>
+            <inclusionTerm>
+              <note>Type 2 diabetes mellitus with intercapillary glomerulosclerosis</note>
+            </inclusionTerm>
+          </diag>
+          <diag>
+            <name>E11.22</name>
+            <desc>Type 2 diabetes mellitus with diabetic chronic kidney disease</desc>
+            <useAdditionalCode>
+              <note>code to identify stage of chronic kidney disease (N18.1-N18.6)</note>
+            </useAdditionalCode>
+          </diag>
+          <diag>
+            <name>E11.29</name>
+            <desc>Type 2 diabetes mellitus with other diabetic kidney complication</desc>
+          </diag>
+        </diag>
+        <diag>
+          <name>E11.9</name>
+          <desc>Type 2 diabetes mellitus without complications</desc>
+        </diag>
+      </diag>
+    </section>
+  </chapter>
+  <chapter>
+    <name>14</name>
+    <desc>Diseases of the genitourinary system (N00-N99)</desc>
+    <section id="N17-N19">
+      <desc>Acute kidney failure and chronic kidney disease (N17-N19)</desc>
+      <diag>
+        <name>N18</name>
+        <desc>Chronic kidney disease (CKD)</desc>
+        <codeFirst>
+          <note>any associated diabetic chronic kidney disease (E08.22, E09.22, E10.22, E11.22, E13.22)</note>
+        </codeFirst>
+        <useAdditionalCode>
+          <note>code to identify kidney transplant status, if applicable, (Z94.0)</note>
+        </useAdditionalCode>
+        <diag>
+          <name>N18.3</name>
+          <desc>Chronic kidney disease, stage 3 (moderate)</desc>
+          <diag>
+            <name>N18.31</name>
+            <desc>Chronic kidney disease, stage 3a</desc>
+          </diag>
+          <diag>
+            <name>N18.32</name>
+            <desc>Chronic kidney disease, stage 3b</desc>
+          </diag>
+        </diag>
+      </diag>
+    </section>
+  </chapter>
+  <chapter>
+    <name>9</name>
+    <desc>Diseases of the circulatory system (I00-I99)</desc>
+    <section id="I10-I1A">
+      <desc>Hypertensive diseases (I10-I1A)</desc>
+      <diag>
+        <name>I10</name>
+        <desc>Essential (primary) hypertension</desc>
+        <inclusionTerm>
+          <note>high blood pressure</note>
+        </inclusionTerm>
+        <excludes2>
+          <note>essential (primary) hypertension involving vessels of eye (H35.0-)</note>
+        </excludes2>
+      </diag>
+    </section>
+  </chapter>
+  <chapter>
+    <name>19</name>
+    <desc>Injury, poisoning and certain other consequences of external causes (S00-T88)</desc>
+    <section id="S70-S79">
+      <desc>Injuries to the hip and thigh (S70-S79)</desc>
+      <diag>
+        <name>S72</name>
+        <desc>Fracture of femur</desc>
+        <excludes1>
+          <note>traumatic amputation of hip and thigh (S78.-)</note>
+        </excludes1>
+        <diag>
+          <name>S72.0</name>
+          <desc>Fracture of head and neck of femur</desc>
+          <diag>
+            <name>S72.00</name>
+            <desc>Fracture of unspecified part of neck of femur</desc>
+            <diag>
+              <name>S72.001</name>
+              <desc>Fracture of unspecified part of neck of right femur</desc>
+            </diag>
+          </diag>
+        </diag>
+      </diag>
+    </section>
+  </chapter>
+</ICD10CM.tabular>
