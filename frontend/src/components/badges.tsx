@@ -93,3 +93,24 @@ export function DecisionBadge({ action }: { action: string }) {
     </span>
   )
 }
+
+const VERDICT_STYLES: Record<string, string> = {
+  SUPPORTED: 'bg-green-100 text-green-800 border-green-300',
+  WEAK_SUPPORT: 'bg-amber-100 text-amber-800 border-amber-300',
+  SPECIFICITY_MISMATCH: 'bg-blue-100 text-blue-800 border-blue-300',
+  NOT_SUPPORTED: 'bg-red-100 text-red-800 border-red-300',
+  INVALID_CODE: 'bg-red-100 text-red-800 border-red-300',
+  MISSED_HCC: 'bg-purple-100 text-purple-800 border-purple-300',
+}
+
+export function VerdictBadge({ verdict }: { verdict: string }) {
+  return (
+    <span
+      className={`inline-block rounded border px-2 py-0.5 text-xs font-semibold ${
+        VERDICT_STYLES[verdict] ?? 'bg-gray-100 text-gray-700 border-gray-300'
+      }`}
+    >
+      {verdict.replaceAll('_', ' ')}
+    </span>
+  )
+}

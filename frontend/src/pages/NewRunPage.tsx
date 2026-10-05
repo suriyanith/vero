@@ -4,12 +4,18 @@ import { ApiError } from '../api/client'
 import { useCreateBatch, useCreateRun, useSamples } from '../features/runs/hooks'
 
 type Tab = 'paste' | 'sample' | 'batch'
+type Mode = 'coding' | 'audit'
+
+const CODE_FORMAT = /^[A-TV-Z][0-9][0-9A-Z](\.[0-9A-Z]{1,4})?$/
 
 export function NewRunPage() {
   const [tab, setTab] = useState<Tab>('paste')
+  const [mode, setMode] = useState<Mode>('coding')
   const [text, setText] = useState('')
   const [sampleId, setSampleId] = useState<string | null>(null)
   const [files, setFiles] = useState<File[]>([])
+  const [submittedCodes, setSubmittedCodes] = useState<string[]>([])
+  const [codeDraft, setCodeDraft] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   const samples = useSamples()
@@ -17,12 +23,31 @@ export function NewRunPage() {
   const createBatch = useCreateBatch()
   const navigate = useNavigate()
 
+  const addCode = () => {
+    const code = codeDraft.trim().toUpperCase()
+    if (!code) return
+    if (!CODE_FORMAT.test(code)) {
+      setError(`${code} is not a valid ICD-10-CM code format.`)
+      return
+    }
+    setError(null)
+    if (!submittedCodes.includes(code)) setSubmittedCodes([...submittedCodes, code])
+    setCodeDraft('')
+  }
+
   const submitRun = (payload: { text?: string; sample_id?: string }) => {
     setError(null)
-    createRun.mutate(payload, {
-      onSuccess: (created) => navigate(`/runs/${created.run_id}`),
-      onError: (e) => setError(e instanceof ApiError ? e.message : 'Something went wrong.'),
-    })
+    if (mode === 'audit' && submittedCodes.length === 0) {
+      setError('Audit mode needs at least one submitted code.')
+      return
+    }
+    createRun.mutate(
+      { ...payload, mode, submitted_codes: mode === 'audit' ? submittedCodes : [] },
+      {
+        onSuccess: (created) => navigate(`/runs/${created.run_id}`),
+        onError: (e) => setError(e instanceof ApiError ? e.message : 'Something went wrong.'),
+      },
+    )
   }
 
   const submitBatch = () => {
@@ -49,12 +74,76 @@ export function NewRunPage() {
         : 'text-gray-600 hover:text-gray-900'
     }`
 
+  const auditControls = tab !== 'batch' && (
+    <fieldset className="mb-3">
+      <legend className="sr-only">Run mode</legend>
+      <div className="flex items-center gap-4 text-sm">
+        <label className="flex items-center gap-1">
+          <input
+            type="radio"
+            name="mode"
+            checked={mode === 'coding'}
+            onChange={() => setMode('coding')}
+          />
+          Coding
+        </label>
+        <label className="flex items-center gap-1">
+          <input
+            type="radio"
+            name="mode"
+            checked={mode === 'audit'}
+            onChange={() => setMode('audit')}
+          />
+          Audit submitted codes
+        </label>
+      </div>
+      {mode === 'audit' && (
+        <div className="mt-2">
+          <label className="block text-sm">
+            Submitted codes
+            <span className="ml-1 text-xs text-gray-500">(press Enter to add)</span>
+            <input
+              value={codeDraft}
+              onChange={(e) => setCodeDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  addCode()
+                }
+              }}
+              placeholder="e.g. E11.9"
+              className="mt-1 w-48 rounded border border-gray-300 px-2 py-1 font-mono text-sm focus:border-blue-500 focus:outline-none"
+            />
+          </label>
+          {submittedCodes.length > 0 && (
+            <ul className="mt-2 flex flex-wrap gap-1">
+              {submittedCodes.map((code) => (
+                <li
+                  key={code}
+                  className="flex items-center gap-1 rounded-full bg-gray-200 px-2 py-0.5 font-mono text-xs"
+                >
+                  {code}
+                  <button
+                    aria-label={`Remove ${code}`}
+                    className="text-gray-500 hover:text-gray-900"
+                    onClick={() => setSubmittedCodes(submittedCodes.filter((c) => c !== code))}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </fieldset>
+  )
+
   return (
     <div className="max-w-3xl">
-      <h1 className="text-xl font-bold">New coding run</h1>
+      <h1 className="text-xl font-bold">New run</h1>
       <p className="mt-2 rounded border border-amber-300 bg-amber-50 p-2 text-xs text-amber-800">
-        Synthetic notes only — Vero rejects anything that looks like real patient identifiers. Audit
-        mode arrives in a later phase.
+        Synthetic notes only — Vero rejects anything that looks like real patient identifiers.
       </p>
 
       <div className="mt-4 flex gap-1 border-b border-gray-200" role="tablist">
@@ -87,6 +176,7 @@ export function NewRunPage() {
       <div className="rounded-b border border-t-0 border-gray-200 bg-white p-4">
         {tab === 'paste' && (
           <div>
+            {auditControls}
             <label className="block text-sm font-medium">
               Clinical note
               <textarea
@@ -102,13 +192,14 @@ export function NewRunPage() {
               disabled={!text.trim() || createRun.isPending}
               onClick={() => submitRun({ text })}
             >
-              {createRun.isPending ? 'Submitting…' : 'Run coding'}
+              {createRun.isPending ? 'Submitting…' : mode === 'audit' ? 'Run audit' : 'Run coding'}
             </button>
           </div>
         )}
 
         {tab === 'sample' && (
           <div>
+            {auditControls}
             {samples.isPending && <p className="text-sm text-gray-500">Loading samples…</p>}
             {samples.isError && <p className="text-sm text-red-700">Could not load samples.</p>}
             {samples.data?.length === 0 && (
@@ -138,7 +229,7 @@ export function NewRunPage() {
               disabled={!sampleId || createRun.isPending}
               onClick={() => sampleId && submitRun({ sample_id: sampleId })}
             >
-              {createRun.isPending ? 'Submitting…' : 'Run coding'}
+              {createRun.isPending ? 'Submitting…' : mode === 'audit' ? 'Run audit' : 'Run coding'}
             </button>
           </div>
         )}

@@ -111,6 +111,17 @@ class SuggestionOut(Schema):
     latest_decision: LatestDecisionOut | None
 
 
+class FindingOut(Schema):
+    id: int
+    submitted_code: str
+    verdict: str
+    reason_code: str
+    reason: str
+    evidence: list[QuoteOut]
+    suggested_code: str
+    latest_decision: LatestDecisionOut | None
+
+
 class NoteOut(Schema):
     id: uuid.UUID
     title: str
@@ -124,6 +135,7 @@ class RunDetailOut(Schema):
     note: NoteOut
     conditions: list[ConditionOut]
     suggestions: list[SuggestionOut]
+    findings: list[FindingOut]
     submitted_codes: list[str]
     model_name: str
     prompt_versions: dict[str, str]
@@ -252,6 +264,10 @@ def get_run(request: HttpRequest, run_id: uuid.UUID) -> Status[object]:
                 "suggestions__decisions",
                 queryset=ReviewDecision.objects.select_related("reviewer").order_by("-created_at"),
             ),
+            Prefetch(
+                "findings__decisions",
+                queryset=ReviewDecision.objects.select_related("reviewer").order_by("-created_at"),
+            ),
         )
         .filter(id=run_id)
         .first()
@@ -307,6 +323,19 @@ def get_run(request: HttpRequest, run_id: uuid.UUID) -> Status[object]:
                     latest_decision=latest_decision(s),
                 )
                 for s in run.suggestions.all()
+            ],
+            findings=[
+                FindingOut(
+                    id=f.id,
+                    submitted_code=f.submitted_code,
+                    verdict=f.verdict,
+                    reason_code=f.reason_code,
+                    reason=f.reason,
+                    evidence=f.evidence,
+                    suggested_code=f.suggested_code,
+                    latest_decision=latest_decision(f),
+                )
+                for f in run.findings.all()
             ],
             submitted_codes=run.submitted_codes,
             model_name=run.model_name,

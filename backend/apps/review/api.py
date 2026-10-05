@@ -7,8 +7,13 @@ from ninja.responses import Status
 
 from apps.accounts.auth import current_user
 from apps.review.models import ReviewDecision
-from apps.review.services import DecisionError, accept_all_high, record_decision
-from apps.runs.models import Run, Suggestion
+from apps.review.services import (
+    DecisionError,
+    accept_all_high,
+    record_decision,
+    record_finding_decision,
+)
+from apps.runs.models import AuditFinding, Run, Suggestion
 
 router = Router(tags=["review"])
 
@@ -85,3 +90,26 @@ def accept_high(request: HttpRequest, run_id: uuid.UUID) -> Status[object]:
         200,
         AcceptHighOut(accepted=len(decisions), decisions=[_decision_out(d) for d in decisions]),
     )
+
+
+@router.post(
+    "/findings/{finding_id}/decisions",
+    response={201: DecisionOut, 400: ErrorOut, 404: ErrorOut},
+)
+def create_finding_decision(
+    request: HttpRequest, finding_id: int, payload: DecisionIn
+) -> Status[object]:
+    finding = AuditFinding.objects.select_related("run").filter(id=finding_id).first()
+    if finding is None:
+        return Status(404, {"error": {"code": "FINDING_NOT_FOUND", "message": "Unknown finding."}})
+    try:
+        decision = record_finding_decision(
+            finding,
+            current_user(request),
+            action=payload.action,
+            final_code=payload.final_code,
+            reason=payload.reason,
+        )
+    except DecisionError as exc:
+        return Status(400, {"error": {"code": exc.code, "message": str(exc)}})
+    return Status(201, _decision_out(decision))

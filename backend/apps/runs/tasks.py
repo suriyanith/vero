@@ -13,10 +13,11 @@ from django.utils import timezone
 from apps.llm.factory import build_llm_client
 from apps.reference.services import PostgresCodeRepository
 from apps.runs.models import Run
-from apps.runs.services import save_coding_result
+from apps.runs.services import save_audit_result, save_coding_result
 from vero_core.errors import PipelineError
 from vero_core.interfaces import PipelineConfig, PipelineDeps
-from vero_core.pipeline import code_note
+from vero_core.pipeline import audit_note, code_note
+from vero_core.schemas import AuditResult, CodingResult
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,11 @@ def process_run(run_id: str) -> None:
             llm=build_llm_client(run_id=run.id),
             codes=PostgresCodeRepository(code_set=run.code_set, hcc_model=run.hcc_model),
         )
-        result = code_note(run.note.text, deps, config)
+        result: AuditResult | CodingResult
+        if run.mode == "audit":
+            result = audit_note(run.note.text, run.submitted_codes, deps, config)
+        else:
+            result = code_note(run.note.text, deps, config)
     except PipelineError as exc:
         _fail(run, exc.code, str(exc))
         return
@@ -55,18 +60,22 @@ def process_run(run_id: str) -> None:
         _fail(run, "INTERNAL", "Processing failed unexpectedly. Try again.")
         return
 
+    usage = result.coding.usage if isinstance(result, AuditResult) else result.usage
     with transaction.atomic():
-        save_coding_result(run, result)
+        if isinstance(result, AuditResult):
+            save_audit_result(run, result)
+        else:
+            save_coding_result(run, result)
         run.status = Run.Status.READY_FOR_REVIEW
         run.finished_at = timezone.now()
-        run.duration_ms = result.usage.duration_ms
-        run.input_tokens = result.usage.input_tokens
-        run.output_tokens = result.usage.output_tokens
-        run.dropped_quotes = result.usage.dropped_quotes
+        run.duration_ms = usage.duration_ms
+        run.input_tokens = usage.input_tokens
+        run.output_tokens = usage.output_tokens
+        run.dropped_quotes = usage.dropped_quotes
         run.model_name = config.model_name
         run.prompt_versions = config.prompt_versions
         run.save()
-    logger.info("run %s ready for review (%d suggestions)", run_id, len(result.suggestions))
+    logger.info("run %s ready for review", run_id)
 
 
 def _fail(run: Run, code: str, message: str) -> None:

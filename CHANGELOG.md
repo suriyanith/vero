@@ -7,6 +7,16 @@ All notable changes to Vero are documented here. The format follows
 
 ### Added
 
+- Phase 5: audit mode — `audit_note` reuses the coding result (no extra AI
+  calls) and classifies each submitted code through the ordered verdict
+  ladder (INVALID_CODE → SUPPORTED → WEAK_SUPPORT → SPECIFICITY_MISMATCH →
+  NOT_SUPPORTED with the non-coded condition's status → NOT_DOCUMENTED),
+  plus two-way MISSED_HCC findings for documented HCC conditions never
+  submitted; `AuditFinding` model, finding decisions (append-only, with
+  snapshots; accepting a mismatch endorses the suggested code), audit runs
+  complete when every finding is decided; new-run page gets a mode toggle
+  and submitted-code chips; run detail renders the verdict table and
+  missed-HCC section with per-row decisions.
 - Phase 4: coding UI and review — append-only `ReviewDecision` with evidence
   snapshots (save/delete raise, admin read-only), decision endpoints with
   billable-code validation on modify, "Accept all High", runs auto-complete

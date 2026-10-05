@@ -47,3 +47,39 @@ export function useAcceptAllHigh(runId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['run', runId] }),
   })
 }
+
+export function useDecideFinding(runId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ findingId, input }: { findingId: number; input: DecisionInput }) =>
+      api<Decision>(`/findings/${findingId}/decisions`, { method: 'POST', json: input }),
+    onMutate: async ({ findingId, input }) => {
+      await queryClient.cancelQueries({ queryKey: ['run', runId] })
+      const previous = queryClient.getQueryData<RunDetail>(['run', runId])
+      if (previous) {
+        queryClient.setQueryData<RunDetail>(['run', runId], {
+          ...previous,
+          findings: previous.findings.map((f) =>
+            f.id === findingId
+              ? {
+                  ...f,
+                  latest_decision: {
+                    action: input.action,
+                    final_code: input.final_code ?? '',
+                    reason: input.reason ?? '',
+                    reviewer_name: 'you',
+                    created_at: new Date().toISOString(),
+                  },
+                }
+              : f,
+          ),
+        })
+      }
+      return { previous }
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previous) queryClient.setQueryData(['run', runId], context.previous)
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['run', runId] }),
+  })
+}

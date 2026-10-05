@@ -243,6 +243,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/api/findings/{finding_id}/decisions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Create Finding Decision */
+    post: operations['apps_review_api_create_finding_decision']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -434,6 +451,24 @@ export interface components {
       /** Quotes */
       quotes: components['schemas']['QuoteOut'][]
     }
+    /** FindingOut */
+    FindingOut: {
+      /** Id */
+      id: number
+      /** Submitted Code */
+      submitted_code: string
+      /** Verdict */
+      verdict: string
+      /** Reason Code */
+      reason_code: string
+      /** Reason */
+      reason: string
+      /** Evidence */
+      evidence: components['schemas']['QuoteOut'][]
+      /** Suggested Code */
+      suggested_code: string
+      latest_decision: components['schemas']['LatestDecisionOut'] | null
+    }
     /** LatestDecisionOut */
     LatestDecisionOut: {
       /** Action */
@@ -493,6 +528,8 @@ export interface components {
       conditions: components['schemas']['ConditionOut'][]
       /** Suggestions */
       suggestions: components['schemas']['SuggestionOut'][]
+      /** Findings */
+      findings: components['schemas']['FindingOut'][]
       /** Submitted Codes */
       submitted_codes: string[]
       /** Model Name */
@@ -1052,6 +1089,50 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['AcceptHighOut']
+        }
+      }
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorOut']
+        }
+      }
+    }
+  }
+  apps_review_api_create_finding_decision: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        finding_id: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DecisionIn']
+      }
+    }
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DecisionOut']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorOut']
         }
       }
       /** @description Not Found */

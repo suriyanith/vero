@@ -746,6 +746,73 @@
           }
         ]
       }
+    },
+    "/api/findings/{finding_id}/decisions": {
+      "post": {
+        "operationId": "apps_review_api_create_finding_decision",
+        "summary": "Create Finding Decision",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "finding_id",
+            "schema": {
+              "title": "Finding Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionOut"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "review"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -1226,6 +1293,63 @@
         "title": "ConditionOut",
         "type": "object"
       },
+      "FindingOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "submitted_code": {
+            "title": "Submitted Code",
+            "type": "string"
+          },
+          "verdict": {
+            "title": "Verdict",
+            "type": "string"
+          },
+          "reason_code": {
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/QuoteOut"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "suggested_code": {
+            "title": "Suggested Code",
+            "type": "string"
+          },
+          "latest_decision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LatestDecisionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "submitted_code",
+          "verdict",
+          "reason_code",
+          "reason",
+          "evidence",
+          "suggested_code",
+          "latest_decision"
+        ],
+        "title": "FindingOut",
+        "type": "object"
+      },
       "LatestDecisionOut": {
         "properties": {
           "action": {
@@ -1357,6 +1481,13 @@
             "title": "Suggestions",
             "type": "array"
           },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/FindingOut"
+            },
+            "title": "Findings",
+            "type": "array"
+          },
           "submitted_codes": {
             "items": {
               "type": "string"
@@ -1419,6 +1550,7 @@
           "note",
           "conditions",
           "suggestions",
+          "findings",
           "submitted_codes",
           "model_name",
           "prompt_versions",

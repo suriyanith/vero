@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { RunDetail, Suggestion } from '../api/types'
+import type { Finding, RunDetail, Suggestion } from '../api/types'
 import { CodeSearchModal } from '../components/CodeSearchModal'
 import { EvidenceHighlighter } from '../components/EvidenceHighlighter'
 import { paletteFor, type EvidenceSpan } from '../components/highlight'
 import { StatusBadge } from '../components/badges'
 import { SuggestionCard } from '../components/SuggestionCard'
-import { useAcceptAllHigh, useDecide } from '../features/review/hooks'
+import { AuditFindingsTable } from '../components/AuditFindingsTable'
+import { useAcceptAllHigh, useDecide, useDecideFinding } from '../features/review/hooks'
 import { useRun } from '../features/runs/hooks'
 
 const SHORTCUTS: [string, string][] = [
@@ -43,7 +44,87 @@ export function RunDetailPage() {
       </div>
     )
   }
-  return <ReviewView run={run} />
+  return run.mode === 'audit' ? <AuditView run={run} /> : <ReviewView run={run} />
+}
+
+function AuditView({ run }: { run: RunDetail }) {
+  const decideFinding = useDecideFinding(run.id)
+  const [hoveredCondition, setHoveredCondition] = useState<number | null>(null)
+
+  const spans: EvidenceSpan[] = useMemo(
+    () =>
+      run.conditions.flatMap((c) =>
+        c.quotes.map((q) => ({ start: q.start, end: q.end, conditionId: c.id })),
+      ),
+    [run.conditions],
+  )
+  const submitted = run.findings.filter((f) => f.verdict !== 'MISSED_HCC')
+  const missed = run.findings.filter((f) => f.verdict === 'MISSED_HCC')
+  const notCoded = run.conditions.filter((c) => c.status !== 'active')
+
+  const act = (finding: Finding, action: 'accept' | 'reject') =>
+    decideFinding.mutate({ findingId: finding.id, input: { action } })
+
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-3">
+        <h1 className="text-xl font-bold">{run.note.title}</h1>
+        <StatusBadge status={run.status} />
+        <span className="rounded bg-gray-800 px-2 py-0.5 text-xs font-medium text-white">
+          audit
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-6 lg:grid-cols-2">
+        <section
+          aria-label="Note with highlighted evidence"
+          className="max-h-[75vh] overflow-y-auto rounded-lg border border-gray-200 bg-white p-4"
+        >
+          <EvidenceHighlighter
+            text={run.note.text}
+            spans={spans}
+            activeConditionId={hoveredCondition}
+            onHoverCondition={setHoveredCondition}
+          />
+        </section>
+
+        <section aria-label="Audit findings" className="space-y-5">
+          <AuditFindingsTable
+            title="Submitted codes"
+            findings={submitted}
+            onAccept={(f) => act(f, 'accept')}
+            onReject={(f) => act(f, 'reject')}
+          />
+          <AuditFindingsTable
+            title="Missed HCCs"
+            findings={missed}
+            onAccept={(f) => act(f, 'accept')}
+            onReject={(f) => act(f, 'reject')}
+          />
+          {notCoded.length > 0 && (
+            <div>
+              <h2 className="font-semibold">Not coded</h2>
+              <ul className="mt-2 space-y-1 text-sm">
+                {notCoded.map((c) => (
+                  <li key={c.id} className="rounded border border-gray-200 bg-white p-2">
+                    <span className="font-medium">{c.label}</span>
+                    <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">
+                      {c.status.replaceAll('_', ' ')}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+      </div>
+
+      <footer className="mt-6 border-t border-gray-200 pt-3 text-xs text-gray-500">
+        model {run.model_name || '—'} · {run.duration_ms ?? '—'} ms · tokens {run.input_tokens}/
+        {run.output_tokens}
+      </footer>
+    </div>
+  )
 }
 
 function ReviewView({ run }: { run: RunDetail }) {

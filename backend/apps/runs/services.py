@@ -11,8 +11,8 @@ from apps.accounts.models import User
 from apps.notes.models import Batch, Mode, Note
 from apps.notes.phi import find_phi
 from apps.reference.services import active_code_set, active_hcc_model
-from apps.runs.models import Condition, Run, Suggestion
-from vero_core.schemas import CodingResult
+from apps.runs.models import AuditFinding, Condition, Run, Suggestion
+from vero_core.schemas import AuditResult, CodingResult
 
 DISPLAY_CODE_RE = re.compile(r"^[A-TV-Z][0-9][0-9A-Z](?:\.[0-9A-Z]{1,4})?$")
 
@@ -57,7 +57,6 @@ def _validate_mode(mode: str, submitted_codes: list[str]) -> None:
                 "INVALID_CODE_FORMAT",
                 f"Not valid ICD-10-CM code formats: {', '.join(bad)}",
             )
-        raise RunCreationError("AUDIT_NOT_AVAILABLE", "Audit mode ships in a later phase.")
 
 
 def _enqueue(run: Run) -> None:
@@ -128,7 +127,9 @@ def create_batch(
         raise RunCreationError(
             "TOO_MANY_FILES", f"A batch accepts at most {settings.VERO_MAX_BATCH_FILES} files."
         )
-    _validate_mode(mode, ["placeholder"] if mode == Mode.AUDIT else [])
+    if mode == Mode.AUDIT:
+        # Batch uploads are coding-only: audit needs per-note submitted codes.
+        raise RunCreationError("BATCH_AUDIT_UNSUPPORTED", "Batches run in coding mode only.")
 
     batch = Batch.objects.create(name=name, mode=mode, created_by=user)
     runs: list[Run] = []
@@ -200,3 +201,18 @@ def retry_run(run: Run, user: User) -> Run:
     )
     _enqueue(new_run)
     return new_run
+
+
+def save_audit_result(run: Run, result: AuditResult) -> None:
+    """Persist the audit findings on top of the underlying coding result."""
+    save_coding_result(run, result.coding)
+    for finding in result.findings:
+        AuditFinding.objects.create(
+            run=run,
+            submitted_code=finding.submitted_code or "",
+            verdict=finding.verdict.value,
+            reason_code=finding.reason_code,
+            reason=finding.reason,
+            evidence=[q.model_dump(mode="json") for q in finding.evidence],
+            suggested_code=finding.suggested_code or "",
+        )

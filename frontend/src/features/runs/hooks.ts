@@ -43,8 +43,12 @@ export function useRun(runId: string | undefined) {
 export function useCreateRun() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (payload: { text?: string; sample_id?: string; mode?: string }) =>
-      api<RunCreated>('/runs', { method: 'POST', json: payload }),
+    mutationFn: (payload: {
+      text?: string
+      sample_id?: string
+      mode?: string
+      submitted_codes?: string[]
+    }) => api<RunCreated>('/runs', { method: 'POST', json: payload }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['runs'] }),
   })
 }

@@ -94,3 +94,27 @@ class Suggestion(models.Model):
 
     def __str__(self) -> str:
         return f"{self.display_code} ({self.confidence})"
+
+
+class AuditFinding(models.Model):
+    class Verdict(models.TextChoices):
+        SUPPORTED = "SUPPORTED"
+        WEAK_SUPPORT = "WEAK_SUPPORT"
+        SPECIFICITY_MISMATCH = "SPECIFICITY_MISMATCH"
+        NOT_SUPPORTED = "NOT_SUPPORTED"
+        INVALID_CODE = "INVALID_CODE"
+        MISSED_HCC = "MISSED_HCC"
+
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="findings")
+    submitted_code = models.CharField(max_length=8, blank=True)  # empty for MISSED_HCC
+    verdict = models.CharField(max_length=20, choices=Verdict.choices)
+    reason_code = models.CharField(max_length=30)
+    reason = models.TextField()
+    evidence = models.JSONField(default=list, blank=True)
+    suggested_code = models.CharField(max_length=8, blank=True)
+    related_condition = models.ForeignKey(
+        Condition, null=True, blank=True, on_delete=models.SET_NULL
+    )
+
+    def __str__(self) -> str:
+        return f"{self.submitted_code or self.suggested_code}: {self.verdict}"

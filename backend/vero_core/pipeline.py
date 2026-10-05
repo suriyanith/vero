@@ -1,13 +1,14 @@
 """Pipeline entry points.
 
 Exactly two AI calls per note (extract and select); everything else is
-deterministic Python. `audit_note` arrives in Phase 5.
+deterministic Python. Audit mode reuses the coding result — no extra calls.
 """
 
 import time
 
 from vero_core.interfaces import PipelineConfig, PipelineDeps
 from vero_core.schemas import (
+    AuditResult,
     Candidate,
     CodingResult,
     ConditionStatus,
@@ -16,6 +17,7 @@ from vero_core.schemas import (
     Usage,
     VerifiedCondition,
 )
+from vero_core.steps.audit import audit_findings
 from vero_core.steps.extract import extract_conditions
 from vero_core.steps.finalize import finalize
 from vero_core.steps.retrieve import retrieve_candidates
@@ -74,3 +76,14 @@ def code_note(note_text: str, deps: PipelineDeps, config: PipelineConfig) -> Cod
             dropped_quotes=verified.dropped_quotes,
         ),
     )
+
+
+def audit_note(
+    note_text: str,
+    submitted_codes: list[str],
+    deps: PipelineDeps,
+    config: PipelineConfig,
+) -> AuditResult:
+    coding = code_note(note_text, deps, config)
+    findings = audit_findings(submitted_codes, coding, deps.codes, config)
+    return AuditResult(coding=coding, findings=findings)

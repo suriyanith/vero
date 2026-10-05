@@ -6,7 +6,7 @@ from django.db.models import Exists, OuterRef
 from apps.accounts.models import User
 from apps.reference.models import Icd10Code
 from apps.review.models import ReviewDecision
-from apps.runs.models import Run, Suggestion
+from apps.runs.models import AuditFinding, Run, Suggestion
 
 
 class DecisionError(Exception):
@@ -44,14 +44,25 @@ def _validate_final_code(run: Run, final_code: str) -> str:
 
 
 def _maybe_complete(run: Run) -> None:
+    """Coding runs complete when every suggestion is decided; audit runs when
+    every finding is."""
     if run.status != Run.Status.READY_FOR_REVIEW:
         return
-    undecided = (
-        Suggestion.objects.filter(run=run)
-        .annotate(decided=Exists(ReviewDecision.objects.filter(suggestion=OuterRef("pk"))))
-        .filter(decided=False)
-    )
-    if not undecided.exists():
+    if run.mode == "audit":
+        has_undecided = (
+            AuditFinding.objects.filter(run=run)
+            .annotate(decided=Exists(ReviewDecision.objects.filter(finding=OuterRef("pk"))))
+            .filter(decided=False)
+            .exists()
+        )
+    else:
+        has_undecided = (
+            Suggestion.objects.filter(run=run)
+            .annotate(decided=Exists(ReviewDecision.objects.filter(suggestion=OuterRef("pk"))))
+            .filter(decided=False)
+            .exists()
+        )
+    if not has_undecided:
         run.status = Run.Status.COMPLETED
         run.save(update_fields=["status"])
 
@@ -104,3 +115,52 @@ def accept_all_high(run: Run, reviewer: User) -> list[ReviewDecision]:
         for suggestion in undecided_high
     ]
     return decisions
+
+
+def _finding_snapshot(finding: AuditFinding) -> dict[str, object]:
+    return {
+        "submitted_code": finding.submitted_code,
+        "verdict": finding.verdict,
+        "reason_code": finding.reason_code,
+        "reason": finding.reason,
+        "evidence": finding.evidence,
+        "suggested_code": finding.suggested_code,
+    }
+
+
+@transaction.atomic
+def record_finding_decision(
+    finding: AuditFinding,
+    reviewer: User,
+    *,
+    action: str,
+    final_code: str | None = None,
+    reason: str = "",
+) -> ReviewDecision:
+    run = finding.run
+    if run.status not in (Run.Status.READY_FOR_REVIEW, Run.Status.COMPLETED):
+        raise DecisionError("RUN_NOT_REVIEWABLE", "This run is not ready for review.")
+
+    original = finding.submitted_code or finding.suggested_code or ""
+    resolved_final = ""
+    if action == ReviewDecision.Action.MODIFY:
+        if not final_code:
+            raise DecisionError("FINAL_CODE_REQUIRED", "Modify needs a replacement code.")
+        resolved_final = _validate_final_code(run, final_code)
+    elif action == ReviewDecision.Action.ACCEPT:
+        # Accepting a finding endorses Vero's verdict; for a missed HCC or a
+        # specificity mismatch that means the suggested code.
+        resolved_final = finding.suggested_code or finding.submitted_code or ""
+
+    decision = ReviewDecision.objects.create(
+        run=run,
+        finding=finding,
+        reviewer=reviewer,
+        action=action,
+        original_code=original,
+        final_code=resolved_final,
+        reason=reason,
+        evidence_snapshot=_finding_snapshot(finding),
+    )
+    _maybe_complete(run)
+    return decision

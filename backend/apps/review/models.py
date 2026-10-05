@@ -4,7 +4,7 @@ from typing import Any
 from django.conf import settings
 from django.db import models
 
-from apps.runs.models import Run, Suggestion
+from apps.runs.models import AuditFinding, Run, Suggestion
 
 
 class AppendOnlyError(Exception):
@@ -29,6 +29,9 @@ class ReviewDecision(models.Model):
     run = models.ForeignKey(Run, on_delete=models.PROTECT, related_name="decisions")
     suggestion = models.ForeignKey(
         Suggestion, null=True, blank=True, on_delete=models.PROTECT, related_name="decisions"
+    )
+    finding = models.ForeignKey(
+        AuditFinding, null=True, blank=True, on_delete=models.PROTECT, related_name="decisions"
     )
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     action = models.CharField(max_length=10, choices=Action.choices)

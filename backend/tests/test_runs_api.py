@@ -58,14 +58,6 @@ class TestRunLifecycle:
         response = client.post("/api/runs", {"text": "x" * 20001}, content_type="application/json")
         assert response.json()["error"]["code"] == "INPUT_TOO_LARGE"
 
-    def test_audit_mode_not_yet_available(self, pipeline_env: None, client: Client) -> None:
-        response = client.post(
-            "/api/runs",
-            {"text": NOTE_TEXT, "mode": "audit", "submitted_codes": ["E11.9"]},
-            content_type="application/json",
-        )
-        assert response.json()["error"]["code"] == "AUDIT_NOT_AVAILABLE"
-
     def test_audit_mode_validates_code_format(self, pipeline_env: None, client: Client) -> None:
         response = client.post(
             "/api/runs",
@@ -150,6 +142,7 @@ class TestListAndQueries:
         response = post_run(client, django_capture_on_commit_callbacks, {"text": NOTE_TEXT})
         run_id = response.json()["run_id"]
         client.get(f"/api/runs/{run_id}")  # warm up session queries
-        # session + user + run + conditions + suggestions + decisions
-        with django_assert_num_queries(6):
+        # session + user + run + conditions + suggestions + their decisions
+        # + findings (its decisions prefetch is free when no findings exist)
+        with django_assert_num_queries(7):
             client.get(f"/api/runs/{run_id}")
