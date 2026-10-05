@@ -123,11 +123,13 @@ class TestGenerateAndCache:
 class TestRetries:
     def test_rate_limit_retries_then_fails_with_stable_code(self) -> None:
         error = genai_errors.ClientError(429, {"error": {"message": "quota"}})
-        client, stub = make_client([error, error, error])
+        client, stub = make_client([error] * 5)
         with pytest.raises(LLMError) as excinfo:
             generate(client)
         assert excinfo.value.code == LLM_RATE_LIMITED
-        assert len(stub.calls) == 3
+        assert len(stub.calls) == 5  # MAX_ATTEMPTS
+        # 429 waits out the minute window instead of hammering it
+        assert any(wait >= 60 for wait in client._sleeps)  # type: ignore[attr-defined]
         assert LlmCall.objects.get().status == "error"
 
     def test_server_error_then_success(self) -> None:

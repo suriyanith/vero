@@ -17,16 +17,27 @@ _NOTE_LABELS = (
     ("code_first", "Code first"),
     ("use_additional", "Use additional code"),
 )
-_MAX_NOTE_LINES_PER_TYPE = 4
+_MAX_NOTE_LINES_PER_TYPE = 2
+_MAX_NOTE_CHARS = 110
 
 
 def _candidate_lines(candidates: list[Candidate]) -> list[str]:
+    # Category-expanded siblings inherit identical category-level notes, so
+    # each distinct note line is shown once per condition (on the first
+    # candidate carrying it): the repetition tripled prompt size for zero
+    # information and large prompts get load-shed by the API.
     lines = []
+    seen_notes: set[str] = set()
     for number, candidate in enumerate(candidates, start=1):
         lines.append(f"{number}. {candidate.display_code} — {candidate.description}")
         for key, label in _NOTE_LABELS:
             for note in candidate.notes.get(key, [])[:_MAX_NOTE_LINES_PER_TYPE]:
-                lines.append(f"   {label}: {note}")
+                text = note if len(note) <= _MAX_NOTE_CHARS else note[: _MAX_NOTE_CHARS - 1] + "…"
+                line = f"   {label}: {text}"
+                if line in seen_notes:
+                    continue
+                seen_notes.add(line)
+                lines.append(line)
     return lines
 
 

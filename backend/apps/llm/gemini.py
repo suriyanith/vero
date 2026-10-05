@@ -27,8 +27,9 @@ from vero_core.prompt_loader import load_prompt, render
 
 logger = logging.getLogger(__name__)
 
-MAX_ATTEMPTS = 3  # for rate-limit and server errors
-BACKOFF_BASE_SECONDS = 2.0
+MAX_ATTEMPTS = 5  # for rate-limit and server errors
+BACKOFF_BASE_SECONDS = 3.0  # 3s, 6s, 12s, 24s — Gemini capacity spikes are bursty
+RATE_LIMIT_BACKOFF_SECONDS = 62.0  # 429 quotas reset on minute windows
 
 
 class GeminiClient:
@@ -213,6 +214,10 @@ class GeminiClient:
                     code = LLM_RATE_LIMITED if exc.code == 429 else LLM_UNAVAILABLE
                     raise LLMError(code, "Gemini retries exhausted") from exc
                 backoff = BACKOFF_BASE_SECONDS * (2 ** (attempt - 1))
+                if exc.code == 429:
+                    # Quota windows are per-minute; retrying sooner just burns
+                    # attempts inside the same exhausted window.
+                    backoff = max(backoff, RATE_LIMIT_BACKOFF_SECONDS)
                 logger.warning("Gemini error %s; retrying in %.0fs", exc.code, backoff)
                 self._sleep(backoff)
                 continue
