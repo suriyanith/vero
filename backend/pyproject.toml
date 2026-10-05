@@ -1,0 +1,78 @@
+[project]
+name = "vero-backend"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.1.1",
+    "django-environ>=0.14.0",
+    "django-ninja>=1.7.1",
+    "django-tasks-db>=0.13.0",
+    "psycopg[binary]>=3.3.6",
+    "pydantic>=2.13.5",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs>=6.1.1",
+    "factory-boy>=3.3.3",
+    "hypothesis>=6.168.4",
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.16.10",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # bugbear
+    "T20", # no print in application code
+    "DJ",  # django lints
+]
+
+[tool.ruff.lint.per-file-ignores]
+"vero_core/cli.py" = ["T20"]  # the CLI's whole job is to print
+"**/migrations/*" = ["E501", "I001"]  # generated code
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["mypy_django_plugin.main"]
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+exclude = ["migrations"]
+
+[[tool.mypy.overrides]]
+module = "vero_core.*"
+strict = true
+
+[[tool.mypy.overrides]]
+module = "environ"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["*.migrations.*", "django_tasks_db.*"]
+ignore_errors = true
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+testpaths = ["tests"]
+addopts = "--strict-markers"
+
+[tool.coverage.run]
+source = ["apps", "config", "vero_core"]
+omit = ["*/migrations/*", "manage.py", "config/asgi.py", "config/wsgi.py"]

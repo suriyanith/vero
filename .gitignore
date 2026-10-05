@@ -1,0 +1,28 @@
+# Environment — never commit real env files
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Django
+staticfiles/
+
+# Data — raw CMS downloads are large; see data/SOURCES.md
+data/raw/
+
+# OS
+.DS_Store
