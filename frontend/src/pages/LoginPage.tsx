@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
-import { Button, Card, inputClass } from '../components/ui'
+import { Button, MicroLabel, inputClass } from '../components/ui'
 import { useLogin } from '../features/auth/hooks'
 
 // A miniature of the real product: a suggestion card with its evidence, and
@@ -49,6 +49,7 @@ function EvidenceMock() {
 export function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const login = useLogin()
   const navigate = useNavigate()
 
@@ -93,7 +94,7 @@ export function LoginPage() {
               'radial-gradient(42rem 22rem at 50% -10%, #ddd8f5 0%, rgba(221,216,245,0) 60%)',
           }}
         />
-        <div className="anim-in relative w-full max-w-sm" style={{ animationDelay: '120ms' }}>
+        <div className="anim-in relative w-full max-w-[21rem]" style={{ animationDelay: '120ms' }}>
           <div className="mb-10 text-center lg:hidden">
             <h1 className="font-display text-5xl font-bold tracking-tight">Vero</h1>
             <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-ink-soft">
@@ -102,57 +103,92 @@ export function LoginPage() {
           </div>
 
           <div className="hidden lg:block">
-            <h2 className="font-display text-3xl font-semibold tracking-tight">Welcome back</h2>
-            <p className="mt-1.5 text-sm text-ink-soft">Sign in to review today's queue.</p>
+            <h2 className="font-display text-[2rem] font-semibold tracking-tight">Welcome back</h2>
+            <p className="mt-1 text-sm text-ink-soft">Sign in to review today's queue.</p>
           </div>
 
-          <Card className="mt-0 p-6 sm:p-7 lg:mt-7">
-            <form
-              className="space-y-5"
-              onSubmit={(e) => {
-                e.preventDefault()
-                login.mutate({ username, password }, { onSuccess: () => navigate('/dashboard') })
-              }}
-            >
-              <label className="block text-sm font-medium">
-                Username
-                <input
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  autoComplete="username"
-                  autoFocus
-                  className={`mt-1.5 w-full ${inputClass}`}
-                />
+          <form
+            className="mt-9 space-y-6"
+            onSubmit={(e) => {
+              e.preventDefault()
+              login.mutate({ username, password }, { onSuccess: () => navigate('/dashboard') })
+            }}
+          >
+            <div className="group">
+              <label htmlFor="login-username">
+                <MicroLabel className="transition-colors group-focus-within:text-accent">
+                  Username
+                </MicroLabel>
               </label>
-              <label className="block text-sm font-medium">
-                Password
+              <input
+                id="login-username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                autoFocus
+                className={`mt-2 w-full rounded-[10px] py-2.5 ${inputClass}`}
+              />
+            </div>
+
+            <div className="group">
+              <label htmlFor="login-password">
+                <MicroLabel className="transition-colors group-focus-within:text-accent">
+                  Password
+                </MicroLabel>
+              </label>
+              <div className="relative mt-2">
                 <input
-                  type="password"
+                  id="login-password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
-                  className={`mt-1.5 w-full ${inputClass}`}
+                  className={`w-full rounded-[10px] py-2.5 pr-11 ${inputClass}`}
                 />
-              </label>
-              {login.isError && (
-                <p role="alert" className="text-sm text-[#9a2c21]">
-                  {login.error instanceof ApiError ? login.error.message : 'Login failed.'}
-                </p>
-              )}
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={login.isPending}
-                className="w-full py-2.5 text-[15px]"
-              >
-                {login.isPending ? 'Signing in…' : 'Sign in'}
-              </Button>
-            </form>
-          </Card>
+                <button
+                  type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-lg text-ink-faint transition-colors hover:bg-stone-100 hover:text-ink"
+                  onClick={() => setShowPassword((v) => !v)}
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    className="h-[1.05rem] w-[1.05rem]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M2.5 10s2.8-5 7.5-5 7.5 5 7.5 5-2.8 5-7.5 5-7.5-5-7.5-5z" />
+                    <circle cx="10" cy="10" r="2.2" />
+                    {showPassword && <path d="M4 16L16 4" />}
+                  </svg>
+                </button>
+              </div>
+            </div>
 
-          <p className="mt-7 text-center text-xs leading-5 text-ink-faint">
-            Synthetic data only. Never paste real patient notes into Vero.
-          </p>
+            {login.isError && (
+              <p role="alert" className="text-sm text-[#9a2c21]">
+                {login.error instanceof ApiError ? login.error.message : 'Login failed.'}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={login.isPending}
+              className="w-full rounded-[10px] py-2.5 text-[15px]"
+            >
+              {login.isPending ? 'Signing in…' : 'Sign in'}
+            </Button>
+          </form>
+
+          <div className="mt-9 border-t border-line pt-5">
+            <p className="text-center text-xs leading-5 text-ink-faint">
+              Synthetic data only. Never paste real patient notes into Vero.
+            </p>
+          </div>
         </div>
       </section>
     </main>
