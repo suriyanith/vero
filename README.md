@@ -13,6 +13,18 @@ an append-only audit trail.
 > identifiers — but it is a guardrail, not a de-identification tool. Never
 > paste real patient data into Vero.
 
+## Screenshots
+
+**The review screen** — the note with verified evidence highlighted, suggestion
+cards with confidence, HCC, and MEAT, and accept / reject / modify decisions:
+
+![Reviewing a coded note](docs/screenshots/review.png)
+
+| | |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Evaluation](docs/screenshots/evaluation.png) |
+| ![Append-only audit trail](docs/screenshots/audit-trail.png) | ![Login](docs/screenshots/login.png) |
+
 ## Why
 
 Under-coding loses providers revenue; over-coding creates compliance risk —
