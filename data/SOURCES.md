@@ -14,6 +14,25 @@ downloaded file is recorded here with URL, download date, and SHA-256.
 All four are CMS publications and public domain. Compute a checksum with
 `shasum -a 256 <file>`.
 
+## Download and extract (exact commands)
+
+The Makefile expects these extracted paths. From the repo root:
+
+```bash
+cd data/raw
+curl -LO https://www.cms.gov/files/zip/2027-code-descriptions-tabular-order.zip
+curl -LO https://www.cms.gov/files/zip/2027-code-tables-tabular-index.zip
+curl -LO https://www.cms.gov/files/zip/2027-initial-icd-10-cm-mappings.zip
+curl -LO https://www.cms.gov/files/zip/2027-initial-model-software.zip
+unzip -o 2027-code-descriptions-tabular-order.zip   # -> "Code Descriptions/"
+unzip -o 2027-code-tables-tabular-index.zip         # -> "Table and Index/"
+unzip -o 2027-initial-icd-10-cm-mappings.zip        # -> mappings CSV
+unzip -o 2027-initial-model-software.zip -d model-software
+cd model-software && unzip -o "CMS-HCC software V2826.115.T2.zip" -d V28 && cd ..
+```
+
+Then `make init` loads everything.
+
 Notes verified against the files on 2026-10-04:
 
 - **Order file layout** (1-indexed columns): 1–5 order number, 7–13 code

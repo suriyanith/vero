@@ -55,8 +55,8 @@ findings for documented HCC conditions never submitted.
 Prerequisites: Docker (or local Python 3.12+/Node 22+/Postgres 16), a
 [Google AI Studio](https://aistudio.google.com/) key — new accounts use
 prepaid credits (load a small amount at ai.studio/projects; prepay acts as
-a hard spending cap) — and the CMS reference files (URLs + checksums in
-`data/SOURCES.md`) downloaded into `data/raw/`.
+a hard spending cap) — and the CMS reference files downloaded into `data/raw/` —
+exact download/unzip commands are in [`data/SOURCES.md`](data/SOURCES.md).
 
 ```bash
 cp .env.example .env     # add GEMINI_API_KEY, GEMINI_MODEL, seed passwords
@@ -86,13 +86,23 @@ against the real Gemini API), `make eval` (evaluation on the test split).
 
 ## Evaluation
 
-`manage.py run_eval` scores the pipeline against a human-reviewed answer
-key: code/HCC/category precision-recall-F1, hard-case accuracy (history,
-rule-out, negated, family-history, problem-list-only…), accuracy by
-confidence level, evidence-integrity counters, and audit verdict accuracy.
-It refuses unreviewed labels unless told otherwise, and reruns are free via
-the response cache. See `docs/EVALUATION.md` and `docs/DATASET_CARD.md` —
-the bundled labels are **drafts pending human review**.
+Measured on the 12-note synthetic test split with `gemini-flash-lite-latest`
+(small sample — directional; full method and error analysis in
+[`docs/EVALUATION.md`](docs/EVALUATION.md)):
+
+| Metric | Result |
+|---|---|
+| Hard cases correctly left uncoded (rule-out, history, negated, …) | **11/11** |
+| HCC-level recall (payment-relevant diagnoses found) | **100%** |
+| Unverified quotes / invalid codes shown to users | **0 / 0** |
+| Audit mode: unsupported submitted codes caught | **6/6** |
+| Code-level exact-match F1 | 62% |
+
+The compliance-critical numbers are the strong ones by design; the exact-code
+F1 reflects the free-tier model and the five error patterns are analyzed in
+the doc. `manage.py run_eval` refuses unreviewed labels unless told
+otherwise, and reruns replay from the response cache for free. Labeling
+provenance and limits: [`docs/DATASET_CARD.md`](docs/DATASET_CARD.md).
 
 ## Why local-only
 

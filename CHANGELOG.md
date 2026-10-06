@@ -7,6 +7,28 @@ All notable changes to Vero are documented here. The format follows
 
 Nothing yet.
 
+## [1.1.0] - 2026-10-05
+
+### Added
+
+- Complete design overhaul: warm-paper design system (Fraunces/Inter,
+  tinted dot pills, pill navigation, gradient dashboard hero, motion behind
+  prefers-reduced-motion), split-panel login with a floating product mock,
+  custom form fields, full mobile responsiveness, Vero favicon.
+- First live-verified Gemini integration and first real evaluation run
+  (results + five-pattern error analysis in docs/EVALUATION.md); answer-key
+  verification pass fixed two linkage-presumption label errors.
+
+### Fixed
+
+- Gemini structured output rejects `additionalProperties` (AI-output
+  schemas now use a tolerant base).
+- Select prompt shrunk 4x by deduplicating inherited category notes;
+  429s wait out the per-minute quota window.
+- Vite proxy preserves Host so Django's CSRF origin check passes.
+- Decided review cards visibly resolve (tinted bar + Change) instead of
+  re-offering action buttons; work-queue rows are obviously clickable.
+
 ## [1.0.0] - 2026-10-05
 
 First complete release: all eight build phases of the engineering plan.
