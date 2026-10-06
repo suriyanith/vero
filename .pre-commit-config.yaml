@@ -27,3 +27,4 @@ repos:
     hooks:
       - id: prettier
         files: ^frontend/src/.*\.(ts|tsx|css)$
+        exclude: ^frontend/src/api/schema\.d\.ts$

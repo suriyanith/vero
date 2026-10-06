@@ -4,1510 +4,1510 @@
  */
 
 export interface paths {
-  '/api/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Health */
-    get: operations['config_api_health']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/auth/csrf': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Csrf */
-    get: operations['apps_accounts_api_csrf']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/auth/login': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Login View */
-    post: operations['apps_accounts_api_login_view']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/auth/logout': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Logout View */
-    post: operations['apps_accounts_api_logout_view']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/auth/me': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Me */
-    get: operations['apps_accounts_api_me']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/codes/search': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Search Codes */
-    get: operations['apps_reference_api_search_codes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/codes/{display_code}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Code */
-    get: operations['apps_reference_api_get_code']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/samples': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** List Samples */
-    get: operations['apps_runs_api_list_samples']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/runs': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** List Runs */
-    get: operations['apps_runs_api_list_runs']
-    put?: never
-    /** Create Run View */
-    post: operations['apps_runs_api_create_run_view']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/batches': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Create Batch View */
-    post: operations['apps_runs_api_create_batch_view']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/runs/{run_id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Run */
-    get: operations['apps_runs_api_get_run']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/runs/{run_id}/retry': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Retry Run View */
-    post: operations['apps_runs_api_retry_run_view']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/suggestions/{suggestion_id}/decisions': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Create Decision */
-    post: operations['apps_review_api_create_decision']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/runs/{run_id}/accept-high': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Accept High */
-    post: operations['apps_review_api_accept_high']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/findings/{finding_id}/decisions': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** Create Finding Decision */
-    post: operations['apps_review_api_create_finding_decision']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/decisions': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** List Decisions */
-    get: operations['apps_review_api_list_decisions']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/decisions/export.csv': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Export Decisions Csv */
-    get: operations['apps_review_api_export_decisions_csv']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/runs/{run_id}/export.csv': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Export Run Csv */
-    get: operations['apps_review_api_export_run_csv']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/dashboard/summary': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Dashboard Summary */
-    get: operations['apps_dashboard_api_dashboard_summary']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/eval/runs': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** List Eval Runs */
-    get: operations['apps_evaluation_api_list_eval_runs']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/eval/runs/{run_id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Eval Run */
-    get: operations['apps_evaluation_api_get_eval_run']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    "/api/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health */
+        get: operations["config_api_health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/csrf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Csrf */
+        get: operations["apps_accounts_api_csrf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login View */
+        post: operations["apps_accounts_api_login_view"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout View */
+        post: operations["apps_accounts_api_logout_view"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Me */
+        get: operations["apps_accounts_api_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/codes/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search Codes */
+        get: operations["apps_reference_api_search_codes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/codes/{display_code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Code */
+        get: operations["apps_reference_api_get_code"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/samples": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Samples */
+        get: operations["apps_runs_api_list_samples"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Runs */
+        get: operations["apps_runs_api_list_runs"];
+        put?: never;
+        /** Create Run View */
+        post: operations["apps_runs_api_create_run_view"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Batch View */
+        post: operations["apps_runs_api_create_batch_view"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Run */
+        get: operations["apps_runs_api_get_run"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/runs/{run_id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retry Run View */
+        post: operations["apps_runs_api_retry_run_view"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suggestions/{suggestion_id}/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Decision */
+        post: operations["apps_review_api_create_decision"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/runs/{run_id}/accept-high": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accept High */
+        post: operations["apps_review_api_accept_high"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/findings/{finding_id}/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Finding Decision */
+        post: operations["apps_review_api_create_finding_decision"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Decisions */
+        get: operations["apps_review_api_list_decisions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/decisions/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Decisions Csv */
+        get: operations["apps_review_api_export_decisions_csv"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/runs/{run_id}/export.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Run Csv */
+        get: operations["apps_review_api_export_run_csv"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dashboard/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard Summary */
+        get: operations["apps_dashboard_api_dashboard_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/eval/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Eval Runs */
+        get: operations["apps_evaluation_api_list_eval_runs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/eval/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Eval Run */
+        get: operations["apps_evaluation_api_get_eval_run"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** HealthOut */
-    HealthOut: {
-      /** Status */
-      status: string
-      /** Database */
-      database: boolean
-      /** Code Set Loaded */
-      code_set_loaded: boolean
-    }
-    /** ErrorOut */
-    ErrorOut: {
-      /** Error */
-      error: {
-        [key: string]: string
-      }
-    }
-    /** OkOut */
-    OkOut: {
-      /** Ok */
-      ok: boolean
-    }
-    /** UserOut */
-    UserOut: {
-      /** Username */
-      username: string
-      /** Display Name */
-      display_name: string
-      /** Role */
-      role: string
-    }
-    /** LoginIn */
-    LoginIn: {
-      /** Username */
-      username: string
-      /** Password */
-      password: string
-    }
-    /** CodeOut */
-    CodeOut: {
-      /** Display Code */
-      display_code: string
-      /** Description */
-      description: string
-      /** Is Billable */
-      is_billable: boolean
-      /** Hcc Number */
-      hcc_number: number | null
-      /** Hcc Label */
-      hcc_label: string | null
-    }
-    /** CodeDetailOut */
-    CodeDetailOut: {
-      /** Display Code */
-      display_code: string
-      /** Description */
-      description: string
-      /** Is Billable */
-      is_billable: boolean
-      /** Hcc Number */
-      hcc_number: number | null
-      /** Hcc Label */
-      hcc_label: string | null
-      /** Category */
-      category: string
-      /** Notes */
-      notes: {
-        [key: string]: string[]
-      }
-    }
-    /** SampleOut */
-    SampleOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /** Title */
-      title: string
-      /** Preview */
-      preview: string
-    }
-    /** RunCreatedOut */
-    RunCreatedOut: {
-      /**
-       * Run Id
-       * Format: uuid
-       */
-      run_id: string
-    }
-    /**
-     * Mode
-     * @enum {string}
-     */
-    Mode: 'coding' | 'audit'
-    /** RunCreateIn */
-    RunCreateIn: {
-      /** Text */
-      text?: string | null
-      /** Sample Id */
-      sample_id?: string | null
-      /** @default coding */
-      mode?: components['schemas']['Mode']
-      /**
-       * Submitted Codes
-       * @default []
-       */
-      submitted_codes?: string[]
-    }
-    /** Input */
-    Input: {
-      /**
-       * Limit
-       * @default 100
-       */
-      limit?: number
-      /**
-       * Offset
-       * @default 0
-       */
-      offset?: number
-    }
-    /** PagedRunListItemOut */
-    PagedRunListItemOut: {
-      /** Items */
-      items: components['schemas']['RunListItemOut'][]
-      /** Count */
-      count: number
-    }
-    /** RunListItemOut */
-    RunListItemOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /** Status */
-      status: string
-      /** Mode */
-      mode: string
-      /** Note Title */
-      note_title: string
-      /** Created By Name */
-      created_by_name: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-      /** Suggestion Count */
-      suggestion_count: number
-      /** Error Code */
-      error_code: string
-    }
-    /** BatchCreatedOut */
-    BatchCreatedOut: {
-      /**
-       * Batch Id
-       * Format: uuid
-       */
-      batch_id: string
-      /** Run Ids */
-      run_ids: string[]
-      /** Rejected */
-      rejected: components['schemas']['RejectedFileOut'][]
-    }
-    /** RejectedFileOut */
-    RejectedFileOut: {
-      /** Filename */
-      filename: string
-      /** Code */
-      code: string
-      /** Reason */
-      reason: string
-    }
-    /** ConditionOut */
-    ConditionOut: {
-      /** Id */
-      id: number
-      /** Label */
-      label: string
-      /** Status */
-      status: string
-      /** Specificity Details */
-      specificity_details: string[]
-      /** Quotes */
-      quotes: components['schemas']['QuoteOut'][]
-    }
-    /** FindingOut */
-    FindingOut: {
-      /** Id */
-      id: number
-      /** Submitted Code */
-      submitted_code: string
-      /** Verdict */
-      verdict: string
-      /** Reason Code */
-      reason_code: string
-      /** Reason */
-      reason: string
-      /** Evidence */
-      evidence: components['schemas']['QuoteOut'][]
-      /** Suggested Code */
-      suggested_code: string
-      latest_decision: components['schemas']['LatestDecisionOut'] | null
-    }
-    /** LatestDecisionOut */
-    LatestDecisionOut: {
-      /** Action */
-      action: string
-      /** Final Code */
-      final_code: string
-      /** Reason */
-      reason: string
-      /** Reviewer Name */
-      reviewer_name: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-    }
-    /** NoteOut */
-    NoteOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /** Title */
-      title: string
-      /** Text */
-      text: string
-    }
-    /** QuoteOut */
-    QuoteOut: {
-      /** Text */
-      text: string
-      /** Start */
-      start: number
-      /** End */
-      end: number
-      /** Meat */
-      meat: string[]
-      /** Match Type */
-      match_type: string
-      /** Ambiguous */
-      ambiguous: boolean
-    }
-    /** RunDetailOut */
-    RunDetailOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /** Status */
-      status: string
-      /** Mode */
-      mode: string
-      note: components['schemas']['NoteOut']
-      /** Conditions */
-      conditions: components['schemas']['ConditionOut'][]
-      /** Suggestions */
-      suggestions: components['schemas']['SuggestionOut'][]
-      /** Findings */
-      findings: components['schemas']['FindingOut'][]
-      /** Submitted Codes */
-      submitted_codes: string[]
-      /** Model Name */
-      model_name: string
-      /** Prompt Versions */
-      prompt_versions: {
-        [key: string]: string
-      }
-      /** Duration Ms */
-      duration_ms: number | null
-      /** Input Tokens */
-      input_tokens: number
-      /** Output Tokens */
-      output_tokens: number
-      /** Dropped Quotes */
-      dropped_quotes: number
-      /** Error Code */
-      error_code: string
-      /** Error Message */
-      error_message: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-    }
-    /** SuggestionOut */
-    SuggestionOut: {
-      /** Id */
-      id: number
-      /** Condition Id */
-      condition_id: number | null
-      /** Display Code */
-      display_code: string
-      /** Description */
-      description: string
-      /** Hcc Number */
-      hcc_number: number | null
-      /** Hcc Label */
-      hcc_label: string
-      /** Evidence */
-      evidence: components['schemas']['QuoteOut'][]
-      /** Meat */
-      meat: string[]
-      /** Confidence */
-      confidence: string
-      /** Confidence Reasons */
-      confidence_reasons: string[]
-      /** Rationale */
-      rationale: string
-      /** Flags */
-      flags: string[]
-      /** Candidate Rank */
-      candidate_rank: number
-      latest_decision: components['schemas']['LatestDecisionOut'] | null
-    }
-    /** DecisionOut */
-    DecisionOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /** Action */
-      action: string
-      /** Original Code */
-      original_code: string
-      /** Final Code */
-      final_code: string
-      /** Reason */
-      reason: string
-      /** Reviewer Name */
-      reviewer_name: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-    }
-    /**
-     * Action
-     * @enum {string}
-     */
-    Action: 'accept' | 'reject' | 'modify'
-    /** DecisionIn */
-    DecisionIn: {
-      action: components['schemas']['Action']
-      /** Final Code */
-      final_code?: string | null
-      /**
-       * Reason
-       * @default
-       */
-      reason?: string
-    }
-    /** AcceptHighOut */
-    AcceptHighOut: {
-      /** Accepted */
-      accepted: number
-      /** Decisions */
-      decisions: components['schemas']['DecisionOut'][]
-    }
-    /** DecisionListItemOut */
-    DecisionListItemOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-      /** Reviewer Name */
-      reviewer_name: string
-      /** Action */
-      action: string
-      /** Original Code */
-      original_code: string
-      /** Final Code */
-      final_code: string
-      /** Reason */
-      reason: string
-      /**
-       * Run Id
-       * Format: uuid
-       */
-      run_id: string
-      /** Run Mode */
-      run_mode: string
-      /** Note Title */
-      note_title: string
-      /** Kind */
-      kind: string
-    }
-    /** PagedDecisionListItemOut */
-    PagedDecisionListItemOut: {
-      /** Items */
-      items: components['schemas']['DecisionListItemOut'][]
-      /** Count */
-      count: number
-    }
-    /** EvalRunListOut */
-    EvalRunListOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-      /** Split */
-      split: string
-      /** Mode */
-      mode: string
-      /** Model Name */
-      model_name: string
-      /** Provisional */
-      provisional: boolean
-    }
-    /** EvalRunDetailOut */
-    EvalRunDetailOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string
-      /** Split */
-      split: string
-      /** Mode */
-      mode: string
-      /** Model Name */
-      model_name: string
-      /** Provisional */
-      provisional: boolean
-      /** Pipeline Version */
-      pipeline_version: string
-      /** Prompt Versions */
-      prompt_versions: {
-        [key: string]: string
-      }
-      /** Git Sha */
-      git_sha: string
-      /** Metrics */
-      metrics: {
-        [key: string]: unknown
-      }
-      /** Per Note Results */
-      per_note_results: {
-        [key: string]: unknown
-      }[]
-    }
-  }
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+    schemas: {
+        /** HealthOut */
+        HealthOut: {
+            /** Status */
+            status: string;
+            /** Database */
+            database: boolean;
+            /** Code Set Loaded */
+            code_set_loaded: boolean;
+        };
+        /** ErrorOut */
+        ErrorOut: {
+            /** Error */
+            error: {
+                [key: string]: string;
+            };
+        };
+        /** OkOut */
+        OkOut: {
+            /** Ok */
+            ok: boolean;
+        };
+        /** UserOut */
+        UserOut: {
+            /** Username */
+            username: string;
+            /** Display Name */
+            display_name: string;
+            /** Role */
+            role: string;
+        };
+        /** LoginIn */
+        LoginIn: {
+            /** Username */
+            username: string;
+            /** Password */
+            password: string;
+        };
+        /** CodeOut */
+        CodeOut: {
+            /** Display Code */
+            display_code: string;
+            /** Description */
+            description: string;
+            /** Is Billable */
+            is_billable: boolean;
+            /** Hcc Number */
+            hcc_number: number | null;
+            /** Hcc Label */
+            hcc_label: string | null;
+        };
+        /** CodeDetailOut */
+        CodeDetailOut: {
+            /** Display Code */
+            display_code: string;
+            /** Description */
+            description: string;
+            /** Is Billable */
+            is_billable: boolean;
+            /** Hcc Number */
+            hcc_number: number | null;
+            /** Hcc Label */
+            hcc_label: string | null;
+            /** Category */
+            category: string;
+            /** Notes */
+            notes: {
+                [key: string]: string[];
+            };
+        };
+        /** SampleOut */
+        SampleOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Preview */
+            preview: string;
+        };
+        /** RunCreatedOut */
+        RunCreatedOut: {
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+        };
+        /**
+         * Mode
+         * @enum {string}
+         */
+        Mode: "coding" | "audit";
+        /** RunCreateIn */
+        RunCreateIn: {
+            /** Text */
+            text?: string | null;
+            /** Sample Id */
+            sample_id?: string | null;
+            /** @default coding */
+            mode?: components["schemas"]["Mode"];
+            /**
+             * Submitted Codes
+             * @default []
+             */
+            submitted_codes?: string[];
+        };
+        /** Input */
+        Input: {
+            /**
+             * Limit
+             * @default 100
+             */
+            limit?: number;
+            /**
+             * Offset
+             * @default 0
+             */
+            offset?: number;
+        };
+        /** PagedRunListItemOut */
+        PagedRunListItemOut: {
+            /** Items */
+            items: components["schemas"]["RunListItemOut"][];
+            /** Count */
+            count: number;
+        };
+        /** RunListItemOut */
+        RunListItemOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /** Mode */
+            mode: string;
+            /** Note Title */
+            note_title: string;
+            /** Created By Name */
+            created_by_name: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Suggestion Count */
+            suggestion_count: number;
+            /** Error Code */
+            error_code: string;
+        };
+        /** BatchCreatedOut */
+        BatchCreatedOut: {
+            /**
+             * Batch Id
+             * Format: uuid
+             */
+            batch_id: string;
+            /** Run Ids */
+            run_ids: string[];
+            /** Rejected */
+            rejected: components["schemas"]["RejectedFileOut"][];
+        };
+        /** RejectedFileOut */
+        RejectedFileOut: {
+            /** Filename */
+            filename: string;
+            /** Code */
+            code: string;
+            /** Reason */
+            reason: string;
+        };
+        /** ConditionOut */
+        ConditionOut: {
+            /** Id */
+            id: number;
+            /** Label */
+            label: string;
+            /** Status */
+            status: string;
+            /** Specificity Details */
+            specificity_details: string[];
+            /** Quotes */
+            quotes: components["schemas"]["QuoteOut"][];
+        };
+        /** FindingOut */
+        FindingOut: {
+            /** Id */
+            id: number;
+            /** Submitted Code */
+            submitted_code: string;
+            /** Verdict */
+            verdict: string;
+            /** Reason Code */
+            reason_code: string;
+            /** Reason */
+            reason: string;
+            /** Evidence */
+            evidence: components["schemas"]["QuoteOut"][];
+            /** Suggested Code */
+            suggested_code: string;
+            latest_decision: components["schemas"]["LatestDecisionOut"] | null;
+        };
+        /** LatestDecisionOut */
+        LatestDecisionOut: {
+            /** Action */
+            action: string;
+            /** Final Code */
+            final_code: string;
+            /** Reason */
+            reason: string;
+            /** Reviewer Name */
+            reviewer_name: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** NoteOut */
+        NoteOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Text */
+            text: string;
+        };
+        /** QuoteOut */
+        QuoteOut: {
+            /** Text */
+            text: string;
+            /** Start */
+            start: number;
+            /** End */
+            end: number;
+            /** Meat */
+            meat: string[];
+            /** Match Type */
+            match_type: string;
+            /** Ambiguous */
+            ambiguous: boolean;
+        };
+        /** RunDetailOut */
+        RunDetailOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /** Mode */
+            mode: string;
+            note: components["schemas"]["NoteOut"];
+            /** Conditions */
+            conditions: components["schemas"]["ConditionOut"][];
+            /** Suggestions */
+            suggestions: components["schemas"]["SuggestionOut"][];
+            /** Findings */
+            findings: components["schemas"]["FindingOut"][];
+            /** Submitted Codes */
+            submitted_codes: string[];
+            /** Model Name */
+            model_name: string;
+            /** Prompt Versions */
+            prompt_versions: {
+                [key: string]: string;
+            };
+            /** Duration Ms */
+            duration_ms: number | null;
+            /** Input Tokens */
+            input_tokens: number;
+            /** Output Tokens */
+            output_tokens: number;
+            /** Dropped Quotes */
+            dropped_quotes: number;
+            /** Error Code */
+            error_code: string;
+            /** Error Message */
+            error_message: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** SuggestionOut */
+        SuggestionOut: {
+            /** Id */
+            id: number;
+            /** Condition Id */
+            condition_id: number | null;
+            /** Display Code */
+            display_code: string;
+            /** Description */
+            description: string;
+            /** Hcc Number */
+            hcc_number: number | null;
+            /** Hcc Label */
+            hcc_label: string;
+            /** Evidence */
+            evidence: components["schemas"]["QuoteOut"][];
+            /** Meat */
+            meat: string[];
+            /** Confidence */
+            confidence: string;
+            /** Confidence Reasons */
+            confidence_reasons: string[];
+            /** Rationale */
+            rationale: string;
+            /** Flags */
+            flags: string[];
+            /** Candidate Rank */
+            candidate_rank: number;
+            latest_decision: components["schemas"]["LatestDecisionOut"] | null;
+        };
+        /** DecisionOut */
+        DecisionOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Action */
+            action: string;
+            /** Original Code */
+            original_code: string;
+            /** Final Code */
+            final_code: string;
+            /** Reason */
+            reason: string;
+            /** Reviewer Name */
+            reviewer_name: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * Action
+         * @enum {string}
+         */
+        Action: "accept" | "reject" | "modify";
+        /** DecisionIn */
+        DecisionIn: {
+            action: components["schemas"]["Action"];
+            /** Final Code */
+            final_code?: string | null;
+            /**
+             * Reason
+             * @default
+             */
+            reason?: string;
+        };
+        /** AcceptHighOut */
+        AcceptHighOut: {
+            /** Accepted */
+            accepted: number;
+            /** Decisions */
+            decisions: components["schemas"]["DecisionOut"][];
+        };
+        /** DecisionListItemOut */
+        DecisionListItemOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Reviewer Name */
+            reviewer_name: string;
+            /** Action */
+            action: string;
+            /** Original Code */
+            original_code: string;
+            /** Final Code */
+            final_code: string;
+            /** Reason */
+            reason: string;
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+            /** Run Mode */
+            run_mode: string;
+            /** Note Title */
+            note_title: string;
+            /** Kind */
+            kind: string;
+        };
+        /** PagedDecisionListItemOut */
+        PagedDecisionListItemOut: {
+            /** Items */
+            items: components["schemas"]["DecisionListItemOut"][];
+            /** Count */
+            count: number;
+        };
+        /** EvalRunListOut */
+        EvalRunListOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Split */
+            split: string;
+            /** Mode */
+            mode: string;
+            /** Model Name */
+            model_name: string;
+            /** Provisional */
+            provisional: boolean;
+        };
+        /** EvalRunDetailOut */
+        EvalRunDetailOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Split */
+            split: string;
+            /** Mode */
+            mode: string;
+            /** Model Name */
+            model_name: string;
+            /** Provisional */
+            provisional: boolean;
+            /** Pipeline Version */
+            pipeline_version: string;
+            /** Prompt Versions */
+            prompt_versions: {
+                [key: string]: string;
+            };
+            /** Git Sha */
+            git_sha: string;
+            /** Metrics */
+            metrics: {
+                [key: string]: unknown;
+            };
+            /** Per Note Results */
+            per_note_results: {
+                [key: string]: unknown;
+            }[];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
-  config_api_health: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HealthOut']
-        }
-      }
-      /** @description Service Unavailable */
-      503: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_accounts_api_csrf: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OkOut']
-        }
-      }
-    }
-  }
-  apps_accounts_api_login_view: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LoginIn']
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UserOut']
-        }
-      }
-      /** @description Unauthorized */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_accounts_api_logout_view: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OkOut']
-        }
-      }
-    }
-  }
-  apps_accounts_api_me: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UserOut']
-        }
-      }
-    }
-  }
-  apps_reference_api_search_codes: {
-    parameters: {
-      query: {
-        q: string
-        limit?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CodeOut'][]
-        }
-      }
-    }
-  }
-  apps_reference_api_get_code: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        display_code: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CodeDetailOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_runs_api_list_samples: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SampleOut'][]
-        }
-      }
-    }
-  }
-  apps_runs_api_list_runs: {
-    parameters: {
-      query?: {
-        status?: string | null
-        mode?: string | null
-        batch?: string | null
-        mine?: boolean
-        limit?: number
-        offset?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PagedRunListItemOut']
-        }
-      }
-    }
-  }
-  apps_runs_api_create_run_view: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RunCreateIn']
-      }
-    }
-    responses: {
-      /** @description Accepted */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RunCreatedOut']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_runs_api_create_batch_view: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'multipart/form-data': {
-          /**
-           * Mode
-           * @enum {string}
-           */
-          mode: 'coding' | 'audit'
-          /** Files */
-          files: string[]
-        }
-      }
-    }
-    responses: {
-      /** @description Accepted */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BatchCreatedOut']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_runs_api_get_run: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        run_id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RunDetailOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_runs_api_retry_run_view: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        run_id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Accepted */
-      202: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RunCreatedOut']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_review_api_create_decision: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        suggestion_id: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DecisionIn']
-      }
-    }
-    responses: {
-      /** @description Created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DecisionOut']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_review_api_accept_high: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        run_id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AcceptHighOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_review_api_create_finding_decision: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        finding_id: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DecisionIn']
-      }
-    }
-    responses: {
-      /** @description Created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DecisionOut']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_review_api_list_decisions: {
-    parameters: {
-      query?: {
-        reviewer?: string | null
-        action?: string | null
-        code?: string | null
-        date_from?: string | null
-        date_to?: string | null
-        run?: string | null
-        limit?: number
-        offset?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PagedDecisionListItemOut']
-        }
-      }
-    }
-  }
-  apps_review_api_export_decisions_csv: {
-    parameters: {
-      query?: {
-        reviewer?: string | null
-        action?: string | null
-        code?: string | null
-        date_from?: string | null
-        date_to?: string | null
-        run?: string | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  apps_review_api_export_run_csv: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        run_id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  apps_dashboard_api_dashboard_summary: {
-    parameters: {
-      query?: {
-        days?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  apps_evaluation_api_list_eval_runs: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['EvalRunListOut'][]
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
-  apps_evaluation_api_get_eval_run: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        run_id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['EvalRunDetailOut']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorOut']
-        }
-      }
-    }
-  }
+    config_api_health: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HealthOut"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_accounts_api_csrf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkOut"];
+                };
+            };
+        };
+    };
+    apps_accounts_api_login_view: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginIn"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_accounts_api_logout_view: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OkOut"];
+                };
+            };
+        };
+    };
+    apps_accounts_api_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+        };
+    };
+    apps_reference_api_search_codes: {
+        parameters: {
+            query: {
+                q: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CodeOut"][];
+                };
+            };
+        };
+    };
+    apps_reference_api_get_code: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                display_code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CodeDetailOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_runs_api_list_samples: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SampleOut"][];
+                };
+            };
+        };
+    };
+    apps_runs_api_list_runs: {
+        parameters: {
+            query?: {
+                status?: string | null;
+                mode?: string | null;
+                batch?: string | null;
+                mine?: boolean;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PagedRunListItemOut"];
+                };
+            };
+        };
+    };
+    apps_runs_api_create_run_view: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RunCreateIn"];
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunCreatedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_runs_api_create_batch_view: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Mode
+                     * @enum {string}
+                     */
+                    mode: "coding" | "audit";
+                    /** Files */
+                    files: string[];
+                };
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchCreatedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_runs_api_get_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunDetailOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_runs_api_retry_run_view: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunCreatedOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_review_api_create_decision: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                suggestion_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_review_api_accept_high: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptHighOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_review_api_create_finding_decision: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                finding_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionOut"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_review_api_list_decisions: {
+        parameters: {
+            query?: {
+                reviewer?: string | null;
+                action?: string | null;
+                code?: string | null;
+                date_from?: string | null;
+                date_to?: string | null;
+                run?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PagedDecisionListItemOut"];
+                };
+            };
+        };
+    };
+    apps_review_api_export_decisions_csv: {
+        parameters: {
+            query?: {
+                reviewer?: string | null;
+                action?: string | null;
+                code?: string | null;
+                date_from?: string | null;
+                date_to?: string | null;
+                run?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    apps_review_api_export_run_csv: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    apps_dashboard_api_dashboard_summary: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    apps_evaluation_api_list_eval_runs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvalRunListOut"][];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
+    apps_evaluation_api_get_eval_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvalRunDetailOut"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorOut"];
+                };
+            };
+        };
+    };
 }
