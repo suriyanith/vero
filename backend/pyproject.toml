@@ -14,7 +14,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "django-stubs>=6.1.1",
+    "django-stubs>=6.1.2",
     "factory-boy>=3.3.3",
     "hypothesis>=6.168.4",
     "mypy>=2.4.0",
